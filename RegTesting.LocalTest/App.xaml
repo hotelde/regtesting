@@ -1,0 +1,9 @@
+﻿<windows:Application x:Class="RegTesting.LocalTest.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                    xmlns:windows="clr-namespace:System.Windows;assembly=PresentationFramework"
+                                    StartupUri="GUI\MainWindow.xaml">
+    <windows:Application.Resources>
+         
+    </windows:Application.Resources>
+</windows:Application>

@@ -1,0 +1,64 @@
+﻿<windows:Window x:Class="RegTesting.LocalTest.GUI.MainWindow"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+							   xmlns:windows="clr-namespace:System.Windows;assembly=PresentationFramework"
+				xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
+				Title="RegTesting LocalTest (Local, Remote connecting...)" Height="500" Width="600">
+
+	<controls:Grid>
+		<controls:Grid Name="objRunningTestGrid" Visibility="Collapsed">
+			<controls:Grid.RowDefinitions>
+				<controls:RowDefinition Height="Auto" />
+				<controls:RowDefinition Height="*" />
+				<controls:RowDefinition Height="28" />
+			</controls:Grid.RowDefinitions>
+			<controls:Grid.ColumnDefinitions>
+				<controls:ColumnDefinition Width="*" />
+			</controls:Grid.ColumnDefinitions>
+			<controls:Label controls:Grid.Row="0" controls:Grid.Column="0" Name="txtTestInfo" x:FieldModifier="private"  Margin="3" />
+			<controls:TextBox controls:Grid.Row="1" controls:Grid.Column="0" Name="txtTestStatus" x:FieldModifier="private" IsReadOnly="True" Margin="3" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
+			<controls:Button controls:Grid.Row="2" Content="Back"  controls:Grid.Column="0" Click="BtnBackClick"  Margin="3" />
+		</controls:Grid>
+		<controls:Grid Name="objTestGrid">
+			<controls:Grid.RowDefinitions>
+				<controls:RowDefinition Height="28" />
+				<controls:RowDefinition Height="*" />
+				<controls:RowDefinition Height="28" />
+				<controls:RowDefinition Height="200" />
+			</controls:Grid.RowDefinitions>
+			<controls:Grid.ColumnDefinitions>
+				<controls:ColumnDefinition Width="Auto" />
+				<controls:ColumnDefinition Width="*" />
+			</controls:Grid.ColumnDefinitions>
+			<controls:Label controls:Grid.Row="0" controls:Grid.Column="0" Content="Filter:"/>
+			<controls:TextBox controls:Grid.Row="0" controls:Grid.Column="1" Text="" Name="txtFilter" x:FieldModifier="private"  Margin="3" TextChanged="TxtFilter_OnTextChanged" />
+			<controls:ListBox controls:Grid.Row="1" controls:Grid.Column="0" controls:Grid.ColumnSpan="2" Name="lstViewTestcases" x:FieldModifier="private"  Margin="3" SelectionMode="Extended">
+			</controls:ListBox>
+
+			<controls:Label controls:Grid.Row="2" controls:Grid.Column="0" Content="Testsystem:"/>
+			<controls:TextBox controls:Grid.Row="2" controls:Grid.Column="1" Text="" Name="txtTestsystem" x:FieldModifier="private"  Margin="3" />
+			<controls:Grid controls:Grid.Row="3" controls:Grid.Column="0" controls:Grid.ColumnSpan="2">
+				<controls:Grid.RowDefinitions>
+					<controls:RowDefinition Height="28" />
+					<controls:RowDefinition Height="*" />
+					<controls:RowDefinition Height="28" />
+				</controls:Grid.RowDefinitions>
+				<controls:Grid.ColumnDefinitions>
+					<controls:ColumnDefinition Width="*" />
+					<controls:ColumnDefinition Width="*" />
+				</controls:Grid.ColumnDefinitions>
+			
+
+				<controls:Label controls:Grid.Row="0" controls:Grid.Column="0" Content="Language:"/>
+				<controls:ListBox controls:Grid.Row="1" controls:Grid.Column="0" Name="lstLanguage" x:FieldModifier="private"  Margin="3" SelectionMode="Extended"/>
+				<controls:Label controls:Grid.Row="0" controls:Grid.Column="1" Content="Browser:"/>
+				<controls:ListBox controls:Grid.Row="1" controls:Grid.Column="1" Name="lstBrowser" x:FieldModifier="private"  Margin="3" SelectionMode="Extended" />
+				<controls:Button controls:Grid.Row="2" controls:Grid.Column="0" controls:Grid.ColumnSpan="2" Content="Start Test" Click="BtnStartClick"  Margin="3" />
+			</controls:Grid>
+
+	
+		</controls:Grid>
+	</controls:Grid>
+	
+</windows:Window>
+

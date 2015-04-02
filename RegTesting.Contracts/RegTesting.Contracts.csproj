@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F1096B19-7F46-483E-BDBA-27225D73CF44}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RegTesting.Contracts</RootNamespace>
+    <AssemblyName>RegTesting.Contracts</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\..\..\Packages\Iesi.Collections.3.3.3.4001\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\SupportedBrowsers.cs" />
+    <Compile Include="Attributes\SupportedLanguages.cs" />
+    <Compile Include="Domain\Browser.cs" />
+    <Compile Include="Domain\BrowserMap.cs" />
+    <Compile Include="Domain\HistoryResult.cs" />
+    <Compile Include="Domain\HistoryResultMap.cs" />
+    <Compile Include="Domain\Error.cs" />
+    <Compile Include="Domain\ErrorMap.cs" />
+    <Compile Include="Domain\Language.cs" />
+    <Compile Include="Domain\LanguageMap.cs" />
+    <Compile Include="Domain\Result.cs" />
+    <Compile Include="Domain\ResultMap.cs" />
+    <Compile Include="Domain\Testcase.cs" />
+    <Compile Include="Domain\TestcaseMap.cs" />
+    <Compile Include="Domain\Tester.cs" />
+    <Compile Include="Domain\TesterMap.cs" />
+    <Compile Include="Domain\TestJobMap.cs" />
+    <Compile Include="Domain\Testsuite.cs" />
+    <Compile Include="Domain\TestsuiteMap.cs" />
+    <Compile Include="Domain\Testsystem.cs" />
+    <Compile Include="Domain\TestsystemMap.cs" />
+    <Compile Include="DTO\BrowserDto.cs" />
+    <Compile Include="DTO\LanguageDto.cs" />
+    <Compile Include="ServerErrorModel.cs" />
+    <Compile Include="DTO\TestcaseDto.cs" />
+    <Compile Include="DTO\TesterDto.cs" />
+    <Compile Include="DTO\TestJobDto.cs" />
+    <Compile Include="DTO\TestsuiteDto.cs" />
+    <Compile Include="DTO\TestsystemDto.cs" />
+    <Compile Include="DTO\TestWorkerDto.cs" />
+    <Compile Include="DTO\WorkItemDto.cs" />
+    <Compile Include="Enums\JobType.cs" />
+    <Compile Include="Enums\TestWorkerStatus.cs" />
+    <Compile Include="ErrorOccurrence.cs" />
+    <Compile Include="ErrorOccurrenceGroup.cs" />
+    <Compile Include="GroupedResult.cs" />
+    <Compile Include="GroupedResultPart.cs" />
+    <Compile Include="ITestable.cs" />
+    <Compile Include="ITestableFactory.cs" />
+    <Compile Include="ITestFileLocker.cs" />
+    <Compile Include="ITestJobManager.cs" />
+    <Compile Include="ITestWorker.cs" />
+    <Compile Include="ITypesLoader.cs" />
+    <Compile Include="ITypesLoaderFactory.cs" />
+    <Compile Include="RefreshResultsModel.cs" />
+    <Compile Include="Repositories\ILanguageRepository.cs" />
+    <Compile Include="Repositories\IErrorRepository.cs" />
+    <Compile Include="Repositories\IBrowserRepository.cs" />
+    <Compile Include="Services\ILocalTestService.cs" />
+    <Compile Include="Services\INodeService.cs" />
+    <Compile Include="Services\ISettingsService.cs" />
+    <Compile Include="Services\IBuildTaskService.cs" />
+    <Compile Include="Services\IStatusService.cs" />
+    <Compile Include="Services\ISummaryService.cs" />
+    <Compile Include="Services\ITestViewerService.cs" />
+    <Compile Include="OccurrenceElement.cs" />
+    <Compile Include="Repositories\ITestcaseRepository.cs" />
+    <Compile Include="Repositories\ITesterRepository.cs" />
+    <Compile Include="Repositories\IHistoryResultRepository.cs" />
+    <Compile Include="Repositories\ITestJobRepository.cs" />
+    <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\IResultRepository.cs" />
+    <Compile Include="Services\ITestService.cs" />
+    <Compile Include="ITestPool.cs" />
+    <Compile Include="Repositories\ITestsuiteRepository.cs" />
+    <Compile Include="Repositories\ITestsystemRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Domain\TestJob.cs" />
+    <Compile Include="SummariesModel.cs" />
+    <Compile Include="TestcaseDetailsModel.cs" />
+    <Compile Include="TestcaseProvider.cs" />
+    <Compile Include="TestJobManager.cs" />
+    <Compile Include="TestResult.cs" />
+    <Compile Include="TestState.cs" />
+    <Compile Include="TestsystemSummary.cs" />
+    <Compile Include="TestsystemSummaryModel.cs" />
+    <Compile Include="WebDriverInitStrategy.cs" />
+    <Compile Include="WorkItem.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

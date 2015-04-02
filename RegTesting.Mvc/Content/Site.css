@@ -1,0 +1,579 @@
+﻿/*----------------------------------------------------------
+RegTesting MVC - Site.css
+----------------------------------------------------------*/
+body {
+	background-color: #444444;
+	font-size: .85em;
+	font-family: "Trebuchet MS", Verdana, Helvetica, Sans-Serif;
+	margin: 0;
+	padding: 0;
+	color: #696969;
+}
+
+a:link {
+	color: #222222;
+	text-decoration: underline;
+}
+
+a:visited {
+	color: #222222;
+}
+
+a:hover {
+	color: #DA573B;
+	text-decoration: none;
+}
+
+a:active {
+	color: #F68B1E;
+}
+
+a img {
+border: 0px;
+}
+
+p, ul {
+	margin-bottom: 20px;
+	line-height: 1.6em;
+}
+
+header,
+footer,
+nav,
+section {
+	display: block;
+}
+
+/* HEADINGS   
+----------------------------------------------------------*/
+h1, h2, h3, h4, h5, h6 {
+	font-size: 1.5em;
+	color: #000;
+}
+
+h1 {
+	font-size: 2em;
+	padding-bottom: 0;
+	margin-bottom: 0;
+}
+
+h2 {
+	padding: 0 0 10px 0;
+}
+
+h3 {
+	font-size: 1.2em;
+}
+
+h4 {
+	font-size: 1.1em;
+}
+
+h5, h6 {
+	font-size: 1em;
+}
+
+/* PRIMARY LAYOUT ELEMENTS   
+----------------------------------------------------------*/
+
+/* you can specify a greater or lesser percentage for the 
+page width. Or, you can specify an exact pixel width. */
+.page {
+	width: 90%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+header, #header {
+	position: relative;
+	margin-bottom: 0px;
+	color: #000;
+	padding: 0;
+}
+
+header h1, #header h1 {
+	font-weight: bold;
+	margin: 0;
+	color: #fff;
+	border: none;
+	font-size: 26px !important;
+	text-shadow: 1px 1px 2px #111;
+}
+
+#main {
+	padding: 30px 30px 15px 30px;
+	background-color: #fff;
+	border-radius: 4px 0 0 0;
+	-webkit-border-radius: 4px 0 0 0;
+	-moz-border-radius: 4px 0 0 0;
+}
+
+footer, 
+#footer {
+	background-color: #fff;
+	color: #999;
+	padding: 10px 0;
+	text-align: center;
+	line-height: normal;
+	margin: 0 0 30px 0;
+	font-size: .9em;
+	border-radius: 0 0 4px 4px;
+	-webkit-border-radius: 0 0 4px 4px;
+	-moz-border-radius: 0 0 4px 4px;
+}
+
+/* TAB MENU   
+----------------------------------------------------------*/
+ul#menu {
+	border-bottom: 1px #5C87B2 solid;
+	padding: 0 0 2px;
+	position: relative;
+	margin: 0;
+	text-align: right;
+}
+
+ul#menu li {
+	display: inline;
+	list-style: none;
+}
+
+ul#menu li#greeting {
+	padding: 10px 20px;
+	font-weight: bold;
+	text-decoration: none;
+	line-height: 2.8em;
+	color: #fff;
+}
+
+ul#menu li a {
+	padding: 10px 20px;
+	font-weight: bold;
+	text-decoration: none;
+	line-height: 2.8em;
+	background-color: #e8eef4;
+	color: #000000;
+	border-radius: 4px 4px 0 0;
+	-webkit-border-radius: 4px 4px 0 0;
+	-moz-border-radius: 4px 4px 0 0;
+}
+
+ul#menu li a:hover {
+	background-color: #F68B1E;
+	text-decoration: none;
+}
+
+ul#menu li a:active {
+	background-color: #F68B1E;
+	text-decoration: none;
+}
+
+ul#menu li a.current {
+	background-color: #F68B1E;
+	text-decoration: none;
+}
+
+ul#menu li.selected a {
+	background-color: #fff;
+	color: #000;
+}
+
+/* FORM LAYOUT ELEMENTS   
+----------------------------------------------------------*/
+
+fieldset {
+	border: 1px solid #ddd;
+	padding: 0 1.4em 1.4em 1.4em;
+	margin: 0 0 1.5em 0;
+}
+
+legend {
+	font-size: 1.2em;
+	font-weight: bold;
+}
+
+textarea {
+	min-height: 75px;
+}
+
+input[type="text"], 
+input[type="password"] {
+	border: 1px solid #ccc;
+	padding: 2px;
+	font-size: 1.2em;
+	color: #444;
+	width: 200px;
+}
+
+select {
+	border: 1px solid #ccc;
+	padding: 2px;
+	font-size: 1.2em;
+	color: #444;
+}
+
+input[type="submit"] {
+	font-size: 1.2em;
+	padding: 5px;
+}
+
+/* TABLE
+----------------------------------------------------------*/
+
+table {
+	/*border: solid 1px #e8eef4;*/
+	border: solid 2px #cccccc;
+	border-collapse: collapse;
+}
+
+table td {
+	padding: 5px;
+	/*border: solid 1px #e8eef4;*/
+	border: solid 1px #eeeeee;
+}
+
+table th {
+	padding: 6px 5px;
+	text-align: left;
+	/*background-color: #e8eef4;*/
+	background-color: #eeeeee;
+	
+	/*border: solid 1px #e8eef4;*/
+	border-bottom: solid 2px #cccccc;
+	
+}
+
+/* MISC  
+----------------------------------------------------------*/
+.clear {
+	clear: both;
+}
+
+.error {
+	color: Red;
+}
+
+nav, 
+#menucontainer {
+	margin-top: 40px;
+}
+
+div#title {
+	display: block;
+	float: left;
+	text-align: left;
+}
+
+div#title a:link {
+	color: white;
+	text-decoration: none;
+}
+div#title a:link:visited {
+	color: white;
+	text-decoration: none;
+}
+
+#logindisplay a:hover {
+	color: white;
+	text-decoration: underline;
+}
+
+#logindisplay {
+	font-size: 1.1em;
+	display: block;
+	text-align: right;
+	margin: 10px;
+	color: White;
+}
+
+#logindisplay a:link {
+	color: white;
+	text-decoration: underline;
+}
+
+#logindisplay a:visited {
+	color: white;
+	text-decoration: underline;
+}
+
+
+/* Styles for validation helpers
+-----------------------------------------------------------*/
+.field-validation-error {
+	color: #ff0000;
+}
+
+.field-validation-valid {
+	display: none;
+}
+
+.input-validation-error {
+	border: 1px solid #ff0000;
+	background-color: #ffeeee;
+}
+
+.validation-summary-errors {
+	font-weight: bold;
+	color: #ff0000;
+}
+
+.validation-summary-valid {
+	display: none;
+}
+
+/* Styles for editor and display helpers
+----------------------------------------------------------*/
+.display-label, 
+.editor-label {
+	margin: 1em 0 0 0;
+}
+
+.display-field, 
+.editor-field {
+	margin: 0.5em 0 0 0;
+}
+
+.text-box {
+	width: 30em;
+}
+
+.text-box.multi-line {
+	height: 6.5em;
+}
+
+.tri-state {
+	width: 6em;
+}
+
+
+
+/* Styles for RegTesting Specific
+----------------------------------------------------------*/
+
+.emptyimage 
+{
+	width: 0.1em;
+}
+
+.playimagebig 
+{
+	border: 0;
+}
+
+
+.actionimagesmall
+{
+	border: 0;
+	height: 1.5em;
+}
+
+.testtableheader
+{
+	width: 10em;
+}
+
+
+
+.testtabletestcase
+{
+	border-bottom: 1px solid #dddddd;
+	border-top: 2px solid #dddddd;
+	background-color: #eeeeee;
+}
+
+
+.testactionalllanguages
+{
+	border-bottom: 1px solid #dddddd;
+	border-top: 2px solid #dddddd;
+}
+
+.testactionlanguage
+{
+	border-top: 1px solid white;
+}
+
+.testtablecell a
+{
+	text-decoration: none;
+}
+
+.testtablecell:hover
+{
+	background-color:#F68B1E;
+}
+
+.testcaseDetailsHeader
+{
+	padding: 5px;
+	margin-top: 10px;
+}
+
+.testcaseDetailsHeader:hover
+{
+	background-color:#EEEEEE;
+
+}
+
+.workerstatus0
+{
+	background-color:#8B0000;
+}
+
+.workerstatus1
+{
+	background-color:#556B2F;
+}
+
+.workerstatus2
+{
+	background-color:#fdc024;
+}
+
+.workerstatus3
+{
+	background-color:#cccccc;
+}
+
+.workerstatus8
+{
+	background-color:#000000;
+}
+
+.editor label {
+  float: left;
+  width: 80px;  
+  text-align: right;
+}
+
+.editor input[type=text] {
+  width: 120px;
+  margin: 0 0 0 10px;
+}
+
+.ddlAuswahl {
+	width: 20em;
+	margin-right: 1em;
+	background-color: #ffffff;
+	border: 1px solid #dddddd;
+}
+
+.ddlAuswahlRightBig {
+	width:100%;
+	margin: 0;
+	padding: 0;
+	background-color: #ffffff;
+	border: 1px solid #dddddd;
+}
+
+.ddlAuswahlRightSmall {
+	width: 50%;
+	margin: 0;
+	padding: 0;
+	background-color: #ffffff;
+	border: 1px solid #dddddd;
+}
+
+.sandglass
+{
+	height: 1em;
+	border: 0;
+}
+
+.oldResultImage {
+	width: 16px;
+	display: none;
+} 
+
+.oldHistoryResultImage {
+	width: 16px;
+} 
+
+
+select:hover { background-color:  #FDF5CE; }
+
+/*jQuery .no-close for popups without closebutton.
+*/
+.no-close .ui-dialog-titlebar-close {
+	display: none
+}
+
+.selectionfields 
+{
+	padding: 5px;
+	background-color: #eeeeee;
+	border: 1px solid #dddddd;
+}
+
+.selectionfields2 
+{
+	padding: 5px;
+	background-color: #eeeeee;
+	border: 1px solid #dddddd;
+	
+}
+
+.buttons 
+{
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+
+.hidden
+{
+	display: none;
+}
+
+
+/*Colors for testingresults*/
+
+/*Neutral*/
+.result0, .result2, .result3
+{
+	background-color: #FFFFFF;
+}
+
+/*Success*/
+.result5
+{
+	background-color: #556B2F;
+}
+
+
+/*KnownError*/
+.result8
+{
+	color: #000000;
+	background-color: #FF6633;
+}
+
+/*Error*/
+.result9, .result10
+{
+	color: #FFFFFF;
+	background-color: #8b0000;
+}
+
+/*Waiting*/
+.result14, .result15
+{
+	background-color: #DDDDDD;
+}
+
+/*Running*/
+.result18
+{
+	background-color: #AAAAAA;
+}
+
+
+div .importantMessage
+{
+	background-color: #f68b1e;
+	color: #000000;
+	font-weight: bold;
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 10px;
+	font-size: 1.2em;
+}
