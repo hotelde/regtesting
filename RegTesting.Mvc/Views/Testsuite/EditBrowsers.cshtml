@@ -1,0 +1,39 @@
+﻿@using RegTesting.Mvc.Models
+@model IList<int>
+
+@{
+	ViewBag.Title = "Edit Testsuite - RegTesting";
+	var lstBrowsers = ((List<BrowserModel>) ViewBag.LstBrowsers);
+}
+
+<h2>Edit Testsuite - Set Browsers</h2>
+<fieldset>
+	<legend>Browser</legend>
+	<form method="post" action="@Url.Action("BrowsersChanged")">
+
+	
+		<input type = "hidden" name = "testsuite" value = "@ViewBag.Testsuite" />
+
+		@foreach (BrowserModel browsers in lstBrowsers)
+		{
+			if (!Model.Contains(browsers.ID))
+			{
+				<input type = "checkbox" name = "browsers" value = "@browsers.ID"/>
+				@browsers.Name
+				<br/>
+			}
+			else
+			{
+				<input type = "checkbox" name = "browsers" value = "@browsers.ID" checked="checked" />
+				@browsers.Name
+				<br/>
+			}
+		}
+		<br/>
+		<input type="submit" value="Save"/>
+	</form>
+</fieldset>
+
+<div>
+	@Html.ActionLink("Back", "Edit", new {id = ViewBag.Testsuite})
+</div>

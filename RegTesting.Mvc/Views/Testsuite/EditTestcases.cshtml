@@ -1,0 +1,39 @@
+﻿@using RegTesting.Mvc.Models
+@model IList<int>
+
+@{
+	ViewBag.Title = "Edit Testsuite - RegTesting";
+	var lstTestcases = ((IEnumerable<TestcaseModel>) ViewBag.LstTestcases);
+}
+
+<h2>Testsuite bearbeiten - Testfälle zuordnen</h2>
+<fieldset>
+	<legend>Testfälle</legend>
+	<form method="post" action="@Url.Action("TestcasesChanged")">
+
+		<input type = "hidden" name = "testsuite" value = "@ViewBag.Testsuite" />
+
+		@foreach (TestcaseModel testcases in lstTestcases)
+		{
+			if (!Model.Contains(testcases.ID))
+			{
+				<input type = "checkbox" name = "testcases" value = "@testcases.ID"/>
+				@testcases.Type <text> (@testcases.Name)</text>
+				<br/>
+			}
+			else
+			{
+				<input type = "checkbox" name = "testcases" value = "@testcases.ID" checked="checked" />
+				@testcases.Type <text> (@testcases.Name)</text>
+				<br/>
+			}
+		}
+		<br/>
+		<input type="submit" value="Save"/>
+	</form>
+</fieldset>
+
+
+<div>
+	@Html.ActionLink("Back", "Edit", new {id = ViewBag.Testsuite})
+</div>

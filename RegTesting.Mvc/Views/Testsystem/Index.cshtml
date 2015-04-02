@@ -1,0 +1,51 @@
+﻿@model IEnumerable<RegTesting.Mvc.Models.TestsystemModel>
+
+@{
+	ViewBag.Title = "Testsysteme - RegTesting";
+}
+
+<h2>Testsysteme</h2>
+
+<table class="table">
+	<tr>
+		<th>
+			Url
+		</th>
+		<th>
+			Name
+		</th>
+		<th>
+			Beschreibung
+		</th>
+		<th></th>
+	</tr>
+		<tr>
+		<td colspan="3">
+			@Html.ActionLink("Neues Testsystem", "Create")
+		</td>
+	</tr>
+@foreach (var item in Model) {
+	<tr>
+		<td>
+			@Html.DisplayFor(modelItem => item.Url)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.Name)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.Description)
+		</td>
+		<td>
+			@Html.ActionLink("Bearbeiten", "Edit", new { id=item.ID }) |
+			@Html.ActionLink("Details", "Details", new { id=item.ID }) |
+			@Html.ActionLink("Löschen", "Delete", new { id=item.ID })
+		</td>
+	</tr>
+}
+
+</table>
+
+<br/>
+<div>
+	@Html.ActionLink("Zurück", "Index","Settings")
+</div>

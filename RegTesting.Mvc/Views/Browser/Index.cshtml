@@ -1,0 +1,54 @@
+﻿@using RegTesting.Mvc.Models
+@model IEnumerable<RegTesting.Mvc.Models.BrowserModel>
+
+@{
+	ViewBag.Title = "Browser - RegTesting";
+}
+
+<h2>Browser</h2>
+
+
+				  	<table class="table">
+				  		<tr>
+				  			<th>
+				  				Name
+				  			</th>
+				  			<th>
+				  				Browserstring
+				  			</th>
+				  			<th>
+				  				Versionsstring
+				  			</th>
+				  			<th></th>
+				  		</tr>
+				  		<tr>
+				  			<td colspan="4">
+				  				@Html.ActionLink("Neuer Browser", "Create")
+				  	</td>
+				  </tr>
+				  @foreach (BrowserModel item in Model)
+				  {
+				  	<tr>
+				  		<td>
+				  			@Html.DisplayFor(modelItem => item.Name)
+				  </td>
+				  <td>
+				  	@Html.DisplayFor(modelItem => item.Browserstring)
+				  </td>
+				  <td>
+				  	@Html.DisplayFor(modelItem => item.Versionsstring)
+				  </td>
+				  <td>
+				  	@Html.ActionLink("Bearbeiten", "Edit", new { id = item.ID }) |
+				  @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+				  @Html.ActionLink("Löschen", "Delete", new { id = item.ID })
+				  </td>
+				  </tr>
+				  }
+
+				  </table>
+
+<br/>
+<div>
+    @Html.ActionLink("Zurück", "Index","Settings")
+</div>

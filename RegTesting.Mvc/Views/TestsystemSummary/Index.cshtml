@@ -1,0 +1,96 @@
+﻿@using RegTesting.Contracts
+@model Dictionary<String, IList<TestsystemSummary>>
+
+@{
+    ViewBag.Title = "Testsystem Übersicht";
+}
+
+
+
+
+
+@foreach (KeyValuePair<string, IList<TestsystemSummary>> keyValuePairSummaries in Model)
+{
+
+	<div class="page-header">
+		<h1>
+			@keyValuePairSummaries.Key
+			
+				@if (keyValuePairSummaries.Value.Any())
+				{
+					<small>
+						@keyValuePairSummaries.Value.First().TestsuiteName
+					</small>
+				}
+	</h1>
+	</div>
+	<div id="@(keyValuePairSummaries.Key + "MainBranchSummaryBlock")">
+		@{Html.RenderPartial("MainBranchSummariesPartial", keyValuePairSummaries.Value);}
+	</div>
+}
+
+
+<div class="col-md-6">
+	<h3>Last tested THOR branches</h3>
+	<div id="thorBranchSummaryBlock">
+		<div class="alert alert-warning"><h4>Loading ...</h4></div>
+	</div>
+</div>
+	
+<div class="col-md-6">
+	<h3>Last tested SODA branches </h3>
+	<div id="sodaBranchSummaryBlock">
+		<div class="alert alert-warning"><h4>Loading ...</h4></div>
+	</div>
+</div>
+
+			
+
+
+<script type="text/javascript">
+$(function () {
+	updateThorBranchSummariesTable();
+	updateSodaBranchSummariesTable();
+	updateSodaMainBranchSummariesTable();
+	updateThorMainBranchSummariesTable();
+
+
+	function updateThorBranchSummariesTable() {
+		$.get('@Url.Action("GetThorBranchSummariesTable")', {},
+			function (view) {
+				$("div#thorBranchSummaryBlock").html(view);
+				setTimeout(function () {
+					updateThorBranchSummariesTable();
+				}, 60000);
+			});
+	}
+	function updateSodaBranchSummariesTable() {
+		$.get('@Url.Action("GetSodaBranchSummariesTable")', {},
+			function (view) {
+				$("div#sodaBranchSummaryBlock").html(view);
+				setTimeout(function () {
+					updateSodaBranchSummariesTable();
+				}, 60000);
+			});
+	}
+	function updateThorMainBranchSummariesTable() {
+		$.get('@Url.Action("GetThorMainBranchSummaries")', {},
+			function (view) {
+				$("div#THORMainBranchSummaryBlock").html(view);
+				setTimeout(function () {
+					updateThorMainBranchSummariesTable();
+				}, 30000);
+			});
+	}
+	function updateSodaMainBranchSummariesTable() {
+		$.get('@Url.Action("GetSodaMainBranchSummaries")', {},
+			function (view) {
+				$("div#SODAMainBranchSummaryBlock").html(view);
+			setTimeout(function () {
+					updateSodaMainBranchSummariesTable();
+				}, 30000);
+			});
+	}
+
+});
+</script>

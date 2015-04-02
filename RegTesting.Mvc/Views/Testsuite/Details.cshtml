@@ -1,0 +1,48 @@
+﻿@model RegTesting.Mvc.Models.TestsuiteModel
+
+@{
+	ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+	<legend>Testsuite</legend>
+
+	<div class="display-label">Name</div>
+	<div class="display-field">
+		@Html.DisplayFor(model => model.Name)
+	</div>
+
+	<div class="display-label">Description</div>
+	<div class="display-field">
+		@Html.DisplayFor(model => model.Description)
+	</div>
+</fieldset>
+<p>
+	<b>Testcases:</b>
+	<ul>
+		@foreach (var objTestcase in Model.Testcases)
+		{
+			<li>@objTestcase.Type (@objTestcase.Name)</li>
+		}
+	</ul>
+	<b>Browsers:</b>
+	<ul>
+		@foreach (var objBrowser in Model.Browsers)
+		{
+			<li>@objBrowser.Name</li>
+		}
+	</ul>
+	<b>Languages:</b>
+	<ul>
+		@foreach (var objLanguage in Model.Languages)
+		{
+			<li>@objLanguage.Languagecode</li>
+		}
+	</ul>
+</p>
+<p>
+	@Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
+	@Html.ActionLink("Back to List", "Index")
+</p>

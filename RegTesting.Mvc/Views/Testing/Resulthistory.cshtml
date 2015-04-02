@@ -1,0 +1,142 @@
+﻿@using RegTesting.Contracts.Domain
+@using RegTesting.Mvc.Models
+@model IList<HistoryResult>
+
+	@{
+		ViewBag.Title = "History - RegTesting";
+
+		IList<TestcaseModel> lstTestcases = ((IList<TestcaseModel>)ViewBag.LstTestcases);
+		IList<BrowserModel> lstBrowsers = ((IList<BrowserModel>)ViewBag.LstBrowsers);
+		IList<LanguageModel> lstLanguages = ((IList<LanguageModel>)ViewBag.LstLanguages);
+
+		int intTestsystemID = @ViewBag.Testsystem;
+		int intTestsuiteID = @ViewBag.Testsuite;
+		int intTestcaseID = @ViewBag.Testcase;
+		int intLanguageID = @ViewBag.Language;
+		int intBrowserID = @ViewBag.Browser;
+		int tableWidth = 2;
+	}
+
+	@Html.Partial("PartialTestingMenu")
+
+	<div class="selectionfields2">
+
+		<form class="form-inline" role="form">
+			<div class="form-group">
+				<select id="ddlTestcases" class="form-control" onchange="OnDdlChanged();">
+					string strAttributes = ViewBag.Testcase  == -1 ? "selected=selected" : "";
+					<option value=-1 strattributes>All Testcases</option>
+					@foreach (TestcaseModel objTestcase in lstTestcases)
+					{
+						string strAttributes = objTestcase.ID == ViewBag.Testcase ? "selected=selected" : "";
+						<option value=@objTestcase.ID @strAttributes>@objTestcase.Name</option>
+					}
+				</select>
+
+				<select id="ddlBrowser" class="form-control" onchange="OnDdlChanged();">
+					string strAttributes = ViewBag.Browser  == -1 ? "selected=selected" : "";
+					<option value=-1 strattributes>All Browsers</option>
+					@foreach (BrowserModel objBrowser in lstBrowsers)
+					{
+						string strAttributes = objBrowser.ID == ViewBag.Browser ? "selected=selected" : "";
+						<option value=@objBrowser.ID @strAttributes>@objBrowser.Name</option>
+					}
+				</select><select id="ddlLanguages" class="form-control" onchange="OnDdlChanged();">
+					string strAttributes = ViewBag.Language  == -1 ? "selected=selected" : "";
+					<option value=-1 strattributes>All Languages</option>
+					@foreach (LanguageModel objLanguage in lstLanguages)
+					{
+						string strAttributes = objLanguage.ID == ViewBag.Language ? "selected=selected" : "";
+						<option value=@objLanguage.ID @strAttributes>@objLanguage.Languagecode</option>
+					}
+				</select>
+			</div>
+		</form>
+	</div>
+
+	<br />
+	<br /><br />
+	<table class="table">
+		<tr>
+			<th class="testtableheader">Tester</th>
+			@if (intTestcaseID == -1)
+			{
+				tableWidth++;
+				<th class="testtableheader">Testcase</th>
+			}
+			@if (intBrowserID == -1)
+			{
+				tableWidth++;
+				<th class="testtableheader">Browser</th>
+			}
+			@if (intLanguageID == -1)
+			{
+				tableWidth++;
+				<th class="testtableheader">Language</th>
+			}
+			<th class="testtableheader">Ergebnis</th>
+		</tr>
+		@foreach (HistoryResult objResultsHistory in Model)
+		{
+
+			string strClass = "resultsmall label label-" + StatusHelper.GetStatusString(@objResultsHistory.ResultCode);
+
+			<tr class="toggleDetails">
+				<td>@objResultsHistory.Tester.Name</td>
+				@if (intTestcaseID == -1)
+				{
+					<td>@objResultsHistory.Testcase.Name</td>
+				}
+				@if (intBrowserID == -1)
+				{
+					<td>@objResultsHistory.Browser.Name</td>
+				}
+				@if (intLanguageID == -1)
+				{
+					<td>@objResultsHistory.Language.Languagecode</td>
+				}
+
+				<td>
+					<span class="@strClass">
+						@objResultsHistory.Testtime
+					</span>
+				</td>
+			</tr>
+			<tr style="display: none">
+				<td colspan="@(tableWidth)">
+					@if (objResultsHistory.Error != null)
+					{
+						<b>@objResultsHistory.Error.Message</b><br />
+
+						<text>@objResultsHistory.Error.Type</text>
+						<small>
+							@Html.Raw(@objResultsHistory.Error.StackTrace.Replace(" at ", "<br>at "))
+							@if (objResultsHistory.Error.InnerException != null)
+							{
+								<br /><text>InnerException: @objResultsHistory.Error.InnerException</text>
+							}
+						</small>
+					}
+
+					@if (!String.IsNullOrEmpty(objResultsHistory.ScreenshotFile))
+					{
+						<br/><a class="btn btn-xs" href="@("/screenshots/" + objResultsHistory.ScreenshotFile)" target="_blank"><img class="testscreenshot" src="@("/screenshots/" + objResultsHistory.ScreenshotFile)" /></a>
+					}
+
+					<pre class="detaillog">@Html.Raw(objResultsHistory.DetailLog)</pre>
+				</td>
+			</tr>
+		}
+	</table>
+	<br />
+	@Html.ActionLink("Back", "Index", "Testing", new { testsystem = intTestsystemID, testsuite = intTestsuiteID }, null)
+
+	<script type="text/javascript">
+		function OnDdlChanged() {
+			window.location.href = '@Url.Action("Resulthistory")' + '?testcase=' + $("#ddlTestcases").val() + '&browser=' + $("#ddlBrowser").val() + '&language=' + $("#ddlLanguages").val();
+		}
+
+		$(".toggleDetails").click(function () {
+			$(this).next().toggle();
+		});
+	</script>

@@ -1,0 +1,71 @@
+﻿@using RegTesting.Contracts
+@model TestcaseDetailsModel
+		   
+
+	<div class="testcaseDetailsHeader">
+		<small><b>Namespace:</b> @Model.Testcase.Type</small><br/>
+			
+			
+		<div class="btn-group btn-group-xs">
+			<a class="rerunTestcase btn btn-default btn-xs" data-tc="@Model.Testcase.ID"><i class="glyphicon glyphicon-play"></i> Repeat this testcase</a>
+			@if (Model.ErrorOccurrenceGroup != null)
+			{
+				<a class="rerunErrorTestcase btn btn-default btn-xs" data-tc="@Model.Testcase.ID"><i class="glyphicon glyphicon-repeat"></i> Retest errors</a>
+			}
+			<a class="btn btn-default btn-xs" href="@Url.Action("Resulthistory","Testing", new {testcase=Model.Testcase.ID},null)"><i class="glyphicon glyphicon-calendar"></i> Show History for this testcase</a>
+		</div>
+		<br/>
+			
+	</div><br/>
+
+	@if (!String.IsNullOrWhiteSpace(Model.Testcase.Description))
+	{
+		<small>@Model.Testcase.Description</small><br />
+	} 
+
+	@if (Model.ErrorOccurrenceGroup != null)
+	{
+		<b>Errors:</b>
+		<div class="list-group">
+			@for (int j = 0; j < Model.ErrorOccurrenceGroup.LstErrorOccurence.Count; j++)
+			 {
+				 ErrorOccurrence errorOccurrence = Model.ErrorOccurrenceGroup.LstErrorOccurence[j];
+					@Html.Partial("PartialErrorOccurence", errorOccurrence)
+			 }
+		</div>
+	}
+
+
+
+<script>
+	$(".toggle").unbind();
+	$(".hideable").unbind();
+	$(".rerunTestcase").unbind();
+	$(".rerunErrorTestcase").unbind();
+	$(".toggle").click(function () {
+		$(this).next().toggle();
+	});
+	$(".hideable").click(function () {
+		$(this).siblings(".box").toggle();
+	});
+	$(".rerunTestcase").click(function () {
+		var testcaseid = $(this).attr("data-tc");
+		
+		$.get('@Url.Action("RerunTest")' + "?testcase=" + testcaseid, {},
+			function (data) {
+				SetNewResults(data);
+			});
+		ShowModalConfirm('Repeat testcase ...');
+		
+	});
+	$(".rerunErrorTestcase").click(function () {
+		var testcaseid = $(this).attr("data-tc");
+	
+		$.get('@Url.Action("RerunErrorsOfTest")' + "?testcase=" + testcaseid, {},
+			function (data) {
+				SetNewResults(data);
+			});
+		ShowModalConfirm('Repeat errors of testcase ...');
+		
+	});
+</script>

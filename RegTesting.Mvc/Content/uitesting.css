@@ -1,0 +1,97 @@
+﻿.resultbig {
+	margin: 5px;
+
+	padding: 5px;
+	font-size: 1.5em;
+	color: #FFF;
+	text-align: center;
+}
+
+.resultbig:hover {
+	opacity: 0.7;
+}
+
+.label {
+	border-radius: 0;
+}
+
+.alert {
+	border-radius: 0;
+}
+
+
+.resultsmall {
+	padding: 10px;
+}
+
+.testing-hero-unit {
+  padding: 20px;
+  margin-bottom: 30px;
+  font-size: 18px;
+  font-weight: 200;
+  line-height: 30px;
+  color: inherit;
+  background-color: #eeeeee;
+  -webkit-border-radius: 6px;
+     -moz-border-radius: 6px;
+          border-radius: 6px;
+}
+
+.testing-hero-unit h1 {
+  margin-bottom: 0;
+  font-size: 60px;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: inherit;
+}
+
+.testing-hero-unit li {
+  line-height: 30px;
+}
+
+.accordion-heading {
+	background-color: #eeeeee;
+}
+
+.testscreenshot {
+	max-width: 300px;
+	max-height: 300px;
+}
+
+.bs-callout-danger {
+background-color: #f2dede;
+border-color: #b94a48;
+}
+.bs-callout {
+margin: 20px 0;
+padding: 20px;
+border-left: 3px solid #b94a48;
+}
+
+
+.list-group-item:hover {
+	background-color: #f5f7f6;
+}
+
+.detaillog {
+	white-space: -moz-pre-wrap !important;
+	white-space: -pre-wrap;
+	white-space: -o-pre-wrap;
+	white-space: pre-wrap;
+	word-wrap: break-word;
+}
+
+
+.modal {
+	top: 40%;
+}
+
+
+td.includedField {
+	background-color: green;
+	border: thin solid #333333; 
+}
+
+td.notIncludedField {
+	 border: thin solid #333333; 
+}

@@ -1,0 +1,23 @@
+﻿@using RegTesting.Mvc
+@{
+	ViewBag.Title = "Settings - RegTesting";
+}
+
+
+<h2>Settings</h2>
+<ul>
+	@{ var tester = ViewBag.Tester; }
+	@if (RegtestingMvcConfiguration.Testmanager.Contains(User.Identity.GetLogin(), StringComparer.InvariantCultureIgnoreCase))
+	{
+		<li>@Html.ActionLink("Testfälle bearbeiten", "Index", "Testcase", new { tester }, null)</li>
+		<li>@Html.ActionLink("Browser bearbeiten", "Index", "Browser", new { tester }, null)</li>
+		<li>@Html.ActionLink("Sprachen bearbeiten", "Index", "Language", new { tester }, null)</li>
+	}
+
+	<li>@Html.ActionLink("Testsysteme bearbeiten", "Index", "Testsystem", new { tester }, null)</li>
+	<li>@Html.ActionLink("Testsuiten bearbeiten", "Index", "Testsuite", new {tester}, null)</li>
+</ul>
+
+<p></p>
+<p></p>
+<p></p>

@@ -1,0 +1,67 @@
+﻿@model RegTesting.Mvc.Models.TestsuiteModel
+
+@{
+	ViewBag.Title = "Edit";
+}
+
+<h2>Edit Testsuite</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+	@Html.ValidationSummary(true)
+	<fieldset>
+		<legend>Testsuite</legend>
+
+		@Html.HiddenFor(model => model.ID)
+
+		<div class="editor-label">
+			@Html.LabelFor(model => model.Name)
+		</div>
+		<div class="editor-field">
+			@Html.EditorFor(model => model.Name)
+			@Html.ValidationMessageFor(model => model.Name)
+		</div>
+
+		<div class="editor-label">
+			@Html.LabelFor(model => model.Description)
+		</div>
+		<div class="editor-field">
+			@Html.EditorFor(model => model.Description)
+			@Html.ValidationMessageFor(model => model.Description)
+		</div>
+		<br/>
+		<p>
+			<input type="submit" value="Save" />
+		</p>
+	</fieldset>
+}
+
+<p>
+	<b>Testcases:</b> @Html.ActionLink("Edit", "EditTestcases", new { id = Model.ID })
+	<ul>
+		@foreach (var objTestcase in Model.Testcases)
+		{
+			<li>@objTestcase.Type (@objTestcase.Name)</li>
+		}
+	</ul>
+	<b>Browsers:</b> @Html.ActionLink("Edit", "EditBrowsers", new { id = Model.ID })
+	<ul>
+		@foreach (var objBrowser in Model.Browsers)
+		{
+			<li>@objBrowser.Name</li>
+		}
+	</ul>
+	<b>Languages:</b> @Html.ActionLink("Edit", "EditLanguages", new { id = Model.ID })
+	<ul>
+		@foreach (var objLanguage in Model.Languages)
+		{
+			<li>@objLanguage.Languagecode</li>
+		}
+	</ul>
+</p>
+
+<div>
+	@Html.ActionLink("Zurück", "Index")
+</div>

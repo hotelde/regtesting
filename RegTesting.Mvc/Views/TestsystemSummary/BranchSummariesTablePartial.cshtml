@@ -1,0 +1,29 @@
+﻿@using RegTesting.Contracts
+@model IList<RegTesting.Contracts.TestsystemSummary>
+
+
+
+<table class="table">
+    <tr>
+        <th>Branch</th>
+        <th>Last full run</th>
+    </tr>
+
+	@foreach (TestsystemSummary objItem in Model)
+	{
+		string strClass = "resultsmall label label-" + StatusHelper.GetStatusString(@objItem.TestsystemStatus);
+		<tr>
+			<td>@Html.ActionLink(objItem.TestsystemName, "Index", "Testing", new {testsystem = objItem.TestsystemID, testsuite = objItem.TestsuiteID}, null)</td>
+			<td>
+				<span class="@strClass">
+					@{if(objItem.LastChangeDate.Year > 1) {
+						  @objItem.LastChangeDate
+					  } else {
+						  <text>Not tested yet.</text>
+					  }}
+				</span>
+			</td>
+		</tr>
+	}
+	
+</table>    

@@ -1,0 +1,75 @@
+﻿@using RegTesting.Mvc
+@using RegTesting.Mvc.Models
+@model IList<TestJobModel>
+		   
+
+@if (Model.Any())
+{
+	<table class="table">
+		<tr>
+			<th>Started at</th>
+			<th>Started by</th>
+			<th>Started on</th>
+			<th>Testsuite</th>
+			<th style="width: 20em">Progress</th>
+			<th></th>
+			<th></th>
+		</tr>
+		@foreach (TestJobModel objTestJobModel in Model)
+		{
+			int intCount = objTestJobModel.Count;
+			int intPercentPassed = (intCount == 0 ? 0 : (objTestJobModel.Passed*100/objTestJobModel.Count));
+			int intPercentFailured = (intCount == 0 ? 0 : (objTestJobModel.Failured*100/objTestJobModel.Count));
+			int intPercentFinished = (intCount == 0 ? 0 : (objTestJobModel.Finished*100/objTestJobModel.Count));
+			<tr>
+				<td>@objTestJobModel.TestJobStartedAt.ToString()</td> 
+				<td>@objTestJobModel.TestJobTesterName (@objTestJobModel.TestJobJobType)</td>
+				<td>@objTestJobModel.TestJobTestsystemName</td>
+				<td>@objTestJobModel.TestJobName</td>    
+			  
+				<td>
+					<div class="progress">
+						<div class="progress-bar progress-bar-success" style="width: @(intPercentPassed + "%");"></div>
+						<div class="progress-bar progress-bar-danger" style="width: @(intPercentFailured + "%");"></div>
+					</div>
+				</td>
+
+				<td>
+					@objTestJobModel.Finished /  @objTestJobModel.Count (@intPercentFinished%)
+				</td>
+				<td>
+					<div class="btn-group">
+				
+						@if (RegtestingMvcConfiguration.Testmanager.Contains(User.Identity.GetLogin(), StringComparer.InvariantCultureIgnoreCase))
+						{
+							if (!objTestJobModel.IsCanceled)
+							{
+								<a class="btn btn-default btn-xs" href="@Url.Action("PrioTestJob", "Status", new {testjob = objTestJobModel.ID})"><i class="glyphicon glyphicon-star"></i></a>
+							}
+						}
+
+						@if (string.Equals(objTestJobModel.TestJobTesterName, User.Identity.GetLogin(), StringComparison.InvariantCultureIgnoreCase) || RegtestingMvcConfiguration.Testmanager.Contains(User.Identity.GetLogin(), StringComparer.InvariantCultureIgnoreCase))
+						{
+							if (!objTestJobModel.IsCanceled)
+							{
+								<a class="btn btn-danger btn-xs"  href="@Url.Action("CancelWorkItemGroup", "Status", new {testjob = objTestJobModel.ID})"><i class="glyphicon glyphicon-remove"></i></a>
+
+
+							}
+							else
+							{
+								<button class="btn btn-default disabled btn-xs"><i class="glyphicon glyphicon-remove"></i> Canceled</button>
+							}
+						}
+					</div>
+				</td>
+			</tr>
+		}
+
+	</table>
+}
+else
+{
+	<div class="alert alert-info">There are no running tests</div>
+}
+

@@ -1,0 +1,28 @@
+﻿@model RegTesting.Mvc.Models.LanguageModel
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Sprache löschen</h2>
+
+<h3>Möchten Sie folgende Sprache wirklich löschen? Die Sprache wird damit für alle Tester gelöscht.</h3>
+<fieldset>
+    <legend>Languages</legend>
+
+    <div class="display-label">Name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">Languagecode</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Languagecode)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Löschen" /> |
+        @Html.ActionLink("Zurück", "Index")
+    </p>
+}

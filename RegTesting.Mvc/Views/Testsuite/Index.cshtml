@@ -1,0 +1,47 @@
+﻿@model IEnumerable<RegTesting.Mvc.Models.TestsuiteModel>
+
+@{
+	ViewBag.Title = "Testsuiten - RegTesting";
+}
+
+<h2>Testsuiten</h2>
+
+<table  class="table">
+	<tr>
+		<th>
+			Name
+		</th>
+		<th>
+			Description
+		</th>
+		<th></th>
+	</tr>
+	<tr>
+		<td colspan="3">
+			@Html.ActionLink("New Testsuite", "Create")
+		</td>
+	</tr>
+	@foreach (var item in Model.Where(t=>!t.Name.StartsWith("Local "))) {
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.Name)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Description)
+			</td>
+			<td>
+				@Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+				@Html.ActionLink("Details", "Details", new { id=item.ID }) |
+				@Html.ActionLink("Delete", "Delete", new { id=item.ID })
+			</td>
+		</tr>
+	}
+
+</table>
+
+<br/>
+
+<div>
+	@Html.ActionLink("Testsuites Overview Table", "Overview", "Testsuite") <br/>
+	@Html.ActionLink("Back", "Index","Settings")
+</div>

@@ -1,0 +1,37 @@
+﻿@model IList<RegTesting.Mvc.Models.TestJobModel>
+
+@{
+	ViewBag.Title = "TestJobs";
+}
+
+<div class="navbar navbar-default">
+	<a class="navbar-brand" href="#">Status</a>
+	<ul class="nav navbar-nav">
+		<li class="active"><a href="@Url.Action("TestJobs", "Status", new { tester = @ViewBag.Tester })">Testing jobs</a></li>
+		<li ><a href="@Url.Action("Worker", "Status", new { tester = @ViewBag.Tester })">Worker</a></li>
+	</ul>
+</div>
+
+<div id="statusBlock">
+	@{Html.RenderPartial("TestJobsPartial", Model);}
+</div>
+
+<script type="text/javascript">
+
+	$(function () {
+
+		updateTestJobs();
+
+		function updateTestJobs() {
+			
+			$.get('@Url.Action("TestJobs")' + '?tester=@ViewBag.Tester', {},
+				function (view) {
+					$("div#statusBlock").html(view);
+					setTimeout(function () {
+						updateTestJobs();
+					}, 60000);
+				}
+			);
+		}
+	}); 
+</script>

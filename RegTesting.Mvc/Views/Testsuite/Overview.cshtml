@@ -1,0 +1,93 @@
+﻿@using RegTesting.Mvc.Models
+@model IEnumerable<RegTesting.Mvc.Models.TestsuiteModel>
+
+@{
+	ViewBag.Title = "Testsuiten - RegTesting";
+	IList<TestcaseModel> lstTestcases = ((IList<TestcaseModel>)ViewBag.LstTestcases);
+	IList<BrowserModel> lstBrowsers= ((IList<BrowserModel>)ViewBag.LstBrowsers);
+	IList<LanguageModel> lstLanguages = ((IList<LanguageModel>)ViewBag.LstLanguages);
+}
+
+<h2>Testsuites Overview</h2>
+
+<table class="table">
+	<tr>
+		<th></th>
+		@foreach (var testsuite in Model.Where(t => !t.Name.StartsWith("Local ")))
+		{
+			<th>@testsuite.Name</th>
+		}
+	</tr>
+	@foreach (var testcase in lstTestcases)
+	{
+		<tr>
+			<td>@testcase.Name</td>
+			@foreach (var testsuite in Model.Where(t => !t.Name.StartsWith("Local ")))
+			{
+				if (testsuite.Testcases.Any(t => t.ID == testcase.ID))
+				{
+					<td class="includedField"></td>
+				}
+				else
+				{
+					<td class="notIncludedField"></td>
+				}
+			}
+		</tr>
+	}
+	<tr>
+		<th></th>
+		@foreach (var testsuite in Model.Where(t => !t.Name.StartsWith("Local ")))
+		{
+			<th>@testsuite.Name</th>
+		}
+	</tr>
+	@foreach (var browser in lstBrowsers)
+	{
+		<tr>
+			<td>@browser.Name</td>
+			@foreach (var testsuite in Model.Where(t => !t.Name.StartsWith("Local ")))
+			{
+				if (testsuite.Browsers.Any(t => t.ID == browser.ID))
+				{
+					<td class="includedField"></td>
+				}
+				else
+				{
+					<td class="notIncludedField"></td>
+				}
+			}
+		</tr>
+	}
+	<tr>
+		<th></th>
+		@foreach (var testsuite in Model.Where(t => !t.Name.StartsWith("Local ")))
+		{
+			<th>@testsuite.Name</th>
+		}
+	</tr>
+	@foreach (var language in lstLanguages)
+	{
+		<tr>
+			<td>@language.Languagecode</td>
+			@foreach (var testsuite in Model.Where(t => !t.Name.StartsWith("Local ")))
+			{
+				if (testsuite.Languages.Any(t => t.ID == language.ID))
+				{
+					<td class="includedField"></td>
+				}
+				else
+				{
+					<td class="notIncludedField"></td>
+				}
+			}
+		</tr>
+	}
+
+
+</table>
+
+<br/>
+<div>
+	@Html.ActionLink("Back", "Index","Settings")
+</div>

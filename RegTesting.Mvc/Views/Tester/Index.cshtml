@@ -1,0 +1,39 @@
+﻿@model IEnumerable<RegTesting.Mvc.Models.TesterModel>
+
+@{
+	ViewBag.Title = "Tester - RegTesting";
+}
+
+<h2>Willkommen!</h2>
+Zum Starten bitte einen Tester auswählen, oder einen neuen erstellen.
+<br/>
+<br/>
+<p>
+   
+</p>
+<table>
+    <tr>
+        <th>
+            Tester
+        </th>
+        <th></th>
+    </tr>
+	<tr>
+		<td colspan="2">
+			@Html.ActionLink("Neuer Tester", "Create")
+		</td>
+	</tr>
+@foreach (var item in Model) {
+    <tr>
+		<td>
+			@Html.ActionLink(item.Name, "Index", "Testing", new { tester = item.ID},null)
+		</td>
+        <td>
+            @Html.ActionLink("Bearbeiten", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Löschen", "Delete", new { id=item.ID })
+        </td>
+    </tr>
+}
+
+</table>

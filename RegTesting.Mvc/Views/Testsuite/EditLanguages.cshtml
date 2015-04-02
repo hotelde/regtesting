@@ -1,0 +1,40 @@
+﻿@using RegTesting.Mvc.Models
+@model IList<int>
+
+@{
+	ViewBag.Title = "Edit Testsuite - RegTesting";
+	var lstLanguages = ((List<LanguageModel>) ViewBag.LstLanguages);
+}
+
+<h2>Edit Testsuite - Set languages</h2>
+<fieldset>
+	<legend>Sprachen</legend>
+	<form method="post" action="@Url.Action("LanguagesChanged")">
+
+	
+		<input type = "hidden" name = "testsuite" value = "@ViewBag.Testsuite" />
+
+		@foreach (LanguageModel languages in lstLanguages)
+		{
+			if (!Model.Contains(languages.ID))
+			{
+				<input type = "checkbox" name = "languages" value = "@languages.ID"/>
+				@languages.Name
+				<br/>
+			}
+			else
+			{
+				<input type = "checkbox" name = "languages" value = "@languages.ID" checked="checked" />
+				@languages.Name
+				<br/>
+			}
+		}
+		<br/>
+		<input type="submit" value="Save"/>
+	</form>
+</fieldset>
+
+
+<div>
+	@Html.ActionLink("Zurück", "Edit", new {id = ViewBag.Testsuite})
+</div>

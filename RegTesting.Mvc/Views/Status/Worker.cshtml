@@ -1,0 +1,43 @@
+﻿@model List<RegTesting.Mvc.Models.TestWorkerModel>
+@{
+	ViewBag.Title = "Worker";
+}
+
+
+
+<div class="navbar navbar-default">
+			 <a class="navbar-brand" href="#">Status</a>
+			<ul class="nav navbar-nav">
+				<li><a href="@Url.Action("TestJobs", "Status", new { tester = @ViewBag.Tester })">Testing jobs</a></li>
+				<li class="active"><a href="@Url.Action("Worker", "Status", new { tester = @ViewBag.Tester })">Worker</a></li>
+			</ul>
+</div>
+
+
+
+<div id="statusBlock">
+    @{Html.RenderPartial("PartialWorkerStatus", Model);}
+</div>
+<a class="btn btn-default btn-xs" href="@Url.Action("RebootAllWorker", "Status", new {})"><i class="glyphicon glyphicon-repeat"></i> Reboot all workers</a>
+
+
+<script type="text/javascript">
+
+	$(function () {
+
+		updateWorkerStatus();
+
+		function updateWorkerStatus() {
+			$.get('@Url.Action("RefreshWorkerStatus")', {},
+				function (view) {
+					$("div#statusBlock").html(view);
+					setTimeout(function () {
+						updateWorkerStatus();
+					}, 10000);
+				}
+			);
+		}
+
+
+	}); 
+</script>

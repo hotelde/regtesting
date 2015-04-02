@@ -1,0 +1,23 @@
+﻿@model RegTesting.Mvc.Models.TesterModel
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Tester löschen</h2>
+
+<h3>Das Löschen dieses Testers bedeutet auch, dass alle dazu Testergebnisse gelöscht werden. Möchten Sie folgenden Tester löschen?</h3>
+<fieldset>
+    <legend>Tester</legend>
+
+    <div class="display-label">Name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Löschen" /> |
+        @Html.ActionLink("Zurücl", "Index")
+    </p>
+}

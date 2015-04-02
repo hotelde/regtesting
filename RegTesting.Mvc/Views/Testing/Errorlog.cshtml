@@ -1,0 +1,86 @@
+﻿
+@using RegTesting.Contracts
+@using RegTesting.Contracts.Domain
+@using RegTesting.Mvc.Models
+@model IList<RegTesting.Contracts.ErrorOccurrenceGroup>
+
+@{
+	ViewBag.Title = "Log - RegTesting";
+	List<TestsystemModel> lstTestsysteme = ((List<TestsystemModel>)ViewBag.LstTestsystems);
+	List<TestsuiteModel> lstTestsuites = ((List<TestsuiteModel>)ViewBag.LstTestsuites);
+}
+
+@Html.Partial("PartialTestingMenu")
+
+<div class="testing-hero-unit">
+	<form class="form-inline" role="form">
+		<input type="radio" name="radio-history" value="0" onclick="OnDdlChanged();"/> Current errors
+		<br />
+		<div class="form-group">
+			<input name="radio-history" type="radio" value="1" onclick="OnDdlChanged();"/>
+			Show all errors between: 
+			<input style="width:6em;" type="text" class="datepicker form-control" id="datepickerFrom" />
+			and:
+			<input style="width:6em;" type="text" class="datepicker form-control" id="datepickerTo" />
+		</div>
+	</form>
+</div>
+
+@for (int i = 0; i < Model.Count; i++)
+{ 
+	ErrorOccurrenceGroup errorOccurrenceGroup = Model[i];
+	<div class="panel panel-default">
+
+		
+		 <div id="t@(errorOccurrenceGroup.Testcase.ID)" class="panel-heading">@errorOccurrenceGroup.Testcase.Name</div>
+
+			@for (int j = 0; j < errorOccurrenceGroup.LstErrorOccurence.Count; j++)
+   {
+	   ErrorOccurrence errorOccurrence = errorOccurrenceGroup.LstErrorOccurence[j];
+	   <div class="panel-body">
+		   <Small> (@errorOccurrenceGroup.Testcase.Type) <br/>
+		   @Html.ActionLink("History", "Resulthistory", "Testing", new { testcase = errorOccurrenceGroup.Testcase.ID }, null)</Small>
+		   @Html.Partial("PartialErrorOccurence", errorOccurrence)
+	   </div>
+	   
+   }
+  </div>
+
+	
+}
+<script type="text/javascript">
+	$(function () {
+		$(".datepicker").datepicker({
+			onSelect: function () {
+				$("input[name='radio-history'][value='1']").attr("checked", "checked");
+				OnDdlChanged();
+			}
+		});
+		$(".datepicker").datepicker("option", "dateFormat", "dd.mm.yy");
+		$("#datepickerFrom").val("@ViewBag.DateFrom");
+		$("#datepickerTo").val("@ViewBag.DateTo");
+
+
+		$("input[name='radio-history'][value='@ViewBag.ShowHistory']").attr("checked", "checked");
+		
+	});
+
+	function OnDdlChanged() {
+		window.location.href = "@Url.Action("Errorlog",new {})" + '?history=' + $("input[name='radio-history']:checked").val() + '&fromDate=' + $("#datepickerFrom").val() + '&toDate=' + $("#datepickerTo").val();
+
+
+	}
+</script>
+
+
+<script>
+
+	$(".hideable").click(function () {
+		$(this).siblings(".box").toggle();
+	});
+	$(".toggle").click(function () {
+		$(this).next().toggle();
+	});
+
+</script>
+	

@@ -1,0 +1,30 @@
+﻿@model RegTesting.Mvc.Models.BrowserModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>Browsers</legend>
+
+    <div class="display-label">Name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">Browserstring</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Browserstring)
+    </div>
+
+    <div class="display-label">Versionsstring</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Versionsstring)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

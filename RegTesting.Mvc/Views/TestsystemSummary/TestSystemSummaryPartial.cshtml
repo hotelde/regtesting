@@ -1,0 +1,24 @@
+﻿@model RegTesting.Contracts.TestsystemSummary
+
+@{
+	string strClass = "resultbig label-" + StatusHelper.GetStatusString(Model.TestsystemStatus);
+}
+
+
+<div class="col-md-4">
+	<a href="@Url.Action("Index","Testing", new {testsystem=Model.TestsystemID, testsuite=Model.TestsuiteID},null)">
+		
+		<div class="@strClass">
+			<span>@Model.TestsystemName</span><br/>
+			<span>@{if (Model.LastChangeDate.Year > 1)
+			{
+				@Model.LastChangeDate
+			}
+			else
+			{
+				<text>Not tested yet.</text>
+			}}</span>
+		</div>
+	</a>
+
+</div><!--/span-->

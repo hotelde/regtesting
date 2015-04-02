@@ -1,0 +1,45 @@
+﻿@model IEnumerable<RegTesting.Mvc.Models.LanguageModel>
+
+@{
+	ViewBag.Title = "Sprachen - RegTesting";
+}
+
+<h2>Sprachen</h2>
+
+<table class="table">
+	<tr>
+		<th>
+			Name
+		</th>
+		<th>
+			Languagecode
+		</th>
+		<th></th>
+	</tr>
+	<tr>
+		<td colspan="3">
+			@Html.ActionLink("Neue Sprache", "Create")
+		</td>
+	</tr>
+	@foreach (var item in Model) {
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.Name)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Languagecode)
+			</td>
+			<td>
+				@Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+				@Html.ActionLink("Details", "Details", new { id=item.ID }) |
+				@Html.ActionLink("Delete", "Delete", new { id=item.ID })
+			</td>
+		</tr>
+	}
+
+</table>
+
+<br/>
+<div>
+    @Html.ActionLink("Zurück", "Index","Settings")
+</div>

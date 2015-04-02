@@ -1,0 +1,33 @@
+﻿@model RegTesting.Mvc.Models.BrowserModel
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Browser löschen</h2>
+
+<h3>Möchten Sie folgenden Browser wirklich löschen? Der Browser wird damit für alle Tester gelöscht.</h3>
+<fieldset>
+    <legend>Browsers</legend>
+
+    <div class="display-label">Name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">Browserstring</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Browserstring)
+    </div>
+
+    <div class="display-label">Versionsstring</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Versionsstring)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Löschen" /> |
+        @Html.ActionLink("Zurück", "Index")
+    </p>
+}

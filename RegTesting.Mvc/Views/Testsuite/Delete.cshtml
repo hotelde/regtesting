@@ -1,0 +1,28 @@
+﻿@model RegTesting.Mvc.Models.TestsuiteModel
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Testsuite löschen</h2>
+
+<h3>Möchten Sie folgende Testsuite wirklich löschen? Die Testsuite wird damit für alle Tester gelöscht.</h3>
+<fieldset>
+    <legend>Testsuite</legend>
+
+    <div class="display-label">Name</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">Description</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Description)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Löschen" /> |
+        @Html.ActionLink("Back", "Index")
+    </p>
+}
