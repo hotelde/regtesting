@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.ServiceModel;
-using RegTesting.Contracts.Attributes;
-using RegTesting.Contracts.Domain;
 
-namespace RegTesting.Contracts
+namespace RegTesting.Tests.Core
 {
 	/// <summary>
 	/// Template for a testcase. For most testcases you should implement the Testcase class.

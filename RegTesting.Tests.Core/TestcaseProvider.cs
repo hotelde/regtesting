@@ -5,7 +5,7 @@ using System.Security;
 using System.Security.Permissions;
 using System.Text;
 
-namespace RegTesting.Contracts
+namespace RegTesting.Tests.Core
 {
 	/// <summary>
 	/// A class that provides testcases from a dll file

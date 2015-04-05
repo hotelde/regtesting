@@ -4,8 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using RegTesting.Contracts;
-using RegTesting.Contracts.Domain;
 using RegTesting.LocalTest.Properties;
+using RegTesting.Tests.Core;
 
 namespace RegTesting.LocalTest.Logic
 {
@@ -57,7 +57,7 @@ namespace RegTesting.LocalTest.Logic
 
 		private Browser GetBrowser(string strBrowser)
 		{
-			return new Browser { Browserstring = strBrowser, Name = strBrowser };
+			return new Browser { Browserstring = strBrowser };
 		}
 
 

@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using RegTesting.Contracts;
+using RegTesting.Tests.Core;
 
 namespace RegTesting
 {

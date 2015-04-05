@@ -57,8 +57,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\SupportedBrowsers.cs" />
-    <Compile Include="Attributes\SupportedLanguages.cs" />
     <Compile Include="Domain\Browser.cs" />
     <Compile Include="Domain\BrowserMap.cs" />
     <Compile Include="Domain\HistoryResult.cs" />
@@ -80,7 +78,6 @@
     <Compile Include="Domain\TestsystemMap.cs" />
     <Compile Include="DTO\BrowserDto.cs" />
     <Compile Include="DTO\LanguageDto.cs" />
-    <Compile Include="ServerErrorModel.cs" />
     <Compile Include="DTO\TestcaseDto.cs" />
     <Compile Include="DTO\TesterDto.cs" />
     <Compile Include="DTO\TestJobDto.cs" />
@@ -94,13 +91,9 @@
     <Compile Include="ErrorOccurrenceGroup.cs" />
     <Compile Include="GroupedResult.cs" />
     <Compile Include="GroupedResultPart.cs" />
-    <Compile Include="ITestable.cs" />
-    <Compile Include="ITestableFactory.cs" />
     <Compile Include="ITestFileLocker.cs" />
     <Compile Include="ITestJobManager.cs" />
     <Compile Include="ITestWorker.cs" />
-    <Compile Include="ITypesLoader.cs" />
-    <Compile Include="ITypesLoaderFactory.cs" />
     <Compile Include="RefreshResultsModel.cs" />
     <Compile Include="Repositories\ILanguageRepository.cs" />
     <Compile Include="Repositories\IErrorRepository.cs" />
@@ -127,13 +120,11 @@
     <Compile Include="Domain\TestJob.cs" />
     <Compile Include="SummariesModel.cs" />
     <Compile Include="TestcaseDetailsModel.cs" />
-    <Compile Include="TestcaseProvider.cs" />
     <Compile Include="TestJobManager.cs" />
     <Compile Include="TestResult.cs" />
     <Compile Include="TestState.cs" />
     <Compile Include="TestsystemSummary.cs" />
     <Compile Include="TestsystemSummaryModel.cs" />
-    <Compile Include="WebDriverInitStrategy.cs" />
     <Compile Include="WorkItem.cs" />
   </ItemGroup>
   <ItemGroup>

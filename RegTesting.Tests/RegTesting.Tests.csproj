@@ -42,6 +42,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
@@ -57,15 +58,15 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RegTesting.Contracts\RegTesting.Contracts.csproj">
-      <Project>{F1096B19-7F46-483E-BDBA-27225D73CF44}</Project>
-      <Name>RegTesting.Contracts</Name>
+    <ProjectReference Include="..\RegTesting.Tests.Core\RegTesting.Tests.Core.csproj">
+      <Project>{6EAFA536-480C-46E2-8D5D-8DD58646DA2C}</Project>
+      <Name>RegTesting.Tests.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RegTesting.Tests.Framework\RegTesting.Tests.Framework.csproj">
+      <Project>{CF5F9D83-8F58-408E-AE13-1B504353B95E}</Project>
+      <Name>RegTesting.Tests.Framework</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

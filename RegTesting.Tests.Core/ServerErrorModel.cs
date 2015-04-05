@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace RegTesting.Contracts
+namespace RegTesting.Tests.Core
 {
 
 	/// <summary>

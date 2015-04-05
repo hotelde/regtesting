@@ -12,6 +12,7 @@ using RegTesting.Contracts.Enums;
 using RegTesting.Contracts.Repositories;
 using RegTesting.Service.Mail;
 using RegTesting.Service.Tfs;
+using RegTesting.Tests.Core;
 
 namespace RegTesting.Service.TestLogic
 {

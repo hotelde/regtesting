@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CF5F9D83-8F58-408E-AE13-1B504353B95E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RegTesting.Tests.Framework</RootNamespace>
+    <AssemblyName>RegTesting.Tests.Framework</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WebDriver">
+      <HintPath>..\packages\Selenium.WebDriver.2.45.0\lib\net40\WebDriver.dll</HintPath>
+    </Reference>
+    <Reference Include="WebDriver.Support">
+      <HintPath>..\packages\Selenium.Support.2.45.0\lib\net40\WebDriver.Support.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\SupportedBrowsers.cs" />
+    <Compile Include="Attributes\SupportedLanguages.cs" />
+    <Compile Include="Elements\BasicPageElement.cs" />
+    <Compile Include="Elements\Button.cs" />
+    <Compile Include="Elements\ByFactory.cs" />
+    <Compile Include="Elements\CheckBox.cs" />
+    <Compile Include="Elements\ClickElementWithoutScrollingBehaviour.cs" />
+    <Compile Include="Elements\DefaultClickBehaviour.cs" />
+    <Compile Include="Elements\DefaultFillBehaviour.cs" />
+    <Compile Include="Elements\DefaultSelectBehaviour.cs" />
+    <Compile Include="Elements\FillBehaviourClickFirstThenWaitForClear.cs" />
+    <Compile Include="Elements\FillbehaviourWaitForClearBeforeTyping.cs" />
+    <Compile Include="Elements\HiddenElement.cs" />
+    <Compile Include="Elements\IClickable.cs" />
+    <Compile Include="Elements\IFillable.cs" />
+    <Compile Include="Elements\Image.cs" />
+    <Compile Include="Elements\Input.cs" />
+    <Compile Include="Elements\ISelectable.cs" />
+    <Compile Include="Elements\ITimedFillable.cs" />
+    <Compile Include="Elements\Link.cs" />
+    <Compile Include="Elements\LocateOptions.cs" />
+    <Compile Include="Elements\SelectBox.cs" />
+    <Compile Include="Enums\ClickBehaviours.cs" />
+    <Compile Include="Enums\FillBehaviour.cs" />
+    <Compile Include="Enums\Resolution.cs" />
+    <Compile Include="Enums\Visibility.cs" />
+    <Compile Include="Enums\When.cs" />
+    <Compile Include="Logic\AbstractTestcase.cs" />
+    <Compile Include="Logic\BasePageObject.cs" />
+    <Compile Include="Logic\ClickBehaviourAttribute.cs" />
+    <Compile Include="Logic\ClickBehaviourFactory.cs" />
+    <Compile Include="Logic\Extensions\AsyncWebDriverCalls.cs" />
+    <Compile Include="Logic\Extensions\WebDriverExtensions.cs" />
+    <Compile Include="Logic\Extensions\WebElementExtensions.cs" />
+    <Compile Include="Logic\FillBehaviourAttribute.cs" />
+    <Compile Include="Logic\FillbehaviourFactory.cs" />
+    <Compile Include="Logic\Init\IWebDriverFactory.cs" />
+    <Compile Include="Logic\Init\LocalWebDriverFactory.cs" />
+    <Compile Include="Logic\Init\RemoteWebDriverFactory.cs" />
+    <Compile Include="Logic\LocateAttribute.cs" />
+    <Compile Include="Logic\PageObjectFactory.cs" />
+    <Compile Include="Logic\PagePropsAttribute.cs" />
+    <Compile Include="Logic\PageSettings\AbstractPageSettings.cs" />
+    <Compile Include="Logic\PageSettings\DefaultSettings.cs" />
+    <Compile Include="Logic\PageSettings\IPageSettings.cs" />
+    <Compile Include="Logic\PageSettings\IPageSettingsFactory.cs" />
+    <Compile Include="Logic\PageSettings\PageSettingsFactory.cs" />
+    <Compile Include="Logic\PartialPageObjectAttribute.cs" />
+    <Compile Include="Logic\SupportedResolutions.cs" />
+    <Compile Include="Logic\Testlog.cs" />
+    <Compile Include="Logic\TestStatusManager.cs" />
+    <Compile Include="Logic\WaitAttribute.cs" />
+    <Compile Include="Logic\WaitForElementsOnActionAttribute.cs" />
+    <Compile Include="Logic\WaitModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RegTesting.Tests.Core\RegTesting.Tests.Core.csproj">
+      <Project>{6EAFA536-480C-46E2-8D5D-8DD58646DA2C}</Project>
+      <Name>RegTesting.Tests.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

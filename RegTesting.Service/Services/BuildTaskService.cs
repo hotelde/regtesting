@@ -9,6 +9,7 @@ using RegTesting.Contracts.Enums;
 using RegTesting.Contracts.Repositories;
 using RegTesting.Contracts.Services;
 using RegTesting.Service.Logging;
+using RegTesting.Tests.Core;
 
 namespace RegTesting.Service.Services
 {

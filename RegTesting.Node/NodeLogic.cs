@@ -10,6 +10,8 @@ using AutoMapper;
 using RegTesting.Contracts;
 using RegTesting.Contracts.Domain;
 using RegTesting.Contracts.DTO;
+using RegTesting.Tests.Core;
+using Browser = RegTesting.Tests.Core.Browser;
 
 namespace RegTesting.Node
 {
@@ -172,7 +174,12 @@ namespace RegTesting.Node
 				WaitOnWebExceptions(objWorkItem);
 
 				/**3: Prepare Test **/
-				objTestable.SetupTest(WebDriverInitStrategy.SeleniumLocal, objWorkItem.Browser, objWorkItem.Testsystem.Url,
+				Browser browser = new Browser()
+				{
+					Browserstring = objWorkItem.Browser.Browserstring,
+					Versionsstring = objWorkItem.Browser.Versionsstring
+				};
+				objTestable.SetupTest(WebDriverInitStrategy.SeleniumLocal, browser, objWorkItem.Testsystem.Url,
 									  objWorkItem.Language.Languagecode);
 
 				/**4: Run Test **/

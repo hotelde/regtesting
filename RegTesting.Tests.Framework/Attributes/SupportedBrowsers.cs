@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace RegTesting.Contracts.Attributes
+namespace RegTesting.Tests.Framework.Attributes
 {
 	/// <summary>
 	/// Attribute for supported Browsers

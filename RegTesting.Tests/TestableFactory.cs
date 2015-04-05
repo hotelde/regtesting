@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using RegTesting.Contracts;
+using RegTesting.Tests.Core;
 
 namespace RegTesting
 {

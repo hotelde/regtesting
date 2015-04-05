@@ -1,5 +1,5 @@
 ﻿using System;
-using RegTesting.Contracts;
+using RegTesting.Tests.Core;
 
 namespace RegTesting
 {

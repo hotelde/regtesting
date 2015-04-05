@@ -1,4 +1,4 @@
-﻿namespace RegTesting.Contracts
+﻿namespace RegTesting.Tests.Core
 {
 	/// <summary>
 	/// The ITestableFactory

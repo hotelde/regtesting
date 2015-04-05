@@ -109,6 +109,10 @@
       <Project>{F1096B19-7F46-483E-BDBA-27225D73CF44}</Project>
       <Name>RegTesting.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RegTesting.Tests.Core\RegTesting.Tests.Core.csproj">
+      <Project>{6EAFA536-480C-46E2-8D5D-8DD58646DA2C}</Project>
+      <Name>RegTesting.Tests.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\RegTesting.Tests\RegTesting.Tests.csproj">
       <Project>{CB2AD5B8-A4E7-43EE-904C-B68E0BA12A94}</Project>
       <Name>RegTesting.Tests</Name>

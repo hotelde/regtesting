@@ -1,0 +1,19 @@
+﻿using OpenQA.Selenium;
+using RegTesting.Tests.Core;
+
+namespace RegTesting.Tests.Framework.Logic.Init
+{
+
+	/// <summary>
+	/// The interface for the WebDriverFactories
+	/// </summary>
+	public interface IWebDriverFactory
+	{
+		/// <summary>
+		/// Get a WebDriver
+		/// </summary>
+		/// <param name="objBrowser">the Browser to test on</param>
+		/// <returns>a IWebDriver</returns>
+		IWebDriver GetWebDriver(Browser objBrowser);
+	}
+}

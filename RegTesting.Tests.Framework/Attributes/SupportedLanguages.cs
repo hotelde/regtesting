@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RegTesting.Contracts.Attributes
+namespace RegTesting.Tests.Framework.Attributes
 {
 	/// <summary>
 	/// The attribute for supported languages
