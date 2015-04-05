@@ -115,6 +115,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="RegTesting.Tests.Framework.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RegTesting.Tests.Core\RegTesting.Tests.Core.csproj">
