@@ -12,9 +12,12 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="Testsystem" Type="System.String" Scope="User">
-      <Value Profile="(Default)">dev</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="TestcaseFilter" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="TestcaseFile" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

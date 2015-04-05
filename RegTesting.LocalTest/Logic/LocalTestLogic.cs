@@ -13,10 +13,26 @@ namespace RegTesting.LocalTest.Logic
 	{
 		private ITestable _objTestable;
 
+        private TestcaseProvider _objTestcaseProvider = null;
+
 		public string TestHeader { get; private set; }
 		public List<string> LogEntries { get { return _objTestable.GetLog(); }}
 
 		private bool _bolCanceled;
+
+
+
+        internal void LoadTestFile(string filename)
+        {
+            if (_objTestcaseProvider != null)
+            {
+                _objTestcaseProvider.Unload();
+                _objTestcaseProvider = null;
+            }
+            _objTestcaseProvider = new TestcaseProvider(filename);
+            _objTestcaseProvider.CreateAppDomain();
+        }
+
 
 		/// <summary>
 		/// Load all Testcases from
@@ -24,7 +40,8 @@ namespace RegTesting.LocalTest.Logic
 		/// <returns></returns>
 		internal List<string> GetTestcases()
 		{
-			string[] arrTypes = new TypesLoader().GetTypes();
+
+            string[] arrTypes = _objTestcaseProvider != null ? _objTestcaseProvider.LoadTypes() : new string[0];
 			List<string> lstTestcasesTypes = arrTypes.ToList();
 			lstTestcasesTypes.Sort();
 			return lstTestcasesTypes;
@@ -72,7 +89,7 @@ namespace RegTesting.LocalTest.Logic
 		{
 			TestHeader = String.Format("Testcase: {0} ({1}, {2}) on {3}", strTypeName, strLanguage, objBrowser, strTestsystem);
 
-			_objTestable = GetTestable(strTypeName);
+			_objTestable = _objTestcaseProvider.GetTestableFromTypeName(strTypeName);
 			_objTestable.GetLogLastTime();
 			_objTestable.SetupTest(WebDriverInitStrategy.SeleniumLocal, objBrowser, strTestsystem, strLanguage);
 			try
@@ -92,24 +109,6 @@ namespace RegTesting.LocalTest.Logic
 		{
 			_bolCanceled = true;
 			_objTestable.CancelTest();
-		}
-
-
-		/// <summary>
-		/// Create a testable from a TypeName
-		/// </summary>
-		/// <param name="strTypeName">TypeName of Testcase</param>
-		/// <returns>An ITestable with the created testcase</returns>
-		private ITestable GetTestable(string strTypeName)
-		{
-			Assembly objAssembly = AppDomain.CurrentDomain.GetAssemblies().Single(objAssemb => objAssemb.GetName().Name == "RegTesting.Tests");
-			Type objType = objAssembly.GetType(strTypeName);
-			if (typeof(ITestable).IsAssignableFrom(objType) && !objType.IsAbstract)
-			{
-				ITestable objTestable = (ITestable)AppDomain.CurrentDomain.CreateInstance("RegTesting.Tests", strTypeName).Unwrap();
-				return objTestable;
-			}
-			return null;
 		}
 
 		public string GetAppSetting(string strKey)

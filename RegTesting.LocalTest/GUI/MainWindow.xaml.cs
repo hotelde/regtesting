@@ -17,6 +17,7 @@ using CheckBox = System.Windows.Controls.CheckBox;
 using Label = System.Windows.Controls.Label;
 using ListBox = System.Windows.Controls.ListBox;
 using MessageBox = System.Windows.Forms.MessageBox;
+using System.IO;
 
 namespace RegTesting.LocalTest.GUI
 {
@@ -29,6 +30,7 @@ namespace RegTesting.LocalTest.GUI
 	public partial class MainWindow : Window
 	{
 
+        private bool remoteAvailable = false;
 		private DispatcherTimer _objTimer;
 
 		private readonly LocalTestLogic _objLocalTestLogic;
@@ -69,17 +71,14 @@ namespace RegTesting.LocalTest.GUI
 			string strBrowser = _objLocalTestLogic.GetAppSetting("Browser");
 			if (String.IsNullOrEmpty(strBrowser)) strBrowser = "";
 			
-			_lstTestcases = _objLocalTestLogic.GetTestcases();
 			lstLanguage.Items.Add(GetCheckBoxRow("DE"));
 			SelectItems(lstLanguage,strLanguage.Split('|'), true);
 
-
-			string strTestcase = _objLocalTestLogic.GetAppSetting("Testcase");
-			if (String.IsNullOrEmpty(strTestcase)) strTestcase = "";
-
-			lstViewTestcases.ItemsSource = _lstTestcases;
-			SelectItems(lstViewTestcases,strTestcase.Split('|'), false);
-
+            _lstTestcases = new List<string>();
+            string testcaseFile = _objLocalTestLogic.GetAppSetting("TestcaseFile");
+            if (!String.IsNullOrEmpty(testcaseFile))
+                LoadTestcaseFile(testcaseFile);
+            
 			string filterTestcases = _objLocalTestLogic.GetAppSetting("TestcaseFilter");
 			txtFilter.Text = filterTestcases;
 
@@ -176,10 +175,11 @@ namespace RegTesting.LocalTest.GUI
 		// Completed Method
 		void __objGetRemoteCapabilityBackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
+
 			if (e.Cancelled)
 			{
 			}
-			else if (e.Error != null)
+			else if(!remoteAvailable)
 			{
 				Title = "RegTesting LocalTest (Local)";
 
@@ -235,33 +235,41 @@ namespace RegTesting.LocalTest.GUI
 
 			List<string> lstRemoteLanguages;
 			List<string> lstRemoteBrowsers;
-			using (WcfClient objClient = new WcfClient())
-			{
-				lstRemoteLanguages = objClient.GetLanguages();
-				lstRemoteBrowsers = objClient.GetBrowsers();
 
-			}
-			Dispatcher.Invoke((() =>
-			{
-				lstLanguage.Items.Clear();
-				foreach (string strRemoteLanguage in lstRemoteLanguages)
-				{
-					CheckBox checkBoxRow = GetCheckBoxRow(strRemoteLanguage);
-					checkBoxRow.Click += languageCheckBoxRow_Click;
-					lstLanguage.Items.Add(checkBoxRow);
-				}
-				foreach (string strRemoteBrowser in lstRemoteBrowsers)
-				{
-					CheckBox checkBoxRow = GetCheckBoxRow(StrRemotePrefix + strRemoteBrowser);
-					checkBoxRow.Click += browserCheckBoxRow_Click;
 
-					lstBrowser.Items.Add(checkBoxRow);
-				}
+            try {
+                using (WcfClient objClient = new WcfClient())
+			    {
+				    lstRemoteLanguages = objClient.GetLanguages();
+				    lstRemoteBrowsers = objClient.GetBrowsers();
+
+			    }
+			    Dispatcher.Invoke((() =>
+			    {
+				    lstLanguage.Items.Clear();
+				    foreach (string strRemoteLanguage in lstRemoteLanguages)
+				    {
+					    CheckBox checkBoxRow = GetCheckBoxRow(strRemoteLanguage);
+					    checkBoxRow.Click += languageCheckBoxRow_Click;
+					    lstLanguage.Items.Add(checkBoxRow);
+				    }
+				    foreach (string strRemoteBrowser in lstRemoteBrowsers)
+				    {
+					    CheckBox checkBoxRow = GetCheckBoxRow(StrRemotePrefix + strRemoteBrowser);
+					    checkBoxRow.Click += browserCheckBoxRow_Click;
+
+					    lstBrowser.Items.Add(checkBoxRow);
+				    }
 				
-				lstBrowser.Items.Refresh();
-				lstLanguage.Items.Refresh();
+				    lstBrowser.Items.Refresh();
+				    lstLanguage.Items.Refresh();
+                    remoteAvailable = true;
 
-			}));
+			    }));
+            } catch {
+                remoteAvailable = false;
+            }
+	
 
 
 		}
@@ -321,6 +329,7 @@ namespace RegTesting.LocalTest.GUI
 			List<string> lstSelectedTestcases = lstViewTestcases.SelectedItems.Cast<string>().ToList();
 
 			_objLocalTestLogic.SetAppSetting("TestcaseFilter", txtFilter.Text);
+            _objLocalTestLogic.SetAppSetting("TestcaseFile", txtFile.Text);
 			_objLocalTestLogic.SetAppSetting("Testsystem", txtTestsystem.Text);
 			_objLocalTestLogic.SetAppSetting("Language", string.Join("|", lstSelectedLanguages));
 			_objLocalTestLogic.SetAppSetting("Browser", string.Join("|", lstBrowser.SelectedItems.Cast<CheckBox>().Where(checkBox => checkBox.IsChecked.HasValue && checkBox.IsChecked.Value).Select(checkBox => checkBox.Tag.ToString())));
@@ -397,10 +406,54 @@ namespace RegTesting.LocalTest.GUI
 			objTestGrid.Visibility = Visibility.Visible;
 		}
 
+        private void BtnPickFileClick(object objSender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Test Libraries (*.dll)|*.dll";
+            openFileDialog.ShowDialog();
+            if (!String.IsNullOrEmpty(openFileDialog.FileName))
+                LoadTestcaseFile(openFileDialog.FileName);            
+        }
+
+
+
+        private void LoadTestcaseFile(String filename)
+        {
+            _lstTestcases.Clear();
+            try
+            {
+                _objLocalTestLogic.LoadTestFile(filename);
+                txtFile.Text = filename;
+                _lstTestcases.AddRange(_objLocalTestLogic.GetTestcases());
+                string strTestcase = _objLocalTestLogic.GetAppSetting("Testcase");
+                if (String.IsNullOrEmpty(strTestcase)) strTestcase = "";
+                UpdateTextcaseSearch();
+                SelectItems(lstViewTestcases, strTestcase.Split('|'), false);
+            }
+            catch (FileNotFoundException)
+            {
+                //File not found... Don't show an error. Should only occur when initially starting app and
+                //we try to reload the last loaded file... Instead of displaying an error, just don't load anything.
+            }
+            catch (TypeLoadException)
+            {
+                //File was found, but the file doesn't contain the typesloader we need to search for testclasses
+                UpdateTextcaseSearch();
+            }
+        }
+
+
+
 		private void TxtFilter_OnTextChanged(object objSender, TextChangedEventArgs objE)
 		{
-			lstViewTestcases.ItemsSource = _lstTestcases.Where(objTestcase => objTestcase.ToLower().Contains(txtFilter.Text.ToLower()));
+            UpdateTextcaseSearch();
 		}
+
+
+        private void UpdateTextcaseSearch()
+        {
+            lstViewTestcases.ItemsSource = _lstTestcases.Where(objTestcase => objTestcase.ToLower().Contains(txtFilter.Text.ToLower()));
+        }
 
 		private void ShowErrorMessage(string message, string heading)
 		{
@@ -411,4 +464,5 @@ namespace RegTesting.LocalTest.GUI
 					MessageBoxDefaultButton.Button1);
 		}
 	}
+
 }

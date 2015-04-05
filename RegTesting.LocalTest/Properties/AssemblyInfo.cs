@@ -8,11 +8,12 @@ using System.Windows;
 [assembly: AssemblyTitle("RegTesting.LocalTest")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Hotel.de AG")]
-[assembly: AssemblyProduct("RegTesting.LocalTest")]
-[assembly: AssemblyCopyright("Copyright © Hotel.de AG 2012")]
+[assembly: AssemblyCompany("HOTELDE AG")]
+[assembly: AssemblyProduct("")]
+[assembly: AssemblyCopyright("2012-2015 HOTELDE AG, Apache License, Version 2.0")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
