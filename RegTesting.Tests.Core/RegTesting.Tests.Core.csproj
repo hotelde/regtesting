@@ -48,7 +48,10 @@
     <Compile Include="ITypesLoaderFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerErrorModel.cs" />
+    <Compile Include="TestableFactory.cs" />
     <Compile Include="TestcaseProvider.cs" />
+    <Compile Include="TypesLoader.cs" />
+    <Compile Include="TypesLoaderFactory.cs" />
     <Compile Include="WebDriverInitStrategy.cs" />
   </ItemGroup>
   <ItemGroup>

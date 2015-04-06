@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using RegTesting.Tests.Core;
 
-namespace RegTesting
+namespace RegTesting.Tests.Core
 {
 	/// <summary>
 	/// A Factory for creating our testcases
@@ -24,11 +24,11 @@ namespace RegTesting
 			try
 			{
 
-				Assembly assembly = AppDomain.CurrentDomain.GetAssemblies().Single(objAssemb => objAssemb.GetName().Name == "RegTesting.Tests");
+                Assembly assembly = Assembly.LoadFrom(strAssemblyFile);
 				Type objType = assembly.GetType(strTypeName);
 				if (typeof(ITestable).IsAssignableFrom(objType))
 				{
-					return (ITestable)Activator.CreateInstanceFrom(strAssemblyFile, strTypeName, objConstructArgs).Unwrap();
+                    return (ITestable)Activator.CreateInstanceFrom(strAssemblyFile, strTypeName, objConstructArgs).Unwrap();
 				}
 			}
 			catch (MissingMethodException)

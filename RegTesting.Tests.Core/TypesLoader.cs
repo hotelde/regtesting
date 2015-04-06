@@ -4,9 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using RegTesting.Tests.Core;
 
-namespace RegTesting
+namespace RegTesting.Tests.Core
 {
 	/// <summary>
 	/// Loading Types of this project.
@@ -19,13 +18,12 @@ namespace RegTesting
 		/// Get the Types of the Tests Assembly
 		/// </summary>
 		/// <returns>A string array with all types of the assembly</returns>
-		public string[] GetTypes()
+		public string[] GetTypes(string loadAssembly)
 		{
 			try
 			{
-
-				//Find out this assembly.
-				Assembly assembly = AppDomain.CurrentDomain.GetAssemblies().Single(objAssemb => objAssemb.GetName().Name == "RegTesting.Tests");
+				//Load assembly.
+                Assembly assembly = Assembly.LoadFrom(loadAssembly);
 				//Get and return all types of this assembly
 				IEnumerable<string> types = assembly.GetTypes().Where(t=>typeof(ITestable).IsAssignableFrom(t) && !t.IsAbstract).Select(objType => objType.FullName);
 				return types.ToArray();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Security;
@@ -60,10 +61,10 @@ namespace RegTesting.Tests.Core
 
 			try
 			{
-				ITypesLoaderFactory objTypesLoaderFactory =(ITypesLoaderFactory) _objTestsDomain.CreateInstanceFrom(_strTestsFile, "RegTesting.TypesLoaderFactory").Unwrap();
+                ITypesLoaderFactory objTypesLoaderFactory = (ITypesLoaderFactory)_objTestsDomain.CreateInstance(Assembly.GetExecutingAssembly().FullName, "RegTesting.Tests.Core.TypesLoaderFactory").Unwrap();
 				object[] objConstructArgs = new object[] {};
-				ITypesLoader objTypesLoader = objTypesLoaderFactory.Create(_strTestsFile, "RegTesting.TypesLoader", objConstructArgs);
-				Types = objTypesLoader.GetTypes();
+                ITypesLoader objTypesLoader = objTypesLoaderFactory.Create(Assembly.GetExecutingAssembly().FullName, "RegTesting.Tests.Core.TypesLoader", objConstructArgs);
+				Types = objTypesLoader.GetTypes(_strTestsFile);
 				foreach (string strType in Types)
 				{
 					if (strType.StartsWith("ERROR:"))
@@ -118,7 +119,7 @@ namespace RegTesting.Tests.Core
 		{
 			try
 			{
-				ITestableFactory objTestableFactory = (ITestableFactory)_objTestsDomain.CreateInstanceFrom(_strTestsFile, "RegTesting.TestableFactory").Unwrap();
+                ITestableFactory objTestableFactory = (ITestableFactory)_objTestsDomain.CreateInstance(Assembly.GetExecutingAssembly().FullName, "RegTesting.Tests.Core.TestableFactory").Unwrap();
 				object[] objConstructArgs = new object[] { };
 				ITestable objTestable = objTestableFactory.Create(_strTestsFile,
 					strTypeName, objConstructArgs);
@@ -180,13 +181,12 @@ namespace RegTesting.Tests.Core
 			};
 			_objTestsDomain = AppDomain.CreateDomain("TestDomain", null, objSetup, objPermSet);
 
-
 			try
 			{
-				ITypesLoaderFactory objTypesLoaderFactory = (ITypesLoaderFactory)_objTestsDomain.CreateInstanceFrom(_strTestsFile, "RegTesting.TypesLoaderFactory").Unwrap();
+                ITypesLoaderFactory objTypesLoaderFactory = (ITypesLoaderFactory)_objTestsDomain.CreateInstance(Assembly.GetExecutingAssembly().FullName, " RegTesting.Tests.Core.TypesLoaderFactory").Unwrap();
 				object[] objConstructArgs = new object[] { };
-				ITypesLoader objTypesLoader = objTypesLoaderFactory.Create(_strTestsFile, "RegTesting.TypesLoader", objConstructArgs);
-				Types = objTypesLoader.GetTypes();
+                ITypesLoader objTypesLoader = objTypesLoaderFactory.Create(Assembly.GetExecutingAssembly().FullName, " RegTesting.Tests.Core.TypesLoader", objConstructArgs);
+				Types = objTypesLoader.GetTypes(_strTestsFile);
 			}
 			catch (NullReferenceException)
 			{

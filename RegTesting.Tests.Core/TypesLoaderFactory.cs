@@ -1,7 +1,7 @@
 ﻿using System;
 using RegTesting.Tests.Core;
 
-namespace RegTesting
+namespace RegTesting.Tests.Core
 {
 	/// <summary>
 	/// A Factory for the Typesloader
@@ -21,7 +21,7 @@ namespace RegTesting
 			//Ignore all errors and return null in error case.
 			try
 			{
-				return (ITypesLoader)Activator.CreateInstanceFrom(strAssemblyFile, strTypeName, objConstructArgs).Unwrap();
+				return (ITypesLoader)Activator.CreateInstance(strAssemblyFile, strTypeName, objConstructArgs).Unwrap();
 			}
 			catch (InvalidCastException)
 			{

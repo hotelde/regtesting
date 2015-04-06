@@ -9,6 +9,6 @@ namespace RegTesting.Tests.Core
 		/// Get all Types of the Testcases
 		/// </summary>
 		/// <returns>String array with all Typenames</returns>
-		string[] GetTypes();
+        string[] GetTypes(string loadAssembly);
 	}
 }

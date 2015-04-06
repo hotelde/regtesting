@@ -16,7 +16,13 @@ namespace RegTesting.LocalTest.Logic
         private TestcaseProvider _objTestcaseProvider = null;
 
 		public string TestHeader { get; private set; }
-		public List<string> LogEntries { get { return _objTestable.GetLog(); }}
+		public List<string> LogEntries { 
+            get {
+                if(_objTestable != null)
+                    return _objTestable.GetLog();
+                return new List<string>();
+            }
+        }
 
 		private bool _bolCanceled;
 
