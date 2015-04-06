@@ -1,6 +1,6 @@
 ﻿namespace RegTesting.Tests.Framework.Elements
 {
-	interface ISelectable
+	public interface ISelectable
 	{
 		void SelectByText(string strText);
 		void SelectByValue(string strValue);

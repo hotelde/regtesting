@@ -10,7 +10,7 @@ using RegTesting.Tests.Framework.Logic.PageSettings;
 
 namespace RegTesting.Tests.Framework.Logic
 {
-	abstract internal class BasePageObject
+	abstract public class BasePageObject
 	{
 		private readonly object _lock = new object();
 		protected readonly IWebDriver _driver;

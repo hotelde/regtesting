@@ -3,7 +3,7 @@ using RegTesting.Tests.Framework.Enums;
 
 namespace RegTesting.Tests.Framework.Logic
 {
-	class FillbehaviourFactory
+	public class FillbehaviourFactory
 	{
 		public static IFillable Create(FillBehaviour fillBehaviour, BasicPageElement pageElement)
 		{

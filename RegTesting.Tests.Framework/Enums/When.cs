@@ -1,6 +1,6 @@
 ﻿namespace RegTesting.Tests.Framework.Enums
 {
-	enum When
+	public enum When
 	{
 		Before,
 		After

@@ -4,7 +4,7 @@ using RegTesting.Tests.Framework.Logic.Extensions;
 
 namespace RegTesting.Tests.Framework.Elements
 {
-	class DefaultSelectBehaviour : ISelectable
+	public class DefaultSelectBehaviour : ISelectable
 	{
 		private readonly BasicPageElement _objPageElement;
 

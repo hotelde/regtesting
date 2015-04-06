@@ -10,9 +10,10 @@ using RegTesting.Tests.Framework.Properties;
 
 namespace RegTesting.Tests.Framework.Logic
 {
-	internal class PageObjectFactory
+	public class PageObjectFactory
 	{
 		private static readonly IPageSettingsFactory PageSettingsFactory;
+
 		static PageObjectFactory()
 		{
 			PageSettingsFactory = new PageSettingsFactory();

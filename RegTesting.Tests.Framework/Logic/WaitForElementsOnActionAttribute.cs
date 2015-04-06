@@ -4,7 +4,7 @@ using RegTesting.Tests.Framework.Enums;
 namespace RegTesting.Tests.Framework.Logic
 {
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-	internal class WaitForElementsOnActionAttribute : Attribute
+	public class WaitForElementsOnActionAttribute : Attribute
 	{
 		public When When { get; set; }
 		public string WaitForPageElementWithName { get; set; }

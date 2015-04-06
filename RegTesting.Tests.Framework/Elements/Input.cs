@@ -7,7 +7,7 @@ using RegTesting.Tests.Framework.Logic.Extensions;
 
 namespace RegTesting.Tests.Framework.Elements
 {
-	class Input : BasicPageElement, IFillable, ITimedFillable
+	public class Input : BasicPageElement, IFillable, ITimedFillable
 	{
 		private readonly IFillable _fillBehaviour;
 

@@ -3,7 +3,7 @@ using RegTesting.Tests.Framework.Logic;
 
 namespace RegTesting.Tests.Framework.Elements
 {
-	class FillBehaviourClickFirstThenWaitForClear : IFillable
+	public class FillBehaviourClickFirstThenWaitForClear : IFillable
 	{
 		private readonly IFillable _fillBehaviour;
 		private readonly BasicPageElement _pageElement;

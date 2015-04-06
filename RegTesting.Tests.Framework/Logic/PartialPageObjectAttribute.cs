@@ -2,7 +2,7 @@
 
 namespace RegTesting.Tests.Framework.Logic
 {
-	internal class PartialPageObjectAttribute : Attribute
+	public class PartialPageObjectAttribute : Attribute
 	{
 	}
 }

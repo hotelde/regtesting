@@ -5,7 +5,7 @@ using RegTesting.Tests.Framework.Logic.Extensions;
 
 namespace RegTesting.Tests.Framework.Elements
 {
-	class DefaultClickBehaviour : IClickable
+	public class DefaultClickBehaviour : IClickable
 	{
 		private readonly BasicPageElement _objPageElement;
 

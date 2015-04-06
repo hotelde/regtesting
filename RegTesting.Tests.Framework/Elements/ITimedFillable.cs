@@ -2,7 +2,7 @@
 
 namespace RegTesting.Tests.Framework.Elements
 {
-	interface ITimedFillable
+	public interface ITimedFillable
 	{
 		void Type(string text, TimeSpan timeToWaitAfterTyping);
 

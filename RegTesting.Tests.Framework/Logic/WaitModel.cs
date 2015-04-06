@@ -3,7 +3,7 @@ using RegTesting.Tests.Framework.Elements;
 
 namespace RegTesting.Tests.Framework.Logic
 {
-	class WaitModel
+	public class WaitModel
 	{
 		public WaitModel()
 		{

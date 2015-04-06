@@ -5,7 +5,7 @@ using RegTesting.Tests.Framework.Logic.Extensions;
 
 namespace RegTesting.Tests.Framework.Elements
 {
-	class ClickElementWithoutScrollingBehaviour : IClickable
+	public class ClickElementWithoutScrollingBehaviour : IClickable
 	{
 		private readonly BasicPageElement _objPageElement;
 

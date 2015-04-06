@@ -6,9 +6,9 @@ using RegTesting.Tests.Framework.Logic.Extensions;
 
 namespace RegTesting.Tests.Framework.Elements
 {
-	class DefaultFillBehaviour : IFillable
+	public class DefaultFillBehaviour : IFillable
 	{
-		protected readonly BasicPageElement _objPageElement;
+		private readonly BasicPageElement _objPageElement;
 
 		public DefaultFillBehaviour(BasicPageElement objPageElement)
 		{

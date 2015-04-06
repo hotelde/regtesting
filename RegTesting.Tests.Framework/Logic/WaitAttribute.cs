@@ -3,7 +3,7 @@ using RegTesting.Tests.Framework.Properties;
 
 namespace RegTesting.Tests.Framework.Logic
 {
-	class WaitAttribute : Attribute
+	public class WaitAttribute : Attribute
 	{
 		private int _beforePerformAction = Settings.Default.WaitBeforePerformAction;
 		private int _afterPerformAction = Settings.Default.WaitAfterPerformAction;

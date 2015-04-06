@@ -4,7 +4,7 @@ using RegTesting.Tests.Framework.Logic;
 
 namespace RegTesting.Tests.Framework.Elements
 {
-	class Link : BasicPageElement
+	public class Link : BasicPageElement
 	{
 
 		public Link(By objBy, IWebDriver objWebDriver, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours objClickBehaviour = ClickBehaviours.Default)

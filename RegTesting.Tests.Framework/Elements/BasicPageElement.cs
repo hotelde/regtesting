@@ -11,7 +11,7 @@ namespace RegTesting.Tests.Framework.Elements
 	/// <summary>
 	/// A BasicPageElement
 	/// </summary>
-	internal class BasicPageElement
+	public class BasicPageElement
 	{
 		private readonly TimeSpan _waitAfterClick;
 		protected IClickable ClickBehaviour;

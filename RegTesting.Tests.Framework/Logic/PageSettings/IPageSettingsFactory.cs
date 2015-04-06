@@ -1,6 +1,6 @@
 ﻿namespace RegTesting.Tests.Framework.Logic.PageSettings
 {
-	internal interface IPageSettingsFactory
+	public interface IPageSettingsFactory
 	{
 		AbstractPageSettings GetPageSettings(BasePageObject pageObject);
 	}

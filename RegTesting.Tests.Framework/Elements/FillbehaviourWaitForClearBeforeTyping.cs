@@ -9,7 +9,7 @@ using RegTesting.Tests.Framework.Properties;
 
 namespace RegTesting.Tests.Framework.Elements
 {
-	class FillbehaviourWaitForClearBeforeTyping : IFillable
+	public class FillbehaviourWaitForClearBeforeTyping : IFillable
 	{
 		private readonly IFillable _fillBehaviour;
 		private readonly BasicPageElement _pageElement;

@@ -3,7 +3,7 @@ using RegTesting.Tests.Framework.Enums;
 
 namespace RegTesting.Tests.Framework.Elements
 {
-	class LocateOptions
+	public class LocateOptions
 	{
 		private Visibility _visibility = Visibility.Visible;
 		public By By { get; set; }

@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace RegTesting.Tests.Framework.Logic.PageSettings
 {
-	internal class PageSettingsFactory : IPageSettingsFactory
+	public class PageSettingsFactory : IPageSettingsFactory
 	{
 
 		public AbstractPageSettings GetPageSettings(BasePageObject pageObject)

@@ -1,6 +1,6 @@
 ﻿namespace RegTesting.Tests.Framework.Logic.PageSettings
 {
-	internal abstract class AbstractPageSettings : IPageSettings
+	public abstract class AbstractPageSettings : IPageSettings
 	{
 		protected BasePageObject PageObject;
 		private bool _hasEndlessJQueryAnimation;
@@ -15,7 +15,7 @@
 			set { _hasEndlessJQueryAnimation = value; }
 		}
 
-		internal AbstractPageSettings(BasePageObject pageObject)
+		protected AbstractPageSettings(BasePageObject pageObject)
 		{
 			PageObject = pageObject;
 			PageUsesJquery = false;

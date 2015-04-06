@@ -6,7 +6,7 @@ using RegTesting.Tests.Framework.Logic.Extensions;
 
 namespace RegTesting.Tests.Framework.Elements
 {
-	class SelectBox : BasicPageElement, ISelectable
+	public class SelectBox : BasicPageElement, ISelectable
 	{
 		private readonly ISelectable _selectBehaviour;
 

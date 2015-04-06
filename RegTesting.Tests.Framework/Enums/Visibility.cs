@@ -1,6 +1,6 @@
 ﻿namespace RegTesting.Tests.Framework.Enums
 {
-	internal enum Visibility
+	public enum Visibility
 	{
 		Any,
 		Visible,

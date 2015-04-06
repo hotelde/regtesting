@@ -1,6 +1,6 @@
 ﻿namespace RegTesting.Tests.Framework.Logic.PageSettings
 {
-	internal interface IPageSettings
+	public interface IPageSettings
 	{
 		void ApplySettings();
 
