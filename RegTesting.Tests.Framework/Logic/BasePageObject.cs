@@ -53,7 +53,7 @@ namespace RegTesting.Tests.Framework.Logic
 			}
 		}
 
-		protected void HandleAlert(bool accept)
+		public void HandleAlert(bool accept)
 		{
 			_driver.HandleAlert(accept);
 		}
@@ -63,7 +63,7 @@ namespace RegTesting.Tests.Framework.Logic
 		/// </summary>
 		/// <param name="element">the element</param>
 		/// <param name="timeout">A optional custom timeout (how long should we wait?)</param>
-		protected void WaitForElementDisplayed(BasicPageElement element, TimeSpan? timeout = null)
+		public void WaitForElementDisplayed(BasicPageElement element, TimeSpan? timeout = null)
 		{
 			TestLog.Add("WaitForElementDisplayed: " + element.By);
 			_driver.WaitForElement(element.By, timeout: timeout);
@@ -77,14 +77,14 @@ namespace RegTesting.Tests.Framework.Logic
 		}
 
 
-		protected ReadOnlyCollection<IWebElement> WaitAndFindElements(By findBy)
+		public ReadOnlyCollection<IWebElement> WaitAndFindElements(By findBy)
 		{
 			TestLog.Add("WaitAndFindElements: " + findBy);
 			return _driver.WaitForElements(findBy);
 		}
 
 
-		protected void WaitForElementNotDisplayed(BasicPageElement element)
+		public void WaitForElementNotDisplayed(BasicPageElement element)
 		{
 			TestLog.Add("WaitForElementNotDisplayed: " + element.By);
 			_driver.WaitForElement(element.By, Visibility.Hidden);
@@ -99,7 +99,7 @@ namespace RegTesting.Tests.Framework.Logic
 
 
 
-		protected void WaitFor(BasicPageElement element, Visibility visibility = Visibility.Visible)
+		public void WaitFor(BasicPageElement element, Visibility visibility = Visibility.Visible)
 		{
 			_driver.WaitForElement(element.By, visibility);
 		}
@@ -113,7 +113,7 @@ namespace RegTesting.Tests.Framework.Logic
 		/// <param name="waitModel">The wait-model for the requested dynamic element.</param>
 		/// <param name="clickBehaviour">The ClickBehaviour.</param>
 		/// <returns>T</returns>
-		protected T GetDynamicElement<T>(By findBy, WaitModel waitModel = null, ClickBehaviours clickBehaviour = ClickBehaviours.Default) where T : BasicPageElement
+		public T GetDynamicElement<T>(By findBy, WaitModel waitModel = null, ClickBehaviours clickBehaviour = ClickBehaviours.Default) where T : BasicPageElement
 		{
 			return (T)PageObjectFactory.CreateElementObject(typeof(T), _driver, findBy, waitModel ?? new WaitModel(), this, clickBehaviour);
 		}
@@ -122,7 +122,7 @@ namespace RegTesting.Tests.Framework.Logic
 		/// Change to a specific Frame
 		/// </summary>
 		/// <param name="frameName">The Frame name</param>
-		protected void ChangeFrame(string frameName)
+		public void ChangeFrame(string frameName)
 		{
 			if (string.IsNullOrWhiteSpace(frameName))
 				throw new ArgumentNullException(frameName);
@@ -133,7 +133,7 @@ namespace RegTesting.Tests.Framework.Logic
 		/// <summary>
 		/// Selects either the first frame on the page or the main document when a page contains iFrames.
 		/// </summary>
-		protected void SwitchToDefaultContent()
+		public void SwitchToDefaultContent()
 		{
 			_driver.SwitchTo().DefaultContent();
 		}
@@ -141,7 +141,7 @@ namespace RegTesting.Tests.Framework.Logic
 		/// <summary>
 		/// Let selenium switch to a tab beginning with the string in url
 		/// </summary>
-		protected void SwitchToTab()
+		public void SwitchToTab()
 		{
 			PagePropsAttribute[] objPageAttributes = (PagePropsAttribute[])GetType().GetCustomAttributes(typeof(PagePropsAttribute), true);
 
@@ -158,7 +158,7 @@ namespace RegTesting.Tests.Framework.Logic
 		/// Switching to a tab which coontains the Url-Sequence.
 		/// </summary>
 		/// <param name="urlSequence">String which should be contained in the target tab url.</param>
-		protected void SwitchToTab(string urlSequence)
+		public void SwitchToTab(string urlSequence)
 		{
 			if (string.IsNullOrWhiteSpace(urlSequence))
 				throw new ArgumentNullException("urlSequence");
@@ -168,13 +168,13 @@ namespace RegTesting.Tests.Framework.Logic
 		/// <summary>
 		/// Close the tab which has the focus of the Webdriver instance 
 		/// </summary>
-		protected void CloseCurrentTab()
+		public void CloseCurrentTab()
 		{
 			TestLog.Add("Closing Current Tab.");
 			_driver.Close();
 		}
 
-		protected string GetCurrentUrl()
+		public string GetCurrentUrl()
 		{
 			
 			Task<string> task = _asyncCalls.GetCurrentUrlTask(_driver);
@@ -184,7 +184,7 @@ namespace RegTesting.Tests.Framework.Logic
 			return currentUrl;
 		}
 
-		protected void Redirect()
+		public void Redirect()
 		{
 			
 			string currentUrl = GetCurrentUrl();
