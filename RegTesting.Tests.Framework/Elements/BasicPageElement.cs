@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using OpenQA.Selenium;
 using RegTesting.Tests.Framework.Enums;
 using RegTesting.Tests.Framework.Logic;
@@ -131,6 +132,38 @@ namespace RegTesting.Tests.Framework.Elements
 		public T ClickToPageObject<T>() where T : BasePageObject
 		{
 			return ClickBehaviour.ClickToPageObject<T>(_waitBeforeClick);
+		}
+
+
+		/// <summary>
+		/// Checks if the element has a specific class
+		/// </summary>
+		/// <param name="classname">class</param>
+		/// <returns>Boolean indicating if the element has the specific class</returns>
+		public bool HasClass(string classname)
+		{
+			if (String.IsNullOrEmpty(classname))
+				throw new ArgumentException("classname");
+
+			string classnames = GetAttribute("class");
+			if (String.IsNullOrEmpty(classnames))
+				return false;
+
+			string[] classes = classnames.Split(' ');
+
+			return classes.Contains(classname);
+
+		}
+
+
+		/// <summary>
+		/// Checks if the element has specific classes
+		/// </summary>
+		/// <param name="classnames">classes</param>
+		/// <returns>Boolean indicating if the element has all of the specific classes</returns>
+		public bool HasClasses(params string[] classnames)
+		{
+			return classnames.All(HasClass);
 		}
 	}
 }

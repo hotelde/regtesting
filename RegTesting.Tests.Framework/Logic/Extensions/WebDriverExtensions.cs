@@ -18,14 +18,14 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 	/// <summary>
 	/// A extensions class for the WebDriver. Here we have some more useful functions we use often on a WebDriver
 	/// </summary>
-	internal static class WebDriverExtensions
+	public static class WebDriverExtensions
 	{
 		/// <summary>
 		/// Perfom a safe click on an element
 		/// </summary>
 		/// <param name="objDriver">the webdriver</param>
 		/// <param name="objPageElement">the webelement to click</param>
-		internal static void ClickElement(this IWebDriver objDriver, BasicPageElement objPageElement)
+		public static void ClickElement(this IWebDriver objDriver, BasicPageElement objPageElement)
 		{
 			Stopwatch startNew = Stopwatch.StartNew();
 			Click(FindAndScrollToElement(objPageElement.By, Visibility.Visible, objPageElement.ParentPageObject.PageSettings), objPageElement);
@@ -38,7 +38,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 		/// </summary>
 		/// <param name="objDriver">the webdriver</param>
 		/// <param name="objPageElement">the webelement to click</param>
-		internal static void ClickElementWithoutScrolling(this IWebDriver objDriver, BasicPageElement objPageElement)
+		public static void ClickElementWithoutScrolling(this IWebDriver objDriver, BasicPageElement objPageElement)
 		{
 			Stopwatch startNew = Stopwatch.StartNew();
 			Click(Find(objPageElement.By, Visibility.Visible), objPageElement);
@@ -179,7 +179,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 		/// <param name="timeout">A optional custom timeout (how long should we wait?)</param>
 		/// <param name="visibility">Wait until the element has this visibility.</param>
 		/// <returns>A IWebElement if we found the searched element. Fails with an TimeoutException else.</returns>
-		internal static IWebElement WaitForElement(this IWebDriver objDriver, By objBylocator, TimeSpan? timeout, Visibility visibility = Visibility.Visible)
+		public static IWebElement WaitForElement(this IWebDriver objDriver, By objBylocator, TimeSpan? timeout, Visibility visibility = Visibility.Visible)
 		{
 			return WaitForElementImpl(objDriver, objBylocator, timeout != null ? (TimeSpan)timeout : new TimeSpan(0, 0, Settings.Default.TestTimeout), visibility);
 		}
@@ -273,7 +273,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 		/// <param name="objBylocator">The Locator of the element</param>
 		/// <param name="intExpectedMinimumCountOfElements">The minimum count of elements to expect</param>
 		/// <returns>A IWebElement if we found the searched element. Fails with an TimeoutException else.</returns>
-		internal static ReadOnlyCollection<IWebElement> WaitForElements(this IWebDriver objDriver, By objBylocator, int intExpectedMinimumCountOfElements = 1)
+		public static ReadOnlyCollection<IWebElement> WaitForElements(this IWebDriver objDriver, By objBylocator, int intExpectedMinimumCountOfElements = 1)
 		{
 			return WaitForElementsImpl(objDriver, objBylocator, intExpectedMinimumCountOfElements, null, -1);
 		}
@@ -288,7 +288,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 		/// <param name="strErrorMessage">A Optional alternative message if we run in a timeout.</param>
 		/// <param name="intTimeout">A optional custom timeout (how long should we wait?)</param>
 		/// <returns>A IWebElement if we found the searched element. Fails with an TimeoutException else.</returns>
-		internal static ReadOnlyCollection<IWebElement> WaitForElements(this IWebDriver objDriver, By objBylocator, int intExpectedMinimumCountOfElements, string strErrorMessage, int intTimeout = -1)
+		public static ReadOnlyCollection<IWebElement> WaitForElements(this IWebDriver objDriver, By objBylocator, int intExpectedMinimumCountOfElements, string strErrorMessage, int intTimeout = -1)
 		{
 			return WaitForElementsImpl(objDriver, objBylocator, intExpectedMinimumCountOfElements, strErrorMessage, intTimeout);
 		}
@@ -301,7 +301,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 		/// <param name="intExpectedMinimumCountOfElements">The minimum count of elements to expect</param>
 		/// <param name="intTimeout">A optional custom timeout (how long should we wait?)</param>
 		/// <returns>A IWebElement if we found the searched element. Fails with an TimeoutException else.</returns>
-		internal static ReadOnlyCollection<IWebElement> WaitForElements(this IWebDriver objDriver, By objBylocator, int intExpectedMinimumCountOfElements, int intTimeout)
+		public static ReadOnlyCollection<IWebElement> WaitForElements(this IWebDriver objDriver, By objBylocator, int intExpectedMinimumCountOfElements, int intTimeout)
 		{
 			return WaitForElementsImpl(objDriver, objBylocator, intExpectedMinimumCountOfElements, null, intTimeout);
 		}
@@ -341,7 +341,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 		/// <param name="objDriver">Extension hook</param>
 		/// <param name="objBy">The Locator of the element</param>
 		/// <returns>A boolean if the element is present</returns>
-		internal static bool IsElementPresent(this IWebDriver objDriver, By objBy)
+		public static bool IsElementPresent(this IWebDriver objDriver, By objBy)
 		{
 			try
 			{
@@ -362,7 +362,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 		/// <param name="locator">The Locator of the element</param>
 		/// <param name="timeoutInSeconds">An optional timeout.</param>
 		/// <returns>A boolean if the element is present</returns>
-		internal static bool IsElementDisplayed(this IWebDriver driver, By locator, int timeoutInSeconds = 3)
+		public static bool IsElementDisplayed(this IWebDriver driver, By locator, int timeoutInSeconds = 3)
 		{
 			try
 			{
@@ -389,7 +389,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 		/// </summary>
 		/// <param name="objDriver">Extension hook</param>
 		/// <param name="bolAccept">If we should accept or dismiss the alert.</param>
-		internal static void HandleAlert(this IWebDriver objDriver, bool bolAccept)
+		public static void HandleAlert(this IWebDriver objDriver, bool bolAccept)
 		{
 			HandleAlertImpl(objDriver, bolAccept, null, -1);
 		}
@@ -402,7 +402,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 		/// <param name="bolAccept">If we should accept or dismiss the alert.</param>
 		/// <param name="strErrorMessage">A Optional alternative message if we run in a timeout.</param>
 		/// <param name="intTimeout">A optional custom timeout (how long should we wait?)</param>
-		internal static void HandleAlert(this IWebDriver objDriver, bool bolAccept, string strErrorMessage, int intTimeout = -1)
+		public static void HandleAlert(this IWebDriver objDriver, bool bolAccept, string strErrorMessage, int intTimeout = -1)
 		{
 			HandleAlertImpl(objDriver, bolAccept, strErrorMessage, intTimeout);
 		}
@@ -413,7 +413,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 		/// <param name="objDriver">Extension hook</param>
 		/// <param name="bolAccept">If we should accept or dismiss the alert.</param>
 		/// <param name="intTimeout">A optional custom timeout (how long should we wait?)</param>
-		internal static void HandleAlert(this IWebDriver objDriver, bool bolAccept, int intTimeout)
+		public static void HandleAlert(this IWebDriver objDriver, bool bolAccept, int intTimeout)
 		{
 			HandleAlertImpl(objDriver, bolAccept, null, intTimeout);
 		}
@@ -442,7 +442,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 		}
 
 
-		internal static void SwitchToTab(this IWebDriver driver, string urlSegment)
+		public static void SwitchToTab(this IWebDriver driver, string urlSegment)
 		{
 			if (string.IsNullOrWhiteSpace(urlSegment))
 				throw new ArgumentNullException();
@@ -504,15 +504,15 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 			return true;
 		}
 
-		
 
-		internal static TResult ExecuteJavaScriptAsync<TResult>(this IWebDriver driver, AbstractPageSettings pageSettings, string script, params object[] args) 
+
+		public static TResult ExecuteJavaScriptAsync<TResult>(this IWebDriver driver, AbstractPageSettings pageSettings, string script, params object[] args) 
 		{
 			WaitForJQueryIsLoaded(driver, pageSettings);
 			return (TResult)GetJavaScriptExecutor(driver).ExecuteAsyncScript(script, args);
 		}
 
-		internal static TResult ExecuteScript<TResult>(this IWebDriver driver, AbstractPageSettings pageSettings, string script, params object[] args)
+		public static TResult ExecuteScript<TResult>(this IWebDriver driver, AbstractPageSettings pageSettings, string script, params object[] args)
 		{
 			WaitForJQueryIsLoaded(driver, pageSettings);
 			dynamic objectToCast = GetJavaScriptExecutor(driver).ExecuteScript(script, args);
@@ -536,7 +536,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 			return (TResult)objectToCast;
 		}
 
-		internal static void ExecuteScript(this IWebDriver driver, AbstractPageSettings pageSettings, string script, params object[] args)
+		public static void ExecuteScript(this IWebDriver driver, AbstractPageSettings pageSettings, string script, params object[] args)
 		{
 			WaitForJQueryIsLoaded(driver, pageSettings);
 			ExecuteScript<object>(driver, pageSettings, script, args);

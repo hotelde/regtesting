@@ -26,12 +26,13 @@ namespace RegTesting.Tests.Framework.Logic
 		/// <param name="objWebDriver">The web driver.</param>
 		/// <param name="strBaseUrl">The base URL.</param>
 		/// <param name="bolSuppressLanguageParameter">Supresses the language parameter</param>
+		/// <param name="hashTagParams">hash tag parameters</param>
 		/// <param name="arrFurtherUrlParameters">
 		/// The further URL param after the lng param. 
 		/// The example input value "cpn=2553 would navigate us to: www.hotel.de?lng=de&cpn=2553
 		/// </param>
 		/// <returns>A PageObject, navigated to the PageUrl.</returns>
-		public static T CreateAndNavigateTo<T>(IWebDriver objWebDriver, string strBaseUrl, bool bolSuppressLanguageParameter = false, params string[] arrFurtherUrlParameters) where T : BasePageObject
+		public static T CreateAndNavigateTo<T>(IWebDriver objWebDriver, string strBaseUrl, bool bolSuppressLanguageParameter = false, string[] hashTagParams = null, params string[] arrFurtherUrlParameters) where T : BasePageObject
 		{
 			T pageObject = CreatePageObject<T>(objWebDriver);
 			Type objType = typeof(T);
@@ -39,15 +40,18 @@ namespace RegTesting.Tests.Framework.Logic
 			string pageUrl = strBaseUrl;
 			if (!pageUrl.EndsWith("/"))
 				pageUrl = pageUrl + "/";
-			
+
 			if (pageObject.PageSettings.IsSeoRoute)
 			{
 				pageUrl = CreateSeoRoute(pageUrl, objPageAttribute, arrFurtherUrlParameters);
 			}
 			else
-			{	
-				pageUrl = CreateRoute(pageUrl,objPageAttribute, bolSuppressLanguageParameter, arrFurtherUrlParameters);
+			{
+				pageUrl = CreateRoute(pageUrl, objPageAttribute, bolSuppressLanguageParameter, arrFurtherUrlParameters);
 			}
+
+			if (hashTagParams != null)
+				pageUrl = string.Concat(pageUrl, "#?", string.Join("&", hashTagParams));
 
 			TestLog.AddWithoutTime("<br><b>>>>" + objType.Name + "</b>");
 			TestLog.Add("CreateAndNavigate: " + objType.Name + " -> " + pageUrl);
@@ -55,9 +59,10 @@ namespace RegTesting.Tests.Framework.Logic
 			return pageObject;
 		}
 
+
 		public static T CreateAndNavigateTo<T>(IWebDriver objWebDriver, string strBaseUrl, params string[] arrFurtherUrlParameters) where T : BasePageObject
 		{
-			return CreateAndNavigateTo<T>(objWebDriver, strBaseUrl, false, arrFurtherUrlParameters);
+			return CreateAndNavigateTo<T>(objWebDriver, strBaseUrl, false, null, arrFurtherUrlParameters);
 		}
 
 		private static string CreateSeoRoute(string pageUrl, PagePropsAttribute objPageAttribute, params string[] arrFurtherUrlParameters)
