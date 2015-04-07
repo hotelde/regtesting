@@ -26,8 +26,8 @@ using System.Runtime.InteropServices;
 //
 //      Major Version <- upper this for breaking api changes
 //      Minor Version  <- upper this for new functionality
-//      Build Number <- this should match to the referenced selenium version
-//      Revision
+//      Build Number <- auto generated while build
+//      Revision <- auto generated while build
 //
-[assembly: AssemblyVersion("1.0.*.*")]
-[assembly: AssemblyFileVersion("1.0.*.*")]
+[assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyFileVersion("1.0.*")]
