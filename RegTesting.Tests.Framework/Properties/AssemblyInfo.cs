@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number <- this should match to the referenced selenium version
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.45.3")]
-[assembly: AssemblyFileVersion("1.0.45.3")]
+[assembly: AssemblyVersion("1.0.*.*")]
+[assembly: AssemblyFileVersion("1.0.*.*")]
