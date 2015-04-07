@@ -99,11 +99,10 @@ namespace RegTesting.Tests.Framework.Logic
 
 		private static string GetUrlParams(string[] arrUrlParameters)
 		{
-			string returnVal = "?ddcc=1";
 			string parameters = string.Join("&", arrUrlParameters);
 			if (!string.IsNullOrEmpty(parameters))
-				returnVal = string.Concat(returnVal, "&", parameters);
-			return returnVal;
+				return string.Concat("?", parameters);
+			return String.Empty;
 		}
 
 		
