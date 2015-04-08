@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
+using OpenQA.Selenium.PhantomJS;
 using OpenQA.Selenium.Remote;
 using RegTesting.Tests.Core;
 
@@ -38,6 +39,9 @@ namespace RegTesting.Tests.Framework.Logic.Init
 					break;
 				case "internet explorer":
 					webDriver = new InternetExplorerDriver(new InternetExplorerOptions { BrowserCommandLineArguments = "singleWindow=true", IntroduceInstabilityByIgnoringProtectedModeSettings = true, EnsureCleanSession = true, EnablePersistentHover = false, UnexpectedAlertBehavior = InternetExplorerUnexpectedAlertBehavior.Accept });
+					break;
+				case "phantomjs":
+					webDriver = new PhantomJSDriver(new PhantomJSOptions() {});
 					break;
 				default:
 					throw new NotSupportedException("Not supported browser");

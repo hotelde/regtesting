@@ -86,6 +86,8 @@ namespace RegTesting.LocalTest.GUI
 			AddLocalBrowserCapabilities(StrLocalPrefix + "firefox");
 			AddLocalBrowserCapabilities(StrLocalPrefix + "chrome");
 			AddLocalBrowserCapabilities(StrLocalPrefix + "internet explorer");
+			AddLocalBrowserCapabilities(StrLocalPrefix + "phantomjs");
+
 
 			SelectItems(lstBrowser,strBrowser.Split('|'), true);
 			AddRemoteTestingVariants();
