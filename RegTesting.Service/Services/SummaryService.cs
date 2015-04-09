@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using AutoMapper;
 using RegTesting.Contracts;
 using RegTesting.Contracts.Domain;
+using RegTesting.Contracts.DTO;
 using RegTesting.Contracts.Repositories;
 using RegTesting.Contracts.Services;
 using RegTesting.Service.Cache;
@@ -19,6 +21,7 @@ namespace RegTesting.Service.Services
 		private readonly IResultRepository _resultRepository;
 		private readonly ITestsystemRepository _testsystemRepository;
 		private readonly ITestsuiteRepository _testsuiteRepository;
+		private readonly ITestJobRepository _testJobRepository;
 
 		/// <summary>
 		/// Create a new SummaryService
@@ -26,7 +29,8 @@ namespace RegTesting.Service.Services
 		/// <param name="resultRepository">the ResultRepository</param>
 		/// <param name="testsystemRepository">the TestsystemRepository</param>
 		/// <param name="testsuiteRepository">the TestsuiteRepository</param>
-		public SummaryService(IResultRepository resultRepository, ITestsystemRepository testsystemRepository, ITestsuiteRepository testsuiteRepository)
+		/// <param name="testJobRepository">the TestJobRepository</param>
+		public SummaryService(IResultRepository resultRepository, ITestsystemRepository testsystemRepository, ITestsuiteRepository testsuiteRepository, ITestJobRepository testJobRepository)
 		{
 			if (resultRepository == null)
 				throw new ArgumentNullException("resultRepository");
@@ -34,10 +38,13 @@ namespace RegTesting.Service.Services
 				throw new ArgumentNullException("testsystemRepository");
 			if (testsuiteRepository == null)
 				throw new ArgumentNullException("testsuiteRepository");
+			if (testJobRepository == null)
+				throw new ArgumentNullException("testJobRepository");
 
 			_resultRepository = resultRepository;
 			_testsystemRepository = testsystemRepository;
 			_testsuiteRepository = testsuiteRepository;
+			_testJobRepository = testJobRepository;
 		}
 
 
@@ -63,6 +70,10 @@ namespace RegTesting.Service.Services
 				.ToList();
 		}
 
+		IList<TestJobDto> ISummaryService.GetTestJobs()
+		{
+			return Mapper.Map<List<TestJob>, List<TestJobDto>>(_testJobRepository.GetAll().Where(job => DateTime.Now - job.StartedAt < TimeSpan.FromDays(5)).OrderByDescending(t => t.StartedAt).ToList());
+		}
 
 		private TestsystemSummary CreateTestsystemSummary(Testsystem testsystem, Testsuite testsuite, TestsystemSummariesCache cache)
 		{

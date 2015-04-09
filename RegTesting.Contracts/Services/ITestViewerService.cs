@@ -78,5 +78,12 @@ namespace RegTesting.Contracts.Services
 		/// <param name="maxResults">the maximum count of results</param>
 		/// <returns>a list of historyresults</returns>
 		IList<HistoryResult> GetResultsHistory(int testsystemId, int testcaseId, int browserId, int languageId, int testsuiteId, int maxResults);
+
+		/// <summary>
+		/// Gets the error occurrence groups for a testjob.
+		/// </summary>
+		/// <param name="testjobId">The testjob identifier.</param>
+		/// <returns></returns>
+		IList<ErrorOccurrenceGroup> GetErrorOccurrenceGroupsForTestjob(int testjobId);
 	}
 }

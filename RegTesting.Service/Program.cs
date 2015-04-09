@@ -61,6 +61,7 @@ namespace RegTesting.Service
 
 			Logger.Log("Ready!");
 			Console.ReadLine();
+			
 		}
 
 		static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs args)

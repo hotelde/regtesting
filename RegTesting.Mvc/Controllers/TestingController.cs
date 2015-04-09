@@ -57,8 +57,7 @@ namespace RegTesting.Mvc.Controllers
 			ViewBag.LstTestsystems = testsystems;
 			if (testsystem == 0 && testsystems.Count > 0)
 			{
-				TestsystemModel dev= testsystems.FirstOrDefault(t => t.Name == "dev");
-				testsystem = dev != null ? dev.ID : testsystems[0].ID;
+				testsystem = testsystems[0].ID;
 			}
 
 			IList<TestsuiteModel> testsuites = Mapper.Map<IList<TestsuiteModel>>(_testViewerService.GetTestSuites(testsystem));

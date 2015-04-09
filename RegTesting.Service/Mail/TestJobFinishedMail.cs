@@ -29,20 +29,22 @@ namespace RegTesting.Service.Mail
 			List<Result> results = testJobManager.WorkItems.Select(t => t.Result).Where(t=>t!= null && t.Error!=null).ToList();
 			List<ErrorOccurrenceGroup> errorOccurrenceGroups = ErrorGrouping.GetErrorOccurrenceGroups(results);
 
-			int percent = (100 * testJobManager.Passed) / (testJobManager.Count);
-			string color;
-			string resultHeader;
+			string backgroundcolor;
+			string bordercolor;
+			string resultHeaderStatus;
+
 			if (testJobManager.Passed == testJobManager.Count)
 			{
-				color = "#5cb85c";
-				resultHeader = "Success";
+				backgroundcolor = "#B6DAB8";
+				bordercolor = "#5CB85C";
+				resultHeaderStatus = "succeeded";
 			}
 			else
 			{
-				color = "#d9534f";
-				resultHeader = "Failed";
+				backgroundcolor = "#DF8A8A";
+				bordercolor = "#D9534F";
+				resultHeaderStatus = "failed";
 			}
-
 			string errorOccurrences = "";
 
 			if(errorOccurrenceGroups.Count!=0) 
@@ -58,12 +60,24 @@ namespace RegTesting.Service.Mail
 				errorOccurrences += "</ul></div><br>";
 			}
 
-			String subject = testJobManager.TestJob.Testsystem.Name + ", " + testJobManager.TestJob.Name + ": " + percent + "%";
-			string url = !string.IsNullOrEmpty(RegtestingServerConfiguration.Webportal) ? "<a href=\"" + RegtestingServerConfiguration.Webportal + "/testing?testsuite=" + testJobManager.TestJob.Testsuite.ID + "&testsystem=" + testJobManager.TestJob.Testsystem.ID  + "\">Show results page in browser</a>": "";
+			String subject = "UI-Tests " + resultHeaderStatus + " - " +  testJobManager.TestJob.Name;
+			String header;
+			if (!String.IsNullOrEmpty(testJobManager.TestJob.Description))
+			{
+				header = testJobManager.TestJob.Description.Replace(";", "<br>");
+			}
+			else
+			{
+				header = testJobManager.TestJob.Name;
+			}
+
+
+			string url = !string.IsNullOrEmpty(RegtestingServerConfiguration.Webportal) ? "<a href=\"" + RegtestingServerConfiguration.Webportal + "?testjob=" + testJobManager.TestJob.ID + "\">Show results in browser</a>": "";
 			String body = "<html><body>" +
-							 "<div style=\"background-color:" + color + " ;padding:20px;font-size:1.7em;text-align:center;color:#ffffff;\"><b>" + testJobManager.TestJob.Testsystem.Name + "</b> - " + testJobManager.TestJob.Name  +   ": <b>" + resultHeader + "</b></div>" 
+							 "<div style=\"border-left: 10px solid;border-color: " + bordercolor +";background-color: " + backgroundcolor + ";font-size:1.2em;\">" + header + "</div>" 
 							 + "<p>"
 
+							 
 							 + "Started by: "  +testJobManager.TestJob.Tester.Name + " (" + testJobManager.TestJob.JobType + ")<br>"
 							 + "Started at: " + testJobManager.TestJob.StartedAt + "<br>"
 							 + testJobManager.Passed + " passed tests.<br>"

@@ -1,0 +1,44 @@
+﻿@using RegTesting.Contracts
+@model IList<ErrorOccurrenceGroup>
+
+@if (Model.Count == 0)
+	{
+		@Html.Partial("_PartialSuccess")
+	}
+
+	@for (int i = 0; i < Model.Count; i++)
+	{
+		ErrorOccurrenceGroup errorOccurrenceGroup = Model[i];
+		<div class="testcase">
+
+
+			<div id="t@(errorOccurrenceGroup.Testcase.ID)" class="testcase-name">
+				<b>@errorOccurrenceGroup.Testcase.Name</b><br />
+				<small>
+					@errorOccurrenceGroup.Testcase.Type
+				</small>
+			</div>
+
+			@for (int j = 0; j < errorOccurrenceGroup.LstErrorOccurence.Count; j++)
+			{
+				ErrorOccurrence errorOccurrence = errorOccurrenceGroup.LstErrorOccurence[j];
+				<div class="">
+
+					@Html.Partial("PartialErrorOccurence", errorOccurrence)
+				</div>
+
+			}
+		</div>
+	}
+
+
+	<script>
+
+		$(".hideable").click(function () {
+			$(this).children(".box").toggle();
+		});
+		$(".toggle").click(function () {
+			$(this).next().toggle();
+		});
+
+	</script>

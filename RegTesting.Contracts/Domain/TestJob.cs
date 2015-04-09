@@ -19,6 +19,12 @@ namespace RegTesting.Contracts.Domain
 		public virtual string Name { get; set; }
 
 		/// <summary>
+		/// a description of the testJob
+		/// for example a commitMessage
+		/// </summary>
+		public virtual string Description { get; set; }
+
+		/// <summary>
 		/// The ResultCode
 		/// </summary>
 		public virtual TestState ResultCode { get; set; }

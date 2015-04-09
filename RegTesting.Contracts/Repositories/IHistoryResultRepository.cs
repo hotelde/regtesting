@@ -47,5 +47,14 @@ namespace RegTesting.Contracts.Repositories
 		/// <param name="toDate">to date</param>
 		/// <returns>a list of historyResults</returns>
 		IList<HistoryResult> GetListOfErrorHistoryResults(int testsystemId, IList<Browser> browsers, IList<Testcase> testcases, IList<Language> languages, DateTime fromDate, DateTime toDate);
+
+		/// <summary>
+		/// Gets the list of error history results.
+		/// </summary>
+		/// <param name="testjob">The testjob.</param>
+		/// <returns></returns>
+		IList<HistoryResult> GetListOfErrorHistoryResults(int testjob);
+
+	
 	}
 }

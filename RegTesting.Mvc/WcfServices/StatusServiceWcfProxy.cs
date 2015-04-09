@@ -39,12 +39,12 @@ namespace RegTesting.Mvc.WcfServices
 			}
 		}
 
-		IList<TestJobDto> IStatusService.GetTestJobs()
+		IList<TestJobManagerDto> IStatusService.GetTestJobs()
 		{
 			return _channel.GetTestJobs();
 		}
 
-		IList<TestJobDto> IStatusService.GetTestJobsForTestsystem(int testsystem)
+		IList<TestJobManagerDto> IStatusService.GetTestJobsForTestsystem(int testsystem)
 		{
 			return _channel.GetTestJobsForTestsystem(testsystem);
 		}

@@ -254,10 +254,24 @@ namespace RegTesting.Service.TestLogic
 			if (!testJobManager.IsFinished())
 				return;
 
-			if (IsEmailNecessary(testJobManager))
-				 _testJobFinishedMail.Send(testJobManager);
-
 			_currentTestJobManagers.Remove(testJobManager);
+
+			if (testJobManager.IsCanceled)
+			{
+				testJobManager.TestJob.ResultCode = TestState.Canceled;
+			}
+			else
+			{
+				testJobManager.TestJob.ResultCode = (testJobManager.Passed == testJobManager.Count)
+					? TestState.Success
+					: TestState.Error;
+	
+			}
+			testJobManager.TestJob.FinishedAt = DateTime.Now;
+			_testJobRepository.Store(testJobManager.TestJob);
+
+			if (IsEmailNecessary(testJobManager))
+				_testJobFinishedMail.Send(testJobManager);
 		}
 
 		private bool IsEmailNecessary(ITestJobManager testJobManager)
@@ -268,9 +282,9 @@ namespace RegTesting.Service.TestLogic
 
 		}
 
-		IList<TestJobDto> ITestPool.GetTestJobs()
+		IList<TestJobManagerDto> ITestPool.GetTestJobs()
 		{
-			return Mapper.Map<List<ITestJobManager>, List<TestJobDto>>(_currentTestJobManagers.ToList());
+			return Mapper.Map<List<ITestJobManager>, List<TestJobManagerDto>>(_currentTestJobManagers.ToList());
 		}
 
 		void ITestPool.RegisterTestWorker(ITestWorker testWorker)
@@ -329,9 +343,9 @@ namespace RegTesting.Service.TestLogic
 			new Thread(() => CancelTestJobImpl(testjob)).Start();
 		}
 
-		IList<TestJobDto> ITestPool.GetTestJobs(int intTestsystem)
+		IList<TestJobManagerDto> ITestPool.GetTestJobs(int intTestsystem)
 		{
-			return Mapper.Map<List<ITestJobManager>, List<TestJobDto>>(_currentTestJobManagers.Where(t=>t.TestJob.Testsystem.ID==intTestsystem).ToList());
+			return Mapper.Map<List<ITestJobManager>, List<TestJobManagerDto>>(_currentTestJobManagers.Where(t=>t.TestJob.Testsystem.ID==intTestsystem).ToList());
 
 		}
 

@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
+using RegTesting.Contracts.Domain;
+using RegTesting.Contracts.DTO;
 
 namespace RegTesting.Contracts.Services
 {
@@ -22,6 +24,14 @@ namespace RegTesting.Contracts.Services
 		/// <returns>a list of testsystemsummaries</returns>
 		[OperationContract]
         IList<TestsystemSummary> GetPinnedTestsystemSummaries();
+
+		/// <summary>
+		/// Get the testsystemsummaries for the pinned branches
+		/// </summary>
+		/// <returns>a list of testsystemsummaries</returns>
+		[OperationContract]
+		IList<TestJobDto> GetTestJobs();
+
 
 	}
 }

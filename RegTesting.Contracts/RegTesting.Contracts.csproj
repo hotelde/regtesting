@@ -81,6 +81,7 @@
     <Compile Include="DTO\TestcaseDto.cs" />
     <Compile Include="DTO\TesterDto.cs" />
     <Compile Include="DTO\TestJobDto.cs" />
+    <Compile Include="DTO\TestJobManagerDto.cs" />
     <Compile Include="DTO\TestsuiteDto.cs" />
     <Compile Include="DTO\TestsystemDto.cs" />
     <Compile Include="DTO\TestWorkerDto.cs" />

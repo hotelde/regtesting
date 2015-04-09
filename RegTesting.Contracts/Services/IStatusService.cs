@@ -17,7 +17,7 @@ namespace RegTesting.Contracts.Services
 		/// </summary>
 		/// <returns>Get all testJobs</returns>
 		[OperationContract]
-		IList<TestJobDto> GetTestJobs();
+		IList<TestJobManagerDto> GetTestJobs();
 
 		/// <summary>
 		/// Get the current testJobs of a testsystem
@@ -25,7 +25,7 @@ namespace RegTesting.Contracts.Services
 		/// <param name="testsystem">the testsystem</param>
 		/// <returns>Get all testJobs</returns>
 		[OperationContract]
-		IList<TestJobDto> GetTestJobsForTestsystem(int testsystem);
+		IList<TestJobManagerDto> GetTestJobsForTestsystem(int testsystem);
 
 		/// <summary>
 		/// Get the current testworkers

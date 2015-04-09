@@ -16,68 +16,64 @@ namespace RegTesting.Mvc.Models
 		/// <summary>
 		/// the name of the testJob
 		/// </summary>
-		public virtual string TestJobName { get; set; }
+		public virtual string Name { get; set; }
+
+		/// <summary>
+		/// the description of the testJob
+		/// </summary>
+		public virtual string Description { get; set; }
+
+		/// <summary>
+		/// the author of a commit
+		/// </summary>
+		public string CommitAuthor { get; set; }
+
+		/// <summary>
+		/// the date of a commit
+		/// </summary>
+		public string CommitDate { get; set; }
+
+		/// <summary>
+		/// the merge info of a commit
+		/// </summary>
+		public string CommitMergeInfo { get; set; }
+
+
+		/// <summary>
+		/// the message of a commit
+		/// </summary>
+		public string CommitMessage { get; set; }
+
 
 		/// <summary>
 		/// The ResultCode
 		/// </summary>
-		public virtual int TestJobResultCode { get; set; }
+		public virtual int ResultCode { get; set; }
 
 		/// <summary>
 		/// The Testtime
 		/// </summary>
-		public virtual DateTime? TestJobStartedAt { get; set; }
+		public virtual DateTime? StartedAt { get; set; }
 
 		/// <summary>
 		/// The Testsystem
 		/// </summary>
-		public virtual string TestJobTestsystemName { get; set; }
+		public virtual string TestsystemName { get; set; }
 
 		/// <summary>
 		/// The Testsuite
 		/// </summary>
-		public virtual string TestJobTestsuiteName { get; set; }
+		public virtual string TestsuiteName { get; set; }
 
 		/// <summary>
 		/// The Testsuite
 		/// </summary>
-		public virtual string TestJobTesterName { get; set; }
-
+		public virtual string TesterName { get; set; }
 
 		/// <summary>
 		/// The jobtype
 		/// </summary>
-		public virtual JobType TestJobJobType { get; set; }
-
-		/// <summary>
-		/// The Count of workitems
-		/// </summary>
-		public int Count { get; set; }
-
-		/// <summary>
-		/// The count of failured workItems
-		/// </summary>
-		public int Failured { get; set; }
-
-		/// <summary>
-		/// The count of passed workItems
-		/// </summary>
-		public int Passed { get; set; }
-
-		/// <summary>
-		/// The count of finished workItems
-		/// </summary>
-		public int Finished { get; set; }
-
-		/// <summary>
-		/// The canceled workItems
-		/// </summary>
-		public int Canceled { get; set; }
-
-		/// <summary>
-		/// flag if the testJob is canceled 
-		/// </summary>
-		public bool IsCanceled { get; set; }
+		public virtual JobType JobType { get; set; }
 
 	}
 }

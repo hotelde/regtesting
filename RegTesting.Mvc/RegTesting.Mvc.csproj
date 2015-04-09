@@ -117,6 +117,7 @@
   <ItemGroup>
     <Compile Include="App_Start\AutoMapperInit.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Controllers\TestjobsController.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyResolver.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
@@ -234,6 +235,12 @@
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\modernizr-1.7.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
+    <Content Include="Views\Testjobs\Index.cshtml" />
+    <Content Include="web.config" />
+    <Content Include="Views\Testjobs\PartialErrorOccurence.cshtml" />
+    <Content Include="Views\Testjobs\Details.cshtml" />
+    <Content Include="Views\Testjobs\_PartialTestJob.cshtml" />
+    <None Include="Views\Testjobs\_PartialSuccess.cshtml" />
     <None Include="Web.config.example">
       <SubType>Designer</SubType>
     </None>
@@ -307,6 +314,12 @@
     <Content Include="Views\Testing\TestJobsPartial.cshtml" />
     <Content Include="Views\Testing\PartialMessage.cshtml" />
     <Content Include="Views\Testsuite\Overview.cshtml" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.WebPages.xml" />
     <None Include="_bin_deployableAssemblies\System.Web.WebPages.Razor.xml" />
