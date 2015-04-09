@@ -102,7 +102,7 @@ namespace RegTesting.Service.Services
 
 		}
 		
-		void IBuildTaskService.AddRegTestTasks(string testsystemName, string emailReceiver, string testsuiteName)
+		void IBuildTaskService.AddRegTestTasks(string testsystemName, string emailReceiver, string testsuiteName, string branch, string commitId, string commitMessage)
 		{
 			Testsuite testsuite = _testsuiteRepository.GetByName(testsuiteName);
 			Testsystem testsystem = _testsystemRepository.GetByName(testsystemName);
@@ -110,7 +110,8 @@ namespace RegTesting.Service.Services
 
 			TestJob testjob = new TestJob
 			{
-				Name = "Testsuite " + testsuite.Name,
+				Name = "Commit " + commitId  + " on " + branch,
+				//Description = strCommitMessage,   TODO: Add description to testjob
 				ResultCode = TestState.Pending,
 				Testsuite = testsuite,
 				Testsystem = testsystem,

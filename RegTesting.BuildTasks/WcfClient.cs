@@ -85,7 +85,7 @@ namespace RegTesting.BuildTasks
 	    /// <param name="testsystem">testsystem of the testcases</param>
 	    /// <param name="emailReceiver">optional emailcontact after test execution</param>
 	    /// <param name="testsuite">the testsuite to test</param>
-	    public void SendFile(string filename, string testsystem, string emailReceiver = null, string testsuite = null)
+	    public void SendFile(string filename, string testsystem, string emailReceiver = null, string testsuite = null, string branch = null, string commitId = null, string commitMessage = null)
 		{
 
 			using (FileStream fileStream = new FileStream(filename, FileMode.Open))
@@ -96,7 +96,7 @@ namespace RegTesting.BuildTasks
 				_channel.SendTestcaseFile(testsystem, bufferShort);
 			}
 
-			_channel.AddRegTestTasks(testsystem, emailReceiver, testsuite);
+			_channel.AddRegTestTasks(testsystem, emailReceiver, testsuite, branch, commitId, commitMessage);
 		}
 
 	}
