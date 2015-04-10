@@ -15,37 +15,37 @@ namespace RegTesting.Service.Repositories
 		/// <summary>
 		/// Create a new errorRepository
 		/// </summary>
-		/// <param name="objSession">the session</param>
-		public ErrorRepository(Func<ISession> objSession) : base(objSession)
+		/// <param name="session">the session</param>
+		public ErrorRepository(Func<ISession> session) : base(session)
 		{
 		}
 
-		Error IErrorRepository.GetOrStore(Error objError)
+		Error IErrorRepository.GetOrStore(Error error)
 		{
-			Error objExistingError = Session.Query<Error>()
+			Error existingError = Session.Query<Error>()
 				.FirstOrDefault(
-					result => result.Message == objError.Message &&
-					result.InnerException == objError.InnerException &&
-					result.StackTrace == objError.StackTrace &&
-					result.Type == objError.Type
+					result => result.Message == error.Message &&
+					result.InnerException == error.InnerException &&
+					result.StackTrace == error.StackTrace &&
+					result.Type == error.Type
 				);
-			if (objExistingError != null)
+			if (existingError != null)
 			{
-				return objExistingError;
+				return existingError;
 			}
 
-			((IRepository<Error>) this).Store(objError);
-			return objError;
+			((IRepository<Error>) this).Store(error);
+			return error;
 		}
 
-		Error IErrorRepository.GetByError(Error objError)
+		Error IErrorRepository.GetByError(Error error)
 		{
 			return Session.Query<Error>()
 				.SingleOrDefault(
-				result => result.Message == objError.Message &&
-				result.InnerException == objError.InnerException &&
-				result.StackTrace == objError.StackTrace &&
-				result.Type == objError.Type
+				result => result.Message == error.Message &&
+				result.InnerException == error.InnerException &&
+				result.StackTrace == error.StackTrace &&
+				result.Type == error.Type
 	);
 		}
 	}

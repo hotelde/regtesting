@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using AutoMapper;
 using NHibernate.Linq;
 using RegTesting.Contracts;
-using RegTesting.Contracts.DTO;
 using RegTesting.Contracts.Domain;
+using RegTesting.Contracts.DTO;
 using RegTesting.Contracts.Enums;
 using RegTesting.Contracts.Repositories;
 using RegTesting.Service.Mail;
@@ -21,228 +20,228 @@ namespace RegTesting.Service.TestLogic
 	/// </summary>
 	public class TestPool : ITestPool
 	{
-		private readonly IResultRepository _objResultRepository;
-		private readonly ITestFileLocker _objTestFileLocker;
-		private readonly ITestJobRepository _objTestJobRepository;
-		private readonly List<WorkItem> _lstWaitingWorkItems;
-		private readonly List<WorkItem> _lstCurrentWorkItems;
-		private readonly List<ITestJobManager> _lstCurrentTestJobManagers;
-		private readonly IDictionary<string, ITestWorker> _dicTestWorkers;
+		private readonly IResultRepository _resultRepository;
+		private readonly ITestFileLocker _testFileLocker;
+		private readonly ITestJobRepository _testJobRepository;
+		private readonly List<WorkItem> _waitingWorkItems;
+		private readonly List<WorkItem> _currentWorkItems;
+		private readonly List<ITestJobManager> _currentTestJobManagers;
+		private readonly IDictionary<string, ITestWorker> _testWorkers;
 		private readonly ITestJobFinishedMail _testJobFinishedMail;
 
-		private delegate void AddTasksDelegate(ITestJobManager objTestJob, ICollection<WorkItem> objWorkItems);
+		private delegate void AddTasksDelegate(ITestJobManager testJob, ICollection<WorkItem> workItems);
 
 
-		private readonly object _objLockWorkItems = new object();
+		private readonly object _lockWorkItems = new object();
 
 		/// <summary>
 		/// Create a new testPool
 		/// </summary>
-		/// <param name="objTestJobRepository">the testJobRepository</param>
-		/// <param name="objResultRepository">the resultRepository</param>
-		/// <param name="objTestFileLocker">the testFileLocker</param>
+		/// <param name="testJobRepository">the testJobRepository</param>
+		/// <param name="resultRepository">the resultRepository</param>
+		/// <param name="testFileLocker">the testFileLocker</param>
 		/// <param name="testJobFinishedMail">mail notification on testsuite finished.</param>
-		public TestPool(ITestJobRepository objTestJobRepository,
-			IResultRepository objResultRepository, ITestFileLocker objTestFileLocker, ITestJobFinishedMail testJobFinishedMail)
+		public TestPool(ITestJobRepository testJobRepository,
+			IResultRepository resultRepository, ITestFileLocker testFileLocker, ITestJobFinishedMail testJobFinishedMail)
 		{
-			if (objTestJobRepository == null)
-				throw new ArgumentNullException("objTestJobRepository");
-			if (objResultRepository == null)
-				throw new ArgumentNullException("objResultRepository");
-			if (objTestFileLocker == null)
-				throw new ArgumentNullException("objTestFileLocker");
+			if (testJobRepository == null)
+				throw new ArgumentNullException("testJobRepository");
+			if (resultRepository == null)
+				throw new ArgumentNullException("resultRepository");
+			if (testFileLocker == null)
+				throw new ArgumentNullException("testFileLocker");
 			
-			_objResultRepository = objResultRepository;
-			_objTestFileLocker = objTestFileLocker;
+			_resultRepository = resultRepository;
+			_testFileLocker = testFileLocker;
 			_testJobFinishedMail = testJobFinishedMail;
 
-			_lstWaitingWorkItems = new List<WorkItem>();
-			_lstCurrentWorkItems = new List<WorkItem>();
-			_lstCurrentTestJobManagers = new List<ITestJobManager>();
-			_dicTestWorkers = new Dictionary<string, ITestWorker>();
-			_objTestJobRepository = objTestJobRepository;
+			_waitingWorkItems = new List<WorkItem>();
+			_currentWorkItems = new List<WorkItem>();
+			_currentTestJobManagers = new List<ITestJobManager>();
+			_testWorkers = new Dictionary<string, ITestWorker>();
+			_testJobRepository = testJobRepository;
 		}
 
-		void ITestPool.AddTestJob(ITestJobManager objTestJob, ICollection<WorkItem> objWorkItems)
+		void ITestPool.AddTestJob(ITestJobManager testJobManager, ICollection<WorkItem> workItems)
 		{
-			if (objTestJob == null)
-				throw new ArgumentNullException("objTestJob");
+			if (testJobManager == null)
+				throw new ArgumentNullException("testJobManager");
 
-			if (objWorkItems.Count == 0)
+			if (workItems.Count == 0)
 			{
 				return;
 			}
 
-			AddTasksDelegate objAddTasksToWorkItemGroup = AddTestJobImpl;
-			objAddTasksToWorkItemGroup.BeginInvoke(objTestJob, objWorkItems, null, null);
+			AddTasksDelegate addTasksToWorkItemGroup = AddTestJobImpl;
+			addTasksToWorkItemGroup.BeginInvoke(testJobManager, workItems, null, null);
 		}
 
-		private void AddTestJobImpl(ITestJobManager objTestJobManager, ICollection<WorkItem> objWorkItems)
+		private void AddTestJobImpl(ITestJobManager testJobManager, ICollection<WorkItem> workItems)
 		{
 
 	
-			TestcaseProvider objTestcaseProvider;
+			TestcaseProvider testcaseProvider;
 
-			object objBranchSpecificFileLock = _objTestFileLocker.GetLock(objTestJobManager.TestJob.Testsystem.Name);
-			lock (objBranchSpecificFileLock)
+			object branchSpecificFileLock = _testFileLocker.GetLock(testJobManager.TestJob.Testsystem.Name);
+			lock (branchSpecificFileLock)
 			{
-				objTestcaseProvider =
-					new TestcaseProvider(RegtestingServerConfiguration.Testsfolder + objTestJobManager.TestJob.Testsystem.Filename);
-				objTestcaseProvider.CreateAppDomain();
+				testcaseProvider =
+					new TestcaseProvider(RegtestingServerConfiguration.Testsfolder + testJobManager.TestJob.Testsystem.Filename);
+				testcaseProvider.CreateAppDomain();
 			}
 
-			_objTestJobRepository.Store(objTestJobManager.TestJob);
+			_testJobRepository.Store(testJobManager.TestJob);
 
-			lock (_objLockWorkItems)
+			lock (_lockWorkItems)
 			{
-				List<WorkItem> lstAlreadyFoundWorkItems = new List<WorkItem>();
-				List<Result> lstUpdatedResults = new List<Result>();
+				List<WorkItem> alreadyFoundWorkItems = new List<WorkItem>();
+				List<Result> updatedResults = new List<Result>();
 
-				foreach (WorkItem objWorkItem in objWorkItems)
+				foreach (WorkItem workItem in workItems)
 				{
 
-					ITestable objTestable = GetTestable(objWorkItem, objTestcaseProvider);
-					if (objTestable==null)
+					ITestable testable = GetTestable(workItem, testcaseProvider);
+					if (testable==null)
 					{
-						lstUpdatedResults.Add(UpdateResultInfos(objWorkItem, objTestJobManager.TestJob, TestState.NotAvailable));
+						updatedResults.Add(UpdateResultInfos(workItem, testJobManager.TestJob, TestState.NotAvailable));
 						continue;
 					}
 
-					if (!IsWorkItemSupported(objWorkItem, objTestable))
+					if (!IsWorkItemSupported(workItem, testable))
 					{
-						lstUpdatedResults.Add(UpdateResultInfos(objWorkItem, objTestJobManager.TestJob, TestState.NotSupported));
+						updatedResults.Add(UpdateResultInfos(workItem, testJobManager.TestJob, TestState.NotSupported));
 						continue;
 					}
 
-					WorkItem objExistingWorkItem = CheckForAlreadyQueyedWorkItems(objWorkItem);
-					if (objExistingWorkItem != null)
+					WorkItem existingWorkItem = CheckForAlreadyQueyedWorkItems(workItem);
+					if (existingWorkItem != null)
 					{
-						objExistingWorkItem.AddTestJobManager(objTestJobManager);
-						lstAlreadyFoundWorkItems.Add(objExistingWorkItem);
+						existingWorkItem.AddTestJobManager(testJobManager);
+						alreadyFoundWorkItems.Add(existingWorkItem);
 					}
 					else
 					{
-						objTestJobManager.AddWorkItem(objWorkItem);
-						lstUpdatedResults.Add(UpdateResultInfos(objWorkItem, objTestJobManager.TestJob, TestState.Pending));
+						testJobManager.AddWorkItem(workItem);
+						updatedResults.Add(UpdateResultInfos(workItem, testJobManager.TestJob, TestState.Pending));
 					}
 				}
 
 				//If there is nothing to test, don't add a testsuite
-				if (objTestJobManager.Count == 0 && 
-					lstAlreadyFoundWorkItems.Count == 0)
+				if (testJobManager.Count == 0 && 
+					alreadyFoundWorkItems.Count == 0)
 					return;
 
 
-				_lstCurrentTestJobManagers.Add(objTestJobManager);
+				_currentTestJobManagers.Add(testJobManager);
 
 				//Add new workItems to waiting list
-				objTestJobManager.WorkItems.ForEach(_lstWaitingWorkItems.Add);
+				testJobManager.WorkItems.ForEach(_waitingWorkItems.Add);
 
 				//Add already found workItems back to
-				lstAlreadyFoundWorkItems.ForEach(objTestJobManager.AddWorkItem);
-				_objResultRepository.Store(lstUpdatedResults);
+				alreadyFoundWorkItems.ForEach(testJobManager.AddWorkItem);
+				_resultRepository.Store(updatedResults);
 			}
 			
 		}
 
-		private WorkItem CheckForAlreadyQueyedWorkItems(WorkItem objWorkItem)
+		private WorkItem CheckForAlreadyQueyedWorkItems(WorkItem workItem)
 		{
 			//Search in waiting workItems for a matching workitem
-			WorkItem objExistingWorkItem = GetMatchingWorkItem(_lstWaitingWorkItems, objWorkItem);
-			if (objExistingWorkItem != null)
-				return objExistingWorkItem;
+			WorkItem existingWorkItem = GetMatchingWorkItem(_waitingWorkItems, workItem);
+			if (existingWorkItem != null)
+				return existingWorkItem;
 
 			//Search in current workItems for a matching workitem
-			objExistingWorkItem = GetMatchingWorkItem(_lstCurrentWorkItems, objWorkItem);
-			return objExistingWorkItem;
+			existingWorkItem = GetMatchingWorkItem(_currentWorkItems, workItem);
+			return existingWorkItem;
 		}
 
-		private WorkItem GetMatchingWorkItem(IEnumerable<WorkItem> colWorkItems, WorkItem objWorkItem)
+		private WorkItem GetMatchingWorkItem(IEnumerable<WorkItem> workItems, WorkItem workItem)
 		{
-			return colWorkItems.FirstOrDefault(t => t.Browser.ID == objWorkItem.Browser.ID &&
-															 t.Testcase.ID == objWorkItem.Testcase.ID &&
-															 t.Language.ID == objWorkItem.Language.ID &&
-															 t.Testsystem.ID == objWorkItem.Testsystem.ID
+			return workItems.FirstOrDefault(t => t.Browser.ID == workItem.Browser.ID &&
+															 t.Testcase.ID == workItem.Testcase.ID &&
+															 t.Language.ID == workItem.Language.ID &&
+															 t.Testsystem.ID == workItem.Testsystem.ID
 															 && t.IsCanceled == false);
 		}
 
-		private Result UpdateResultInfos(WorkItem objWorkItem, TestJob objTestJob, TestState enmTestState)
+		private Result UpdateResultInfos(WorkItem workItem, TestJob testJob, TestState testState)
 		{
-			Result objResult = _objResultRepository.Get(objWorkItem.Testsystem, objWorkItem.Testcase,
-				objWorkItem.Browser, objWorkItem.Language);
+			Result result = _resultRepository.Get(workItem.Testsystem, workItem.Testcase,
+				workItem.Browser, workItem.Language);
 
-			objResult.Tester = objWorkItem.Tester;
-			objResult.Testtime = DateTime.Now;
-			objResult.TestJob = objTestJob;
-			objResult.ResultCode = enmTestState;
-			objResult.Error = null;
-			return objResult;
+			result.Tester = workItem.Tester;
+			result.Testtime = DateTime.Now;
+			result.TestJob = testJob;
+			result.ResultCode = testState;
+			result.Error = null;
+			return result;
 		}
 
-		private ITestable GetTestable(WorkItem objWorkItem, TestcaseProvider objTestcaseProvider)
+		private ITestable GetTestable(WorkItem workItem, TestcaseProvider testcaseProvider)
 		{
 
-			object objBranchSpecificFileLock = _objTestFileLocker.GetLock(objWorkItem.Testsystem.Name);
-			lock (objBranchSpecificFileLock)
+			object branchSpecificFileLock = _testFileLocker.GetLock(workItem.Testsystem.Name);
+			lock (branchSpecificFileLock)
 			{
-				ITestable objTest = objTestcaseProvider.GetTestableFromTypeName(objWorkItem.Testcase.Type);
-				return objTest;
+				ITestable testable = testcaseProvider.GetTestableFromTypeName(workItem.Testcase.Type);
+				return testable;
 			}
 
 			
 		}
 
 
-		private bool IsWorkItemSupported(WorkItem objWorkItem, ITestable objTestcase)
+		private bool IsWorkItemSupported(WorkItem workItem, ITestable testable)
 		{
 
-			string[] arrSupportedLanguages = objTestcase.GetSupportedLanguages();
-			if (arrSupportedLanguages != null &&
-				!arrSupportedLanguages.Contains(objWorkItem.Language.Languagecode, StringComparer.InvariantCultureIgnoreCase))
+			string[] supportedLanguages = testable.GetSupportedLanguages();
+			if (supportedLanguages != null &&
+				!supportedLanguages.Contains(workItem.Language.Languagecode, StringComparer.InvariantCultureIgnoreCase))
 				return false;
 
-			string[] arrSupportedBrowsers = objTestcase.GetSupportedBrowsers();
-			if (arrSupportedBrowsers != null &&
-				!arrSupportedBrowsers.Contains(objWorkItem.Browser.Name, StringComparer.InvariantCultureIgnoreCase))
+			string[] supportedBrowsers = testable.GetSupportedBrowsers();
+			if (supportedBrowsers != null &&
+				!supportedBrowsers.Contains(workItem.Browser.Name, StringComparer.InvariantCultureIgnoreCase))
 				return false;
 			
 			return true;
 		}
 
-		WorkItem ITestPool.GetWorkItem(ITestWorker objTestWorker)
+		WorkItem ITestPool.GetWorkItem(ITestWorker testWorker)
 		{
-			lock (_objLockWorkItems)
+			lock (_lockWorkItems)
 			{
-				foreach (WorkItem objWorkItem in _lstWaitingWorkItems)
+				foreach (WorkItem workItem in _waitingWorkItems)
 				{
-					if (objTestWorker.Browsers.Any(t=>t.ID == objWorkItem.Browser.ID))
+					if (testWorker.Browsers.Any(t=>t.ID == workItem.Browser.ID))
 					{
 						//If Deployment is running, don't test on the stage!
-						if (TfsBuildQuery.IsDeploymentRunning(objWorkItem.Testsystem))
+						if (TfsBuildQuery.IsDeploymentRunning(workItem.Testsystem))
 							continue;
 
-						_lstWaitingWorkItems.Remove(objWorkItem);
-						_lstCurrentWorkItems.Add(objWorkItem);
-						return objWorkItem;
+						_waitingWorkItems.Remove(workItem);
+						_currentWorkItems.Add(workItem);
+						return workItem;
 					}
 				}
 			}
 			return null;
 		}
 
-		void ITestPool.WorkItemFinished(WorkItem objWorkItem)
+		void ITestPool.WorkItemFinished(WorkItem workItem)
 		{
-			if (objWorkItem == null)
-				throw new ArgumentNullException("objWorkItem");
+			if (workItem == null)
+				throw new ArgumentNullException("workItem");
 
 
-			lock (_objLockWorkItems)
+			lock (_lockWorkItems)
 			{
-				_lstCurrentWorkItems.Remove(objWorkItem);
-				if (!objWorkItem.IsCanceled) {
-					foreach (ITestJobManager objTestJob in objWorkItem.TestJobManagers)
+				_currentWorkItems.Remove(workItem);
+				if (!workItem.IsCanceled) {
+					foreach (ITestJobManager testJobManager in workItem.TestJobManagers)
 					{
-						CheckTestJobFinished(objTestJob);
+						CheckTestJobFinished(testJobManager);
 					}
 				}
 
@@ -250,78 +249,78 @@ namespace RegTesting.Service.TestLogic
 
 		}
 
-		private void CheckTestJobFinished(ITestJobManager objTestJob)
+		private void CheckTestJobFinished(ITestJobManager testJobManager)
 		{
-			if (!objTestJob.IsFinished())
+			if (!testJobManager.IsFinished())
 				return;
 
-			if (IsEmailNecessary(objTestJob))
-				 _testJobFinishedMail.Send(objTestJob);
+			if (IsEmailNecessary(testJobManager))
+				 _testJobFinishedMail.Send(testJobManager);
 
-			_lstCurrentTestJobManagers.Remove(objTestJob);
+			_currentTestJobManagers.Remove(testJobManager);
 		}
 
-		private bool IsEmailNecessary(ITestJobManager objTestJob)
+		private bool IsEmailNecessary(ITestJobManager testJobManager)
 		{
-			return objTestJob.Count != 0 &&
-				!objTestJob.IsCanceled &&
-				!(objTestJob.Failured == 0 && objTestJob.TestJob.JobType == JobType.Buildtask);
+			return testJobManager.Count != 0 &&
+				!testJobManager.IsCanceled &&
+				!(testJobManager.Failured == 0 && testJobManager.TestJob.JobType == JobType.Buildtask);
 
 		}
 
 		IList<TestJobDto> ITestPool.GetTestJobs()
 		{
-			return Mapper.Map<List<ITestJobManager>, List<TestJobDto>>(_lstCurrentTestJobManagers.ToList());
+			return Mapper.Map<List<ITestJobManager>, List<TestJobDto>>(_currentTestJobManagers.ToList());
 		}
 
-		void ITestPool.RegisterTestWorker(ITestWorker objTestWorker)
+		void ITestPool.RegisterTestWorker(ITestWorker testWorker)
 		{
-			if (objTestWorker == null)
-				throw new ArgumentNullException("objTestWorker");
+			if (testWorker == null)
+				throw new ArgumentNullException("testWorker");
 
-			_dicTestWorkers.Add(objTestWorker.Name, objTestWorker);
+			_testWorkers.Add(testWorker.Name, testWorker);
 		}
 
-		void ITestPool.RemoveTestWorker(ITestWorker objTestWorker)
+		void ITestPool.RemoveTestWorker(ITestWorker testWorker)
 		{
 			throw new NotImplementedException();
 		}
 
 		IList<ITestWorker> ITestPool.GetTestWorker()
 		{
-			return _dicTestWorkers.Select(t=>t.Value).ToList();
+			return _testWorkers.Select(t=>t.Value).ToList();
 		}
 
-		ITestWorker ITestPool.GetTestWorker(string strNode)
+		ITestWorker ITestPool.GetTestWorker(string nodeName)
 		{
-			if (!_dicTestWorkers.ContainsKey(strNode))
+			if (!_testWorkers.ContainsKey(nodeName))
 			{
 				return null;
 			}
-			return _dicTestWorkers[strNode];
+			return _testWorkers[nodeName];
 		}
 
 		void ITestPool.PrioTestJob(int testjob)
 		{
-			lock (_objLockWorkItems)
+			lock (_lockWorkItems)
 			{
-				List<WorkItem> lstToPriorize = new List<WorkItem>();
-				ITestJobManager objTestJobManager = _lstCurrentTestJobManagers.SingleOrDefault(t => t.ID == testjob);
-				if (objTestJobManager == null)
+				List<WorkItem> toPriorize = new List<WorkItem>();
+				ITestJobManager testJobManager = _currentTestJobManagers.SingleOrDefault(t => t.ID == testjob);
+				if (testJobManager == null)
 					return;
 
-				for (int intWaitingTasksIter = _lstWaitingWorkItems.Count - 1; intWaitingTasksIter > -1; intWaitingTasksIter--)
+				for (int waitingTasksIter = _waitingWorkItems.Count - 1; waitingTasksIter > -1; waitingTasksIter--)
 				{
-					WorkItem objWorkItem = _lstWaitingWorkItems[intWaitingTasksIter];
-					if (!objWorkItem.TestJobManagers.Contains(objTestJobManager))
+					WorkItem waitingWorkItem = _waitingWorkItems[waitingTasksIter];
+					if (!waitingWorkItem.TestJobManagers.Contains(testJobManager))
 						continue;
 
-					_lstWaitingWorkItems.Remove(objWorkItem);
-					lstToPriorize.Add(objWorkItem);
+					_waitingWorkItems.Remove(waitingWorkItem);
+					toPriorize.Add(waitingWorkItem);
 				}
-				_lstWaitingWorkItems.InsertRange(0, lstToPriorize);
-				_lstCurrentTestJobManagers.Remove(objTestJobManager);
-				_lstCurrentTestJobManagers.Insert(0, objTestJobManager);
+				_waitingWorkItems.InsertRange(0, toPriorize);
+				_currentTestJobManagers.Remove(testJobManager);
+				_currentTestJobManagers.Insert(0, testJobManager);
 			}
 		}
 
@@ -332,45 +331,45 @@ namespace RegTesting.Service.TestLogic
 
 		IList<TestJobDto> ITestPool.GetTestJobs(int intTestsystem)
 		{
-			return Mapper.Map<List<ITestJobManager>, List<TestJobDto>>(_lstCurrentTestJobManagers.Where(t=>t.TestJob.Testsystem.ID==intTestsystem).ToList());
+			return Mapper.Map<List<ITestJobManager>, List<TestJobDto>>(_currentTestJobManagers.Where(t=>t.TestJob.Testsystem.ID==intTestsystem).ToList());
 
 		}
 
-		void ITestPool.ReAddWorkItem(WorkItem objWorkItem)
+		void ITestPool.ReAddWorkItem(WorkItem workItem)
 		{
-			lock (_objLockWorkItems)
+			lock (_lockWorkItems)
 			{
-				_lstCurrentWorkItems.Remove(objWorkItem);
-				_lstWaitingWorkItems.Insert(0,objWorkItem);
+				_currentWorkItems.Remove(workItem);
+				_waitingWorkItems.Insert(0,workItem);
 			}
 		}
 
 		private void CancelTestJobImpl(int testjob)
 		{
-			lock (_objLockWorkItems)
+			lock (_lockWorkItems)
 			{
-				ITestJobManager objTestJobManager = _lstCurrentTestJobManagers.SingleOrDefault(t => t.ID == testjob);
-				if (objTestJobManager == null)
+				ITestJobManager testJobManager = _currentTestJobManagers.SingleOrDefault(t => t.ID == testjob);
+				if (testJobManager == null)
 					return;
 
-				objTestJobManager.IsCanceled = true;
+				testJobManager.IsCanceled = true;
 
-				foreach (WorkItem objWorkItem in objTestJobManager.WorkItems.Where(objWorkItem =>
+				foreach (WorkItem workItem in testJobManager.WorkItems.Where(objWorkItem =>
 					!objWorkItem.IsCanceled &&
 					objWorkItem.TestJobManagers.All(t => t.IsCanceled)))
 				{
-					CancelWorkItem(objWorkItem);
+					CancelWorkItem(workItem);
 				}
-				CheckTestJobFinished(objTestJobManager);
+				CheckTestJobFinished(testJobManager);
 			}
 		}
 
-		private void CancelWorkItem(WorkItem objWorkItem)
+		private void CancelWorkItem(WorkItem workItem)
 		{
-			objWorkItem.IsCanceled = true;
-			objWorkItem.TestState = TestState.Canceled;
-			if (_lstWaitingWorkItems.Contains(objWorkItem))
-				_lstWaitingWorkItems.Remove(objWorkItem);
+			workItem.IsCanceled = true;
+			workItem.TestState = TestState.Canceled;
+			if (_waitingWorkItems.Contains(workItem))
+				_waitingWorkItems.Remove(workItem);
 		}
 	}
 }

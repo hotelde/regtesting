@@ -14,11 +14,11 @@ namespace RegTesting.Service.TestLogic
 	/// </summary>
 	public class TestFileLocker : ITestFileLocker
 	{
-		private volatile ConcurrentDictionary<string, object> _dicLocks = new ConcurrentDictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
+		private volatile ConcurrentDictionary<string, object> _locks = new ConcurrentDictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
 		object ITestFileLocker.GetLock(string strTestsystem)
 		{
-			return _dicLocks.GetOrAdd(strTestsystem, (strName) => new object());
+			return _locks.GetOrAdd(strTestsystem, (strName) => new object());
 		}
 
 	}

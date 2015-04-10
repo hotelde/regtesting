@@ -36,36 +36,36 @@ namespace RegTesting.Service
 			int port = RegtestingServerConfiguration.Port;
 
 			Logger.Log("Loading Services on port " + port + ":");
-			IHostService<ITestService> objHostTestService = new HostWcfService<ITestService>(new Uri("http://localhost:" + port + "/TestService"));
-			objHostTestService.Init(ObjectFactory.GetInstance<ITestService>());
+			IHostService<ITestService> hostTestService = new HostWcfService<ITestService>(new Uri("http://localhost:" + port + "/TestService"));
+			hostTestService.Init(ObjectFactory.GetInstance<ITestService>());
 
-			IHostService<IStatusService> objHostStatusService = new HostWcfService<IStatusService>(new Uri("http://localhost:" + port + "/StatusService"));
-			objHostStatusService.Init(ObjectFactory.GetInstance<IStatusService>());
+			IHostService<IStatusService> hostStatusService = new HostWcfService<IStatusService>(new Uri("http://localhost:" + port + "/StatusService"));
+			hostStatusService.Init(ObjectFactory.GetInstance<IStatusService>());
 
-			IHostService<IBuildTaskService> objBuildTaskService = new HostWcfService<IBuildTaskService>(new Uri("http://localhost:" + port + "/BuildTaskService"));
-			objBuildTaskService.Init(ObjectFactory.GetInstance<IBuildTaskService>());
+			IHostService<IBuildTaskService> buildTaskService = new HostWcfService<IBuildTaskService>(new Uri("http://localhost:" + port + "/BuildTaskService"));
+			buildTaskService.Init(ObjectFactory.GetInstance<IBuildTaskService>());
 
-			IHostService<ILocalTestService> objLocalTestService = new HostWcfService<ILocalTestService>(new Uri("http://localhost:" + port + "/LocalTestService"));
-			objLocalTestService.Init(ObjectFactory.GetInstance<ILocalTestService>());
+			IHostService<ILocalTestService> localTestService = new HostWcfService<ILocalTestService>(new Uri("http://localhost:" + port + "/LocalTestService"));
+			localTestService.Init(ObjectFactory.GetInstance<ILocalTestService>());
 
-			IHostService<ISummaryService> objSummaryService = new HostWcfService<ISummaryService>(new Uri("http://localhost:" + port + "/SummaryService"));
-			objSummaryService.Init(ObjectFactory.GetInstance<ISummaryService>());
+			IHostService<ISummaryService> summaryService = new HostWcfService<ISummaryService>(new Uri("http://localhost:" + port + "/SummaryService"));
+			summaryService.Init(ObjectFactory.GetInstance<ISummaryService>());
 
-			IHostService<INodeService> objNodeService = new HostWcfService<INodeService>(new Uri("http://localhost:" + port + "/NodeService"));
-			objNodeService.Init(ObjectFactory.GetInstance<INodeService>());
+			IHostService<INodeService> nodeService = new HostWcfService<INodeService>(new Uri("http://localhost:" + port + "/NodeService"));
+			nodeService.Init(ObjectFactory.GetInstance<INodeService>());
 
 			new RecycleLonglifeWorkerBackgroundTask(ObjectFactory.GetInstance<ITestPool>());
 
-			AppDomain objCurrentDomain = AppDomain.CurrentDomain;
-			objCurrentDomain.UnhandledException += UnhandledExceptionHandler;
+			AppDomain currentDomain = AppDomain.CurrentDomain;
+			currentDomain.UnhandledException += UnhandledExceptionHandler;
 
 			Logger.Log("Ready!");
 			Console.ReadLine();
 		}
 
-		static void UnhandledExceptionHandler(object objSender, UnhandledExceptionEventArgs objArgs)
+		static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs args)
 		{
-			Exception objEx = (Exception)objArgs.ExceptionObject;
+			Exception objEx = (Exception)args.ExceptionObject;
 			new UnhandledExceptionMail(objEx).Send();
 		}
 

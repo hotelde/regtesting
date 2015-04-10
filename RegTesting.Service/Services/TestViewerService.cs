@@ -16,171 +16,170 @@ namespace RegTesting.Service.Services
 	/// </summary>
 	public class TestViewerService : ITestViewerService
 	{
-		private readonly IResultRepository _objResultRepository;
-		private readonly ITestsystemRepository _objTestsystemRepository;
-		private readonly ITestsuiteRepository _objTestsuiteRepository;
-		private readonly ITesterRepository _objTesterRepository;
-		private readonly ITestcaseRepository _objTestcaseRepository;
-		private readonly IHistoryResultRepository _objHistoryResultRepository;
+		private readonly IResultRepository _resultRepository;
+		private readonly ITestsystemRepository _testsystemRepository;
+		private readonly ITestsuiteRepository _testsuiteRepository;
+		private readonly ITesterRepository _testerRepository;
+		private readonly ITestcaseRepository _testcaseRepository;
+		private readonly IHistoryResultRepository _historyResultRepository;
 
 		/// <summary>
 		/// Create a new TestViewer
 		/// </summary>
-		/// <param name="objResultRepository">the ResultRepository</param>
-		/// <param name="objTestsystemRepository">the TestsystemRepository</param>
-		/// <param name="objTestsuiteRepository">the TestsuiteRepository</param>
-		/// <param name="objTesterRepository">the TesterRepository</param>
-		/// <param name="objTestcaseRepository">the TestcaseRepository</param>
-		/// <param name="objHistoryResultRepository">the HistoryResultRepository</param>
-		public TestViewerService(IResultRepository objResultRepository, ITestsystemRepository objTestsystemRepository, ITestsuiteRepository objTestsuiteRepository,
-			ITesterRepository objTesterRepository, ITestcaseRepository objTestcaseRepository, IHistoryResultRepository objHistoryResultRepository)
+		/// <param name="resultRepository">the ResultRepository</param>
+		/// <param name="testsystemRepository">the TestsystemRepository</param>
+		/// <param name="testsuiteRepository">the TestsuiteRepository</param>
+		/// <param name="testerRepository">the TesterRepository</param>
+		/// <param name="testcaseRepository">the TestcaseRepository</param>
+		/// <param name="historyResultRepository">the HistoryResultRepository</param>
+		public TestViewerService(IResultRepository resultRepository, ITestsystemRepository testsystemRepository, ITestsuiteRepository testsuiteRepository,
+			ITesterRepository testerRepository, ITestcaseRepository testcaseRepository, IHistoryResultRepository historyResultRepository)
 		{
-			if (objResultRepository == null)
-				throw new ArgumentNullException("objResultRepository");
-			if (objTestsystemRepository == null)
-				throw new ArgumentNullException("objTestsystemRepository");
-			if (objTestsuiteRepository == null)
-				throw new ArgumentNullException("objTestsuiteRepository");
-			if (objTesterRepository == null)
-				throw new ArgumentNullException("objTesterRepository");
-			if (objTestcaseRepository == null)
-				throw new ArgumentNullException("objTestcaseRepository");
-			if (objHistoryResultRepository == null)
-				throw new ArgumentNullException("objHistoryResultRepository");
+			if (resultRepository == null)
+				throw new ArgumentNullException("resultRepository");
+			if (testsystemRepository == null)
+				throw new ArgumentNullException("testsystemRepository");
+			if (testsuiteRepository == null)
+				throw new ArgumentNullException("testsuiteRepository");
+			if (testerRepository == null)
+				throw new ArgumentNullException("testerRepository");
+			if (testcaseRepository == null)
+				throw new ArgumentNullException("testcaseRepository");
+			if (historyResultRepository == null)
+				throw new ArgumentNullException("historyResultRepository");
 
-			_objResultRepository = objResultRepository;
-			_objTestsystemRepository = objTestsystemRepository;
-			_objTestsuiteRepository = objTestsuiteRepository;
-			_objTesterRepository = objTesterRepository;
-			_objTestcaseRepository = objTestcaseRepository;
-			_objHistoryResultRepository = objHistoryResultRepository;
+			_resultRepository = resultRepository;
+			_testsystemRepository = testsystemRepository;
+			_testsuiteRepository = testsuiteRepository;
+			_testerRepository = testerRepository;
+			_testcaseRepository = testcaseRepository;
+			_historyResultRepository = historyResultRepository;
 		}
 
 
 		IList<TestsystemDto> ITestViewerService.GetTestsystems()
 		{
-			return Mapper.Map<IList<TestsystemDto>>(_objTestsystemRepository.GetAll());
+			return Mapper.Map<IList<TestsystemDto>>(_testsystemRepository.GetAll());
 		}
 
 		IList<TestsuiteDto> ITestViewerService.GetTestSuites(int testsystem)
 		{
-			return Mapper.Map<IList<TestsuiteDto>>(_objTestsuiteRepository.GetAll()
+			return Mapper.Map<IList<TestsuiteDto>>(_testsuiteRepository.GetAll()
 				.Where(testsuite => testsuite.TestsystemFilter == null || testsuite.TestsystemFilter.ID == testsystem)
 				.ToList());
 		}
 
-		IList<GroupedResult> ITestViewerService.GetResults(int intTestsystem, int intTestsuite, DateTime? datResultsSince)
+		IList<GroupedResult> ITestViewerService.GetResults(int testsystemIndex, int testsuiteId, DateTime? resultsSince)
 		{
-			Testsuite objTestsuite = _objTestsuiteRepository.GetById(intTestsuite);
-			IList<Result> listOfResults = _objResultRepository.GetListOfResults(intTestsystem, objTestsuite.Browsers, objTestsuite.Testcases,
-									  objTestsuite.Languages).ToList();
+			Testsuite testsuite = _testsuiteRepository.GetById(testsuiteId);
+			IList<Result> results = _resultRepository.GetListOfResults(testsystemIndex, testsuite.Browsers, testsuite.Testcases,
+									  testsuite.Languages).ToList();
 
-			List<GroupedResult> lstGroupedResults = new List<GroupedResult>();
+			List<GroupedResult> groupedResults = new List<GroupedResult>();
 
-			foreach (Testcase objTestcase in objTestsuite.Testcases)
+			foreach (Testcase testcase in testsuite.Testcases)
 			{
-				GroupedResult objGroupedRes = CalculateGroupedResultsForTestcase(objTestcase.ID, listOfResults.Where(objResult => objResult.Testcase.ID == objTestcase.ID).ToList(), datResultsSince);
-				if (objGroupedRes != null)
-					lstGroupedResults.Add(objGroupedRes);
+				GroupedResult groupedResult = CalculateGroupedResultsForTestcase(testcase.ID, results.Where(result => result.Testcase.ID == testcase.ID).ToList(), resultsSince);
+				if (groupedResult != null)
+					groupedResults.Add(groupedResult);
 			}
 
-			return lstGroupedResults;
+			return groupedResults;
 		}
 
 
-		TestcaseDetailsModel ITestViewerService.GetTestcaseDetails(int intTestsystem, int intTestsuite, int intTestcase)
+		TestcaseDetailsModel ITestViewerService.GetTestcaseDetails(int testsystemIndex, int testsuiteId, int testcaseId)
 		{
-			Testsuite objTestsuite = _objTestsuiteRepository.GetById(intTestsuite);
-			TestcaseDetailsModel objTestDetailsModel = new TestcaseDetailsModel();
+			Testsuite testsuite = _testsuiteRepository.GetById(testsuiteId);
+			TestcaseDetailsModel testcaseDetails = new TestcaseDetailsModel();
 
-			IList<Result> lstErrorResultsOfTestsuite = _objResultRepository.GetErrorResultsOfTestsuite(intTestsystem, objTestsuite.Browsers, objTestsuite.Testcases.Where(t => t.ID == intTestcase).ToList(), 
-			                                                objTestsuite.Languages);
+			IList<Result> errorResultsOfTestsuite = _resultRepository.GetErrorResultsOfTestsuite(testsystemIndex, testsuite.Browsers, testsuite.Testcases.Where(t => t.ID == testcaseId).ToList(), 
+			                                                testsuite.Languages);
 
-			IList<ErrorOccurrenceGroup> errorOccurenceGroups = ErrorGrouping.GetErrorOccurrenceGroups(lstErrorResultsOfTestsuite);
+			IList<ErrorOccurrenceGroup> errorOccurenceGroups = ErrorGrouping.GetErrorOccurrenceGroups(errorResultsOfTestsuite);
 			if (errorOccurenceGroups.Any())
 			{
-				objTestDetailsModel.ErrorOccurrenceGroup = errorOccurenceGroups.First();
+				testcaseDetails.ErrorOccurrenceGroup = errorOccurenceGroups.First();
 			}
-			objTestDetailsModel.Testcase = _objTestcaseRepository.GetById(intTestcase);
-			return objTestDetailsModel;
+			testcaseDetails.Testcase = _testcaseRepository.GetById(testcaseId);
+			return testcaseDetails;
 		}
 
 
-		int ITestViewerService.GetTesterIDByName(string strName)
+		int ITestViewerService.GetTesterIDByName(string name)
 		{
-			return _objTesterRepository.GetByName(strName).ID;
+			return _testerRepository.GetByName(name).ID;
 		}
 
-		IList<ErrorOccurrenceGroup> ITestViewerService.GetCurrentErrorOccurrenceGroups(int intTestsystem, int intTestsuite)
+		IList<ErrorOccurrenceGroup> ITestViewerService.GetCurrentErrorOccurrenceGroups(int testsystemIndex, int testsuiteId)
 		{
-			Testsuite objTestsuite = _objTestsuiteRepository.GetById(intTestsuite);
-			IList<Result> lstErrorResultsOfTestsuite = _objResultRepository.GetErrorResultsOfTestsuite(intTestsystem, objTestsuite.Browsers,
-				objTestsuite.Testcases, objTestsuite.Languages);
-			return ErrorGrouping.GetErrorOccurrenceGroups(lstErrorResultsOfTestsuite);
+			Testsuite testsuite = _testsuiteRepository.GetById(testsuiteId);
+			IList<Result> errorResultsOfTestsuite = _resultRepository.GetErrorResultsOfTestsuite(testsystemIndex, testsuite.Browsers,
+				testsuite.Testcases, testsuite.Languages);
+			return ErrorGrouping.GetErrorOccurrenceGroups(errorResultsOfTestsuite);
 		}
 
-		IList<ErrorOccurrenceGroup> ITestViewerService.GetHistoryErrorOccurrenceGroups(int intTestsystem, int intTestsuite, DateTime datFromDateTime,
-		                                                  DateTime datToDateTime)
+		IList<ErrorOccurrenceGroup> ITestViewerService.GetHistoryErrorOccurrenceGroups(int testsystemIndex, int testsuiteId, DateTime fromDate, DateTime toDate)
 		{
-			Testsuite objTestsuite = _objTestsuiteRepository.GetById(intTestsuite);
-			IList<HistoryResult> lstHistoryErrorResultsOfTestsuite = _objHistoryResultRepository.GetListOfErrorHistoryResults(intTestsystem,
-				objTestsuite.Browsers, objTestsuite.Testcases, objTestsuite.Languages, datFromDateTime, datToDateTime);
-			return ErrorGrouping.GetHistoryErrorOccurrenceGroups(lstHistoryErrorResultsOfTestsuite);
+			Testsuite testsuite = _testsuiteRepository.GetById(testsuiteId);
+			IList<HistoryResult> historyErrorResultsOfTestsuite = _historyResultRepository.GetListOfErrorHistoryResults(testsystemIndex,
+				testsuite.Browsers, testsuite.Testcases, testsuite.Languages, fromDate, toDate);
+			return ErrorGrouping.GetHistoryErrorOccurrenceGroups(historyErrorResultsOfTestsuite);
 		}
 
-		IList<HistoryResult> ITestViewerService.GetResultsHistory(int intTestsystem, int intTestcase, int intBrowser, int intLanguage, int intTestsuite,
-		                               int intMaxResults)
+		IList<HistoryResult> ITestViewerService.GetResultsHistory(int testsystemIndex, int testcaseId, int browserId, int languageId, int testsuiteId,
+		                               int maxResults)
 		{
-			Testsuite objTestsuite = _objTestsuiteRepository.GetById(intTestsuite);
-			IList<Browser> lstBrowsers = intBrowser == -1 ? objTestsuite.Browsers : objTestsuite.Browsers.Where(t => t.ID == intBrowser).ToList();
-			IList<Language> lstLanguages = intLanguage == -1 ? objTestsuite.Languages : objTestsuite.Languages.Where(t => t.ID == intLanguage).ToList();
-			IList<Testcase> lstTestcases = intTestcase == -1 ? objTestsuite.Testcases : objTestsuite.Testcases.Where(t => t.ID == intTestcase).ToList();
+			Testsuite objTestsuite = _testsuiteRepository.GetById(testsuiteId);
+			IList<Browser> browsers = browserId == -1 ? objTestsuite.Browsers : objTestsuite.Browsers.Where(t => t.ID == browserId).ToList();
+			IList<Language> languages = languageId == -1 ? objTestsuite.Languages : objTestsuite.Languages.Where(t => t.ID == languageId).ToList();
+			IList<Testcase> testcases = testcaseId == -1 ? objTestsuite.Testcases : objTestsuite.Testcases.Where(t => t.ID == testcaseId).ToList();
 
-			return _objHistoryResultRepository.GetListOfHistoryResults(intTestsystem, lstBrowsers, lstTestcases, lstLanguages, intMaxResults).ToList();
+			return _historyResultRepository.GetListOfHistoryResults(testsystemIndex, browsers, testcases, languages, maxResults).ToList();
 		}
 
 		#region private members
-		private GroupedResult CalculateGroupedResultsForTestcase(int intTestcaseID, List<Result> lstResults, DateTime? datResultsSince)
+		private GroupedResult CalculateGroupedResultsForTestcase(int intTestcaseID, List<Result> results, DateTime? resultsSince)
 		{
 
 			//Don't show not supported state...
-			lstResults = lstResults.Where(t => t.ResultCode !=TestState.NotSupported).ToList();
+			results = results.Where(t => t.ResultCode !=TestState.NotSupported).ToList();
 
-			if (!lstResults.Any())
+			if (!results.Any())
 				return null;
 
 			//If we have a date since filter, only use results if there are new ones...
-			if (datResultsSince.HasValue && lstResults.Max(t => t.Testtime) + new TimeSpan(0, 0, 10) < datResultsSince.Value)
+			if (resultsSince.HasValue && results.Max(t => t.Testtime) + new TimeSpan(0, 0, 10) < resultsSince.Value)
 				return null;
 
-			GroupedResult objGroupedResult = new GroupedResult { Testcase = intTestcaseID };
+			GroupedResult groupedResult = new GroupedResult { Testcase = intTestcaseID };
 
-			var objGroupedResultsByResultCode = lstResults.GroupBy(result => result.ResultCode, result => result,
+			var groupedResultsByResultCode = results.GroupBy(result => result.ResultCode, result => result,
 									 (key, elements) => new { ResultCode = key, Results = elements.ToList() });
 
-			bool bolAllResultsAreEqual = objGroupedResultsByResultCode.Count() == 1;
+			bool allResultsAreEqual = groupedResultsByResultCode.Count() == 1;
 
-			foreach (var result in objGroupedResultsByResultCode)
+			foreach (var result in groupedResultsByResultCode)
 			{
 
-				GroupedResultPart objGroupedResultPart = new GroupedResultPart { ResultCode = result.ResultCode };
-				if (bolAllResultsAreEqual)
+				GroupedResultPart groupedResultPart = new GroupedResultPart { ResultCode = result.ResultCode };
+				if (allResultsAreEqual)
 				{
-					objGroupedResultPart.ResultLabel = (result.ResultCode).ToString();
+					groupedResultPart.ResultLabel = (result.ResultCode).ToString();
 				}
 				else if (result.Results.Count == 1)
 				{
-					Result objSingleResult = result.Results[0];
-					objGroupedResultPart.ResultLabel = objSingleResult.Browser.Name + " " + objSingleResult.Language.Languagecode + " " + ((TestState)result.ResultCode);
+					Result singleResult = result.Results[0];
+					groupedResultPart.ResultLabel = singleResult.Browser.Name + " " + singleResult.Language.Languagecode + " " + ((TestState)result.ResultCode);
 				}
 				else
 				{
-					objGroupedResultPart.ResultLabel = result.Results.Count + "x " + (result.ResultCode);
+					groupedResultPart.ResultLabel = result.Results.Count + "x " + (result.ResultCode);
 				}
-				objGroupedResult.GroupedResultParts.Add(objGroupedResultPart);
+				groupedResult.GroupedResultParts.Add(groupedResultPart);
 			}
 
-			return objGroupedResult;
+			return groupedResult;
 		}
 
 	

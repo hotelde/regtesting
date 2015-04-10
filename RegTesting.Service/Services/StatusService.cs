@@ -20,74 +20,74 @@ namespace RegTesting.Service.Services
 	[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
 	public class StatusService : IStatusService
 	{
-		private readonly ITestPool _objTestPool;
-		private readonly ITestsystemRepository _objTestsystemRepository;
+		private readonly ITestPool _testPool;
+		private readonly ITestsystemRepository _testsystemRepository;
 
 		/// <summary>
 		/// Create a new statusService
 		/// </summary>
-		/// <param name="objTestPool">the testPool</param>
-		/// <param name="objTestsystemRepository">the testsystemRepository</param>
-		public StatusService(ITestPool objTestPool, ITestsystemRepository objTestsystemRepository)
+		/// <param name="testPool">the testPool</param>
+		/// <param name="testsystemRepository">the testsystemRepository</param>
+		public StatusService(ITestPool testPool, ITestsystemRepository testsystemRepository)
 		{
-			if (objTestPool == null)
-				throw new ArgumentNullException("objTestPool");
-			if (objTestsystemRepository == null)
-				throw new ArgumentNullException("objTestsystemRepository");
+			if (testPool == null)
+				throw new ArgumentNullException("testPool");
+			if (testsystemRepository == null)
+				throw new ArgumentNullException("testsystemRepository");
 
-			_objTestPool = objTestPool;
-			_objTestsystemRepository = objTestsystemRepository;
+			_testPool = testPool;
+			_testsystemRepository = testsystemRepository;
 		}
 
 
 		IList<TestJobDto> IStatusService.GetTestJobs()
 		{
-			return _objTestPool.GetTestJobs();
+			return _testPool.GetTestJobs();
 
 		}
 
 
-		IList<TestJobDto> IStatusService.GetTestJobsForTestsystem(int intTestsystem)
+		IList<TestJobDto> IStatusService.GetTestJobsForTestsystem(int testsystemId)
 		{
-			return _objTestPool.GetTestJobs(intTestsystem);
+			return _testPool.GetTestJobs(testsystemId);
 
 		}
 
 		IList<TestWorkerDto> IStatusService.GetTestWorkers()
 		{
-			return _objTestPool.GetTestWorker().Select(Mapper.Map<TestWorkerDto>).OrderBy(t => t.Name).ToList();
+			return _testPool.GetTestWorker().Select(Mapper.Map<TestWorkerDto>).OrderBy(t => t.Name).ToList();
 		}
 
 		void IStatusService.PrioTestJob(int testjob)
 		{
-			_objTestPool.PrioTestJob(testjob);
+			_testPool.PrioTestJob(testjob);
 		}
 
 		void IStatusService.CancelTestJob(int testjob)
 		{
-			_objTestPool.CancelTestJob(testjob);
+			_testPool.CancelTestJob(testjob);
 		}
 
 		void IStatusService.RebootWorker(string node)
 		{
-			_objTestPool.GetTestWorker(node).RebootWorker();
+			_testPool.GetTestWorker(node).RebootWorker();
 		}
 
 		void IStatusService.RebootAllWorker()
 		{
-			_objTestPool.GetTestWorker().ForEach(w => w.RebootWorker());
+			_testPool.GetTestWorker().ForEach(w => w.RebootWorker());
 		}
 
 
-		string IStatusService.GetMessage(int testsystem)
+		string IStatusService.GetMessage(int testsystemId)
 		{
-			Testsystem objTestsystem = _objTestsystemRepository.GetById(testsystem);
+			Testsystem testsystem = _testsystemRepository.GetById(testsystemId);
 
-			String strDeployname = Tfs.TfsBuildQuery.GetDeploymentName(objTestsystem);
-			bool bolIsDeploymentRunning = Tfs.TfsBuildQuery.IsDeploymentRunning(strDeployname);
-			if (bolIsDeploymentRunning)
+			String deployname = Tfs.TfsBuildQuery.GetDeploymentName(testsystem);
+			bool isDeploymentRunning = Tfs.TfsBuildQuery.IsDeploymentRunning(deployname);
+			if (isDeploymentRunning)
 			{
-				return "<b>" + strDeployname + " is running</b>. Testing task starts after build is finished.";
+				return "<b>" + deployname + " is running</b>. Testing task starts after build is finished.";
 			}
 			return "";
 		}

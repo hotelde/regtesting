@@ -9,8 +9,8 @@
 		/// <summary>
 		/// init the hosted service
 		/// </summary>
-		/// <param name="objEntity">the entity</param>
-		void Init(TEntity objEntity);
+		/// <param name="entity">the entity</param>
+		void Init(TEntity entity);
 
 	}
 }

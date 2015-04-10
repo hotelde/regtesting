@@ -8,37 +8,37 @@ namespace RegTesting.Service.Cache
 		public static TestsystemSummariesCache ThorCache = new TestsystemSummariesCache();
 		public static TestsystemSummariesCache SodaCache = new TestsystemSummariesCache();
 
-		private readonly Dictionary<int, TestsystemSummary> _dicTestsystemsummaries = new Dictionary<int, TestsystemSummary>();
+		private readonly Dictionary<int, TestsystemSummary> testSystemSummaries = new Dictionary<int, TestsystemSummary>();
 
-		private readonly Dictionary<int, object> _dicTestsystemLocks = new Dictionary<int, object>();
-		private readonly object _objLock = new object();
+		private readonly Dictionary<int, object> testsystemLocks = new Dictionary<int, object>();
+		private readonly object _lock = new object();
 
-		public TestsystemSummary Get(int intTestsystem)
+		public TestsystemSummary Get(int testsystemIndex)
 		{
-			if (!_dicTestsystemsummaries.ContainsKey(intTestsystem))
+			if (!testSystemSummaries.ContainsKey(testsystemIndex))
 				return null;
 
-			return _dicTestsystemsummaries[intTestsystem];
+			return testSystemSummaries[testsystemIndex];
 
 		}
 
-		public void Set(int intTestsystem, TestsystemSummary objValue)
+		public void Set(int testsystemIndex, TestsystemSummary testsystemSummary)
 		{
 
-			_dicTestsystemsummaries[intTestsystem] = objValue;
+			testSystemSummaries[testsystemIndex] = testsystemSummary;
 			
 		}
 
-		public object GetLock(int intTestsystem)
+		public object GetLock(int testsystemIndex)
 		{
-			lock (_objLock)
+			lock (_lock)
 			{
-				if (!_dicTestsystemLocks.ContainsKey(intTestsystem))
+				if (!testsystemLocks.ContainsKey(testsystemIndex))
 				{
-					_dicTestsystemLocks[intTestsystem] = new object();
+					testsystemLocks[testsystemIndex] = new object();
 				}
 
-				return _dicTestsystemLocks[intTestsystem];
+				return testsystemLocks[testsystemIndex];
 			}
 
 		}

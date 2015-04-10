@@ -15,18 +15,18 @@ namespace RegTesting.Service.Repositories
 		/// <summary>
 		/// Create a TestsuiteRepository
 		/// </summary>
-		/// <param name="objSession">the session</param>
-		public BrowserRepository(Func<ISession> objSession)
-			: base(objSession)
+		/// <param name="session">the session</param>
+		public BrowserRepository(Func<ISession> session)
+			: base(session)
 		{
 		}
 
 
-		Browser IBrowserRepository.GetByName(string strName)
+		Browser IBrowserRepository.GetByName(string browserName)
 		{
 			return Session
 					.CreateCriteria(typeof(Browser))
-					.Add(Restrictions.Eq("Name", strName))
+					.Add(Restrictions.Eq("Name", browserName))
 					.UniqueResult<Browser>();
 		}
 	}

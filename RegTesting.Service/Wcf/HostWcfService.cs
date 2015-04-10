@@ -11,41 +11,41 @@ namespace RegTesting.Service.Wcf
 	/// <typeparam name="TEntity">the ServiceInterface to Host</typeparam>
 	public class HostWcfService<TEntity> : IHostService<TEntity> where TEntity : class
 	{
-		private readonly Uri _objBaseAddress;
+		private readonly Uri _baseAddress;
 		
 		/// <summary>
 		/// Create a new HostWcfService
 		/// </summary>
-		/// <param name="objBaseAddress">the baseAddress of the service</param>
-		public HostWcfService(Uri objBaseAddress)
+		/// <param name="baseAddress">the baseAddress of the service</param>
+		public HostWcfService(Uri baseAddress)
 		{
-			if (objBaseAddress == null)
-				throw new ArgumentNullException("objBaseAddress");
+			if (baseAddress == null)
+				throw new ArgumentNullException("baseAddress");
 
-			_objBaseAddress = objBaseAddress;
+			_baseAddress = baseAddress;
 		}
 
-		void IHostService<TEntity>.Init(TEntity objEntity)
+		void IHostService<TEntity>.Init(TEntity entity)
 		{
 
-			Logger.Log("Init " + objEntity.GetType().Name + "...");
+			Logger.Log("Init " + entity.GetType().Name + "...");
 			// Create ServiceHost
-			ServiceHost objSelfHost = new ServiceHost(objEntity, _objBaseAddress);
+			ServiceHost selfHost = new ServiceHost(entity, _baseAddress);
 
 			try
 			{
 				// Add a service endpoint.
-				objSelfHost.AddServiceEndpoint(
+				selfHost.AddServiceEndpoint(
 					typeof(TEntity),
 					new WSHttpBinding("WSHttpBinding_IRegressionsTestingService"), "");
 
 				// Enable metadata exchange.
-				ServiceMetadataBehavior objServiceMetadataBehavior = new ServiceMetadataBehavior { HttpGetEnabled = true };
-				objSelfHost.Description.Behaviors.Add(objServiceMetadataBehavior);
-				objSelfHost.Description.Behaviors.Find<ServiceDebugBehavior>().IncludeExceptionDetailInFaults = true;
+				ServiceMetadataBehavior serviceMetadataBehavior = new ServiceMetadataBehavior { HttpGetEnabled = true };
+				selfHost.Description.Behaviors.Add(serviceMetadataBehavior);
+				selfHost.Description.Behaviors.Find<ServiceDebugBehavior>().IncludeExceptionDetailInFaults = true;
 
 				// Start the service.
-				objSelfHost.Open();
+				selfHost.Open();
 
 				Logger.Log("[OK]");
 
@@ -53,12 +53,12 @@ namespace RegTesting.Service.Wcf
 			catch (CommunicationException objCe)
 			{
 				Logger.Log("An exception occurred: {0}", objCe.Message);
-				objSelfHost.Abort();
+				selfHost.Abort();
 			}
 			catch (Exception objEx)
 			{
 				Logger.Log("An exception occurred: {0}", objEx.Message);
-				objSelfHost.Abort();
+				selfHost.Abort();
 			}
 		}
 	}

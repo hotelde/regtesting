@@ -56,9 +56,9 @@ namespace RegTesting.Service.TestLogic
 		{
 			get
 			{
-				TimeSpan objTimeSpan = DateTime.Now - LastStart;
-				TimeSpan objTimeSpanTrimmed = new TimeSpan(objTimeSpan.Days, objTimeSpan.Hours, objTimeSpan.Minutes, objTimeSpan.Seconds);
-				return (int)objTimeSpanTrimmed.TotalSeconds;
+				TimeSpan timeSpan = DateTime.Now - LastStart;
+				TimeSpan timeSpanTrimmed = new TimeSpan(timeSpan.Days, timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+				return (int)timeSpanTrimmed.TotalSeconds;
 			}
 		}
 
@@ -68,19 +68,19 @@ namespace RegTesting.Service.TestLogic
 		public string TestruntimeString {
 			get
 			{
-				TimeSpan objTimeSpan = DateTime.Now - LastStart;
-				TimeSpan objTimeSpanTrimmed = new TimeSpan(objTimeSpan.Days, objTimeSpan.Hours, objTimeSpan.Minutes, objTimeSpan.Seconds);
-				return objTimeSpanTrimmed.ToString("c");
+				TimeSpan timeSpan = DateTime.Now - LastStart;
+				TimeSpan timeSpanTrimmed = new TimeSpan(timeSpan.Days, timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds);
+				return timeSpanTrimmed.ToString("c");
 			}
 		}
 
 		/// <summary>
 		/// Create a new NodeTestWorker
 		/// </summary>
-		/// <param name="strName">the nodeName</param>
-		public NodeTestWorker(string strName)
+		/// <param name="nodeName">the nodeName</param>
+		public NodeTestWorker(string nodeName)
 		{
-			Name = strName;
+			Name = nodeName;
 			Browsers = new List<Browser>();
 			State = TestWorkerStatus.Ok;
 			LastStart = DateTime.Now;
@@ -102,10 +102,10 @@ namespace RegTesting.Service.TestLogic
 			State = TestWorkerStatus.Rebooting;
 			LastStart = DateTime.Now;
 
-			Process objProcess = new Process {StartInfo = {FileName = "shutdown", Arguments = "-m " + Name + " -r -f -t 0"}};
+			Process process = new Process {StartInfo = {FileName = "shutdown", Arguments = "-m " + Name + " -r -f -t 0"}};
 
 			Logger.Log("Rebooting worker: " + Name);
-			objProcess.Start();
+			process.Start();
 		}
 
 	}

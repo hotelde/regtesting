@@ -22,8 +22,8 @@ namespace RegTesting.Service.Mail
 			Logger.Log("Test job finished. No success-mail send. Mailing-Service is running in test configuration.");
 			
 			List<Result> results = testJobManager.WorkItems.Select(t => t.Result).Where(t => t != null && t.Error != null).ToList();
-			List<ErrorOccurrenceGroup> lstErrorOccurrenceGroups = ErrorGrouping.GetErrorOccurrenceGroups(results);
-			Logger.Log(testJobManager.Passed + " passed tests. " + testJobManager.Failured + " failed tests. ErrorOccurences from GetErrorOccurrenceGroups(): " + lstErrorOccurrenceGroups.Count);
+			List<ErrorOccurrenceGroup> errorOccurrenceGroups = ErrorGrouping.GetErrorOccurrenceGroups(results);
+			Logger.Log(testJobManager.Passed + " passed tests. " + testJobManager.Failured + " failed tests. ErrorOccurences from GetErrorOccurrenceGroups(): " + errorOccurrenceGroups.Count);
 		}
 	}
 }

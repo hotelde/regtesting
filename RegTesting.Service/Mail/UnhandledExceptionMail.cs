@@ -9,15 +9,15 @@ namespace RegTesting.Service.Mail
 	/// </summary>
 	public class UnhandledExceptionMail : AbstractMail
 	{
-		private readonly Exception _objException;
+		private readonly Exception _exception;
 
 		/// <summary>
 		/// Create a new UnhandledExceptionMail
 		/// </summary>
-		/// <param name="objException">The exception</param>
-		public UnhandledExceptionMail(Exception objException)
+		/// <param name="exception">The exception</param>
+		public UnhandledExceptionMail(Exception exception)
 		{
-			_objException = objException;
+			_exception = exception;
 		}
 
 		/// <summary>
@@ -25,7 +25,7 @@ namespace RegTesting.Service.Mail
 		/// </summary>
 		public void Send()
 		{
-			SendMail(RegtestingServerConfiguration.Errormailadress, "CRITICAL - UnhandledException!", "UnhandledException:\n" + _objException);
+			SendMail(RegtestingServerConfiguration.Errormailadress, "CRITICAL - UnhandledException!", "UnhandledException:\n" + _exception);
 		}
 
 	}

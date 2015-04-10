@@ -11,35 +11,35 @@ namespace RegTesting.Service.TestLogic
 {
 	class RecycleLonglifeWorkerBackgroundTask
 	{
-		private readonly ITestPool _objTestPool;
-		private bool _bolCanceled = false;
-		private readonly int _intRecycleTime;
+		private readonly ITestPool _testPool;
+		private bool _canceled = false;
+		private readonly int _recycleTime;
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="objTestPool">the testPool</param>
-		public RecycleLonglifeWorkerBackgroundTask(ITestPool objTestPool)
+		/// <param name="testPool">the testPool</param>
+		public RecycleLonglifeWorkerBackgroundTask(ITestPool testPool)
 		{
-			if (objTestPool == null)
-				throw new ArgumentNullException("objTestPool");
-			_objTestPool = objTestPool;
-			_intRecycleTime = RegtestingServerConfiguration.RecycleTime;
+			if (testPool == null)
+				throw new ArgumentNullException("testPool");
+			_testPool = testPool;
+			_recycleTime = RegtestingServerConfiguration.RecycleTime;
 			Run();
 		}
 
 		private void Run()
 		{
-			Task objRecycleTask = Task.Factory.StartNew(() =>
+			Task recycleTask = Task.Factory.StartNew(() =>
 			{
-				while (!_bolCanceled)
+				while (!_canceled)
 				{
 					Thread.Sleep(5000);
-					foreach (ITestWorker objTestWorker in _objTestPool.GetTestWorker().Where(t=>t.WorkItem!=null))
+					foreach (ITestWorker testWorker in _testPool.GetTestWorker().Where(t=>t.WorkItem!=null))
 					{
-						if (objTestWorker.Testruntime > _intRecycleTime && objTestWorker.State == TestWorkerStatus.Ok)
+						if (testWorker.Testruntime > _recycleTime && testWorker.State == TestWorkerStatus.Ok)
 						{
-							objTestWorker.RebootWorker();
+							testWorker.RebootWorker();
 						}
 					}
 				}

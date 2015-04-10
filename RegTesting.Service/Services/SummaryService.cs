@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 using RegTesting.Contracts;
 using RegTesting.Contracts.Domain;
 using RegTesting.Contracts.Repositories;
@@ -18,28 +16,28 @@ namespace RegTesting.Service.Services
 	[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
 	public class SummaryService : ISummaryService
 	{
-		private readonly IResultRepository _objResultRepository;
-		private readonly ITestsystemRepository _objTestsystemRepository;
-		private readonly ITestsuiteRepository _objTestsuiteRepository;
+		private readonly IResultRepository _resultRepository;
+		private readonly ITestsystemRepository _testsystemRepository;
+		private readonly ITestsuiteRepository _testsuiteRepository;
 
 		/// <summary>
 		/// Create a new SummaryService
 		/// </summary>
-		/// <param name="objResultRepository">the ResultRepository</param>
-		/// <param name="objTestsystemRepository">the TestsystemRepository</param>
-		/// <param name="objTestsuiteRepository">the TestsuiteRepository</param>
-		public SummaryService(IResultRepository objResultRepository, ITestsystemRepository objTestsystemRepository, ITestsuiteRepository objTestsuiteRepository)
+		/// <param name="resultRepository">the ResultRepository</param>
+		/// <param name="testsystemRepository">the TestsystemRepository</param>
+		/// <param name="testsuiteRepository">the TestsuiteRepository</param>
+		public SummaryService(IResultRepository resultRepository, ITestsystemRepository testsystemRepository, ITestsuiteRepository testsuiteRepository)
 		{
-			if (objResultRepository == null)
-				throw new ArgumentNullException("objResultRepository");
-			if (objTestsystemRepository == null)
-				throw new ArgumentNullException("objTestsystemRepository");
-			if (objTestsuiteRepository == null)
-				throw new ArgumentNullException("objTestsuiteRepository");
+			if (resultRepository == null)
+				throw new ArgumentNullException("resultRepository");
+			if (testsystemRepository == null)
+				throw new ArgumentNullException("testsystemRepository");
+			if (testsuiteRepository == null)
+				throw new ArgumentNullException("testsuiteRepository");
 
-			_objResultRepository = objResultRepository;
-			_objTestsystemRepository = objTestsystemRepository;
-			_objTestsuiteRepository = objTestsuiteRepository;
+			_resultRepository = resultRepository;
+			_testsystemRepository = testsystemRepository;
+			_testsuiteRepository = testsuiteRepository;
 		}
 
 
@@ -47,84 +45,84 @@ namespace RegTesting.Service.Services
 
 		IList<TestsystemSummary> ISummaryService.GetTestsystemSummaryForAllThorBranches()
 		{
-			Testsuite objTestsuite = _objTestsuiteRepository.GetByName(RegtestingServerConfiguration.ThorDefaulttestsuite);
-			return _objTestsystemRepository.GetAll()
-				.Select(objTestsystem => CreateTestsystemSummary(objTestsystem, objTestsuite, TestsystemSummariesCache.ThorCache))
+			Testsuite testsuite = _testsuiteRepository.GetByName(RegtestingServerConfiguration.ThorDefaulttestsuite);
+			return _testsystemRepository.GetAll()
+				.Select(objTestsystem => CreateTestsystemSummary(objTestsystem, testsuite, TestsystemSummariesCache.ThorCache))
 				.OrderByDescending(objSummary => objSummary.LastChangeDate).Where(objSummary => DateTime.Now - objSummary.LastChangeDate < TimeSpan.FromDays(7)).ToList();
 		}
 
 		IList<TestsystemSummary> ISummaryService.GetTestsystemSummaryForAllSodaBranches()
 		{
-			Testsuite objTestsuite = _objTestsuiteRepository.GetByName(RegtestingServerConfiguration.SodaDefaulttestsuite);
-			return _objTestsystemRepository.GetAll()
-				.Select(objTestsystem => CreateTestsystemSummary(objTestsystem, objTestsuite, TestsystemSummariesCache.SodaCache))
+			Testsuite testsuite = _testsuiteRepository.GetByName(RegtestingServerConfiguration.SodaDefaulttestsuite);
+			return _testsystemRepository.GetAll()
+				.Select(objTestsystem => CreateTestsystemSummary(objTestsystem, testsuite, TestsystemSummariesCache.SodaCache))
 				.OrderByDescending(objSummary => objSummary.LastChangeDate).Where(objSummary => DateTime.Now - objSummary.LastChangeDate < TimeSpan.FromDays(7)).ToList();
 		}
 
 
 		IList<TestsystemSummary> ISummaryService.GetTestsystemSummaryForThorMainBranches()
 		{
-			Testsuite objTestsuite = _objTestsuiteRepository.GetByName(RegtestingServerConfiguration.ThorDefaulttestsuite);
-			IList<Testsystem> lstMainTestsystems = new List<Testsystem>
+			Testsuite testsuite = _testsuiteRepository.GetByName(RegtestingServerConfiguration.ThorDefaulttestsuite);
+			IList<Testsystem> mainTestsystems = new List<Testsystem>
 				{
-					_objTestsystemRepository.GetByName("dev")
+					_testsystemRepository.GetByName("dev")
 				};
 
-			return lstMainTestsystems
-				.Select(objTestsystem => CreateTestsystemSummary(objTestsystem, objTestsuite, TestsystemSummariesCache.ThorCache))
+			return mainTestsystems
+				.Select(objTestsystem => CreateTestsystemSummary(objTestsystem, testsuite, TestsystemSummariesCache.ThorCache))
 				.ToList();
 		}
 
 
 		IList<TestsystemSummary> ISummaryService.GetTestsystemSummaryForSodaMainBranches()
 		{
-			Testsuite objTestsuite = _objTestsuiteRepository.GetByName(RegtestingServerConfiguration.SodaDefaulttestsuite);
+			Testsuite testsuite = _testsuiteRepository.GetByName(RegtestingServerConfiguration.SodaDefaulttestsuite);
 		
-			IList<Testsystem> lstMainTestsystems = new List<Testsystem>
+			IList<Testsystem> mainTestsystems = new List<Testsystem>
 				{
-					_objTestsystemRepository.GetByName("devsoda-uit")
+					_testsystemRepository.GetByName("devsoda-uit")
 				};
 
-			return lstMainTestsystems
-				.Select(objTestsystem => CreateTestsystemSummary(objTestsystem, objTestsuite, TestsystemSummariesCache.SodaCache))
+			return mainTestsystems
+				.Select(objTestsystem => CreateTestsystemSummary(objTestsystem, testsuite, TestsystemSummariesCache.SodaCache))
 				.ToList();
 		}
 
-		private TestsystemSummary CreateTestsystemSummary(Testsystem objTestsystem, Testsuite objTestsuite, TestsystemSummariesCache cache)
+		private TestsystemSummary CreateTestsystemSummary(Testsystem testsystem, Testsuite testsuite, TestsystemSummariesCache cache)
 		{
-			lock (cache.GetLock(objTestsystem.ID))
+			lock (cache.GetLock(testsystem.ID))
 			{
 				
-				TestsystemSummary objCachedResult = cache.Get(objTestsystem.ID);
+				TestsystemSummary objCachedResult = cache.Get(testsystem.ID);
 
 				if (objCachedResult != null)
 					return objCachedResult;
 
 
-				IList<Result> listOfResults = _objResultRepository.GetListOfResults(objTestsystem.ID, objTestsuite.Browsers, objTestsuite.Testcases,
-													  objTestsuite.Languages);
+				IList<Result> results = _resultRepository.GetListOfResults(testsystem.ID, testsuite.Browsers, testsuite.Testcases,
+													  testsuite.Languages);
 
-				TestsystemSummary objTestsystemSummary = new TestsystemSummary
+				TestsystemSummary testsystemSummary = new TestsystemSummary
 				{
-					TestsuiteName = objTestsuite.Name,
-					TestsuiteID = objTestsuite.ID,
-					TestsystemName = objTestsystem.Name,
-					TestsystemID = objTestsystem.ID,
+					TestsuiteName = testsuite.Name,
+					TestsuiteID = testsuite.ID,
+					TestsystemName = testsystem.Name,
+					TestsystemID = testsystem.ID,
 				};
 
-				if (listOfResults.Count != 0)
+				if (results.Count != 0)
 				{
-					objTestsystemSummary.LastChangeDate = listOfResults.Min(t => t.Testtime);
-					objTestsystemSummary.TestsystemStatus = listOfResults.Max(t => t.ResultCode);
+					testsystemSummary.LastChangeDate = results.Min(t => t.Testtime);
+					testsystemSummary.TestsystemStatus = results.Max(t => t.ResultCode);
 				}
 				else
 				{
-					objTestsystemSummary.LastChangeDate = DateTime.MinValue;
-					objTestsystemSummary.TestsystemStatus = (int)TestState.NotSet;
+					testsystemSummary.LastChangeDate = DateTime.MinValue;
+					testsystemSummary.TestsystemStatus = (int)TestState.NotSet;
 				}
 
-				cache.Set(objTestsystem.ID, objTestsystemSummary);
-				return objTestsystemSummary;
+				cache.Set(testsystem.ID, testsystemSummary);
+				return testsystemSummary;
 			}
 		}
 	}

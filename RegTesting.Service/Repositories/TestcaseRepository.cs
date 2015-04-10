@@ -15,9 +15,9 @@ namespace RegTesting.Service.Repositories
 		/// <summary>
 		/// Create a TestsuiteRepository
 		/// </summary>
-		/// <param name="objSession">the session</param>
-		public TestcaseRepository(Func<ISession> objSession)
-			: base(objSession)
+		/// <param name="session">the session</param>
+		public TestcaseRepository(Func<ISession> session)
+			: base(session)
 		{
 
 		}
