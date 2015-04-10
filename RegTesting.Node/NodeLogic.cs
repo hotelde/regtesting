@@ -22,17 +22,17 @@ namespace RegTesting.Node
 		/// </summary>
 		public string[] Types { get; set; }
 
-		private readonly string _strServerAdr;
-		private readonly string _strNodename;
-		private TestcaseProvider _objTestcaseProvider;
-		private readonly List<string> _lstBrowsers;
+		private readonly string _serverAdr;
+		private readonly string _nodename;
+		private TestcaseProvider _testcaseProvider;
+		private readonly List<string> _browsers;
 		private int _pollingIntervall;
 
-		public NodeLogic(string strServerAdr, string strNodeName, List<string> lstBrowsers)
+		public NodeLogic(string serverAdr, string nodeName, List<string> browsers)
 		{
-			_strServerAdr = strServerAdr;
-			_strNodename = strNodeName;
-			_lstBrowsers = lstBrowsers;
+			_serverAdr = serverAdr;
+			_nodename = nodeName;
+			_browsers = browsers;
 			_pollingIntervall = NodeConfiguration.PollingIntervall;
 		}
 
@@ -42,13 +42,13 @@ namespace RegTesting.Node
 			do
 			{
 				EnsureBrowserClosed();
-				WorkItemDto objWorkItemDto = WaitForWorkItem();
-				WorkItem objWorkItem = Mapper.Map<WorkItem>(objWorkItemDto);
+				WorkItemDto workItemDto = WaitForWorkItem();
+				WorkItem workItem = Mapper.Map<WorkItem>(workItemDto);
 
-				Console.WriteLine(@"Loading " + objWorkItem.Testsystem.Name);
-				UpdateTestcases(objWorkItem.Testsystem);
-				Console.WriteLine(@"Received" + objWorkItem.Testsystem.Name);
-				TestResult objTestResult = HandleTest(objWorkItem);
+				Console.WriteLine(@"Loading " + workItem.Testsystem.Name);
+				UpdateTestcases(workItem.Testsystem);
+				Console.WriteLine(@"Received" + workItem.Testsystem.Name);
+				TestResult objTestResult = HandleTest(workItem);
 				SendTestResultToServer(objTestResult);
 				UnloadTestcases();
 			} while (true);
@@ -85,42 +85,42 @@ namespace RegTesting.Node
 		}
 		private void UnloadTestcases()
 		{
-			_objTestcaseProvider.Unload();
+			_testcaseProvider.Unload();
 		}
 
-		private void SendTestResultToServer(TestResult objTestResult)
+		private void SendTestResultToServer(TestResult testResult)
 		{
-			Console.Out.WriteLine("Result: " + objTestResult.TestState);
-			using (WcfClient objWcfClient = new WcfClient(_strServerAdr))
+			Console.Out.WriteLine("Result: " + testResult.TestState);
+			using (WcfClient objWcfClient = new WcfClient(_serverAdr))
 			{
-				objWcfClient.FinishedWork(_strNodename, objTestResult);
+				objWcfClient.FinishedWork(_nodename, testResult);
 			}
 
 			Console.Out.WriteLine("Finished.");
 
 		}
 
-		private void UpdateTestcases(Testsystem objTestsystem)
+		private void UpdateTestcases(Testsystem testsystem)
 		{
-			const string strTestfile = @"LocalTests.dll";
-			byte[] arrData;
-			using (WcfClient objWcfClient = new WcfClient(_strServerAdr))
+			const string testfile = @"LocalTests.dll";
+			byte[] data;
+			using (WcfClient wcfClient = new WcfClient(_serverAdr))
 			{
-				arrData = objWcfClient.FetchDll(_strNodename, objTestsystem.Name);
+				data = wcfClient.FetchDll(_nodename, testsystem.Name);
 			}
 
-			using (FileStream objFileStream = new FileStream(strTestfile, FileMode.Create, FileAccess.Write))
+			using (FileStream fileStream = new FileStream(testfile, FileMode.Create, FileAccess.Write))
 			{
-				objFileStream.Write(arrData, 0, arrData.Length);
+				fileStream.Write(data, 0, data.Length);
 			}
-			_objTestcaseProvider = new TestcaseProvider(strTestfile);
-			_objTestcaseProvider.CreateAppDomain();
+			_testcaseProvider = new TestcaseProvider(testfile);
+			_testcaseProvider.CreateAppDomain();
 		}
 
 
-		private ITestable LoadTestable(WorkItem objWorkItem)
+		private ITestable LoadTestable(WorkItem workItem)
 		{
-			return _objTestcaseProvider.GetTestableFromTypeName(objWorkItem.Testcase.Type);
+			return _testcaseProvider.GetTestableFromTypeName(workItem.Testcase.Type);
 		}
 
 		private WorkItemDto WaitForWorkItem()
@@ -128,8 +128,8 @@ namespace RegTesting.Node
 			Console.Out.WriteLine("Wait for WorkItem");
 			do
 			{
-				WorkItemDto objWorkItem = FetchWork();
-				if (objWorkItem != null) return objWorkItem;
+				WorkItemDto workItem = FetchWork();
+				if (workItem != null) return workItem;
 				Thread.Sleep(_pollingIntervall);
 
 			} while (true);
@@ -138,9 +138,9 @@ namespace RegTesting.Node
 		private void Register()
 		{
 			Console.Out.WriteLine("Register at server...");
-			using (WcfClient objWcfClient = new WcfClient(_strServerAdr))
+			using (WcfClient wcfClient = new WcfClient(_serverAdr))
 			{
-				objWcfClient.Register(_strNodename, _lstBrowsers);
+				wcfClient.Register(_nodename, _browsers);
 			}
 
 
@@ -148,118 +148,118 @@ namespace RegTesting.Node
 
 		private WorkItemDto FetchWork()
 		{
-			using (WcfClient objWcfClient = new WcfClient(_strServerAdr))
+			using (WcfClient wcfClient = new WcfClient(_serverAdr))
 			{
-				return objWcfClient.GetWork(_strNodename);
+				return wcfClient.GetWork(_nodename);
 			}
 		}
 
 
-		private TestResult HandleTest(WorkItem objWorkItem)
+		private TestResult HandleTest(WorkItem workItem)
 		{
-			TestResult objTestResult = new TestResult();
-			ITestable objTestable = null;
-			List<string> lstLog = new List<string>();
+			TestResult testResult = new TestResult();
+			ITestable testable = null;
+			List<string> log = new List<string>();
 			try
 			{
-				lstLog.Add("Test on " + _strNodename);
+				log.Add("Test on " + _nodename);
 
 				/**1: Load Testclass **/
-				Console.WriteLine(@"Testing {0} {1} ({2}/{3})", objWorkItem.Testcase.Name, objWorkItem.Browser.Name, objWorkItem.Testsystem.Name, objWorkItem.Language.Languagecode);
-				objTestable = LoadTestable(objWorkItem);
-				if (objTestable == null)
+				Console.WriteLine(@"Testing {0} {1} ({2}/{3})", workItem.Testcase.Name, workItem.Browser.Name, workItem.Testsystem.Name, workItem.Language.Languagecode);
+				testable = LoadTestable(workItem);
+				if (testable == null)
 					return new TestResult { TestState = TestState.NotAvailable };
 
 				/**2: Wait for branch get ready **/
-				WaitOnWebExceptions(objWorkItem);
+				WaitOnWebExceptions(workItem);
 
 				/**3: Prepare Test **/
 				Browser browser = new Browser()
 				{
-					Browserstring = objWorkItem.Browser.Browserstring,
-					Versionsstring = objWorkItem.Browser.Versionsstring
+					Browserstring = workItem.Browser.Browserstring,
+					Versionsstring = workItem.Browser.Versionsstring
 				};
-				objTestable.SetupTest(WebDriverInitStrategy.SeleniumLocal, browser, objWorkItem.Testsystem.Url,
-									  objWorkItem.Language.Languagecode);
+				testable.SetupTest(WebDriverInitStrategy.SeleniumLocal, browser, workItem.Testsystem.Url,
+									  workItem.Language.Languagecode);
 
 				/**4: Run Test **/
-				objTestable.Test();
+				testable.Test();
 
-				objTestResult.TestState = TestState.Success;
+				testResult.TestState = TestState.Success;
 			}
-			catch (NotSupportedException objException)
+			catch (NotSupportedException notSupportedException)
 			{
-				Error objError = CreateErrorFromException(objException);
-				objTestResult.TestState = TestState.NotSupported;
-				objTestResult.Error = objError;
+				Error objError = CreateErrorFromException(notSupportedException);
+				testResult.TestState = TestState.NotSupported;
+				testResult.Error = objError;
 			}
-			catch (TaskCanceledException objException)
+			catch (TaskCanceledException taskCanceledException)
 			{
-				Error objError = CreateErrorFromException(objException);
-				objTestResult.TestState = TestState.Canceled;
-				objTestResult.Error = objError;
+				Error objError = CreateErrorFromException(taskCanceledException);
+				testResult.TestState = TestState.Canceled;
+				testResult.Error = objError;
 			}
-			catch (Exception objException)
+			catch (Exception exception)
 			{
 				ServerErrorModel serverException = null;
 				try
 				{
-					if (objTestable != null)
-						serverException = objTestable.CheckForServerError();
+					if (testable != null)
+						serverException = testable.CheckForServerError();
 				}
 				catch
 				{
 					//Error catching serverException
 				}
-				Error objError = CreateErrorFromException(objException);
+				Error error = CreateErrorFromException(exception);
 				if (serverException != null)
 				{
-					objError.Type = serverException.Type;
-					objError.Message = serverException.Message;
-					objError.InnerException = serverException.InnerException;
+					error.Type = serverException.Type;
+					error.Message = serverException.Message;
+					error.InnerException = serverException.InnerException;
 					//objError.StackTrace = serverException.StackTrace; Keep error stacktrace.
 
 				}
-				objTestResult.TestState = TestState.Error;
-				objTestResult.Error = objError;
-				if (objTestable != null)
-					objTestResult.Screenshot = objTestable.SaveScreenshot("");
+				testResult.TestState = TestState.Error;
+				testResult.Error = error;
+				if (testable != null)
+					testResult.Screenshot = testable.SaveScreenshot("");
 
 
 			}
 			finally
 			{
-				if (objTestable != null)
+				if (testable != null)
 				{
-					objTestable.TeardownTest();
-					lstLog.AddRange(objTestable.GetLogLastTime());
+					testable.TeardownTest();
+					log.AddRange(testable.GetLogLastTime());
 				}
 
-				objTestResult.Log = lstLog;
+				testResult.Log = log;
 			}
-			return objTestResult;
+			return testResult;
 		}
 
-		private Error CreateErrorFromException(Exception objException)
+		private Error CreateErrorFromException(Exception exception)
 		{
 			Error objError = new Error
 			{
-				Type = objException.GetType().ToString(),
-				Message = objException.Message,
-				StackTrace = objException.StackTrace ?? "",
-				InnerException = (objException.InnerException != null ? objException.InnerException.ToString() : null),
+				Type = exception.GetType().ToString(),
+				Message = exception.Message,
+				StackTrace = exception.StackTrace ?? "",
+				InnerException = (exception.InnerException != null ? exception.InnerException.ToString() : null),
 			};
 			return objError;
 		}
 
-		private void WaitOnWebExceptions(WorkItem objWorkItem)
+		private void WaitOnWebExceptions(WorkItem workItem)
 		{
 			for (int intTryCount = 0; intTryCount < 10; intTryCount++)
 			{
-				WebClient objWebClient = new WebClient();
+				WebClient webClient = new WebClient();
 				try
 				{
-					objWebClient.DownloadString("http://" + objWorkItem.Testsystem.Url);
+					webClient.DownloadString("http://" + workItem.Testsystem.Url);
 					break;
 				}
 				catch

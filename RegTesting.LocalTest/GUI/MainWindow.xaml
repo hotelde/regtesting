@@ -74,7 +74,7 @@
 
 
                 <controls:Label controls:Grid.Row="0" controls:Grid.Column="0" Content="Language:"/>
-                <controls:ListBox controls:Grid.Row="1" controls:Grid.Column="0" Name="lstLanguage" x:FieldModifier="private"  Margin="3" SelectionMode="Extended"/>
+                <controls:ListBox controls:Grid.Row="1" controls:Grid.Column="0" Name="languages" x:FieldModifier="private"  Margin="3" SelectionMode="Extended"/>
                 <controls:Label controls:Grid.Row="0" controls:Grid.Column="1" Content="Browser:"/>
                 <controls:ListBox controls:Grid.Row="1" controls:Grid.Column="1" Name="lstBrowser" x:FieldModifier="private"  Margin="3" SelectionMode="Extended" />
                 <controls:Button controls:Grid.Row="2" controls:Grid.Column="0" controls:Grid.ColumnSpan="2" Content="Start Test" Click="BtnStartClick"  Margin="3" />

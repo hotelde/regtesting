@@ -12,8 +12,8 @@ namespace RegTesting.Node
 	/// </summary>
 	public class WcfClient : IDisposable
 	{
-		private readonly INodeService _objChannel;
-		private readonly ChannelFactory<INodeService> _objHttpFactory;
+		private readonly INodeService _channel;
+		private readonly ChannelFactory<INodeService> _httpFactory;
 
 
 		/// <summary>
@@ -23,11 +23,11 @@ namespace RegTesting.Node
 		public WcfClient(String strEndpointAddress)
 		{
 
-			EndpointAddress objEndpointAddress = new EndpointAddress(strEndpointAddress);
-			if (_objChannel != null) return;
+			EndpointAddress endpointAddress = new EndpointAddress(strEndpointAddress);
+			if (_channel != null) return;
 
-			_objHttpFactory = new ChannelFactory<INodeService>("NodeServiceEndpoint", objEndpointAddress);
-			_objChannel = _objHttpFactory.CreateChannel();
+			_httpFactory = new ChannelFactory<INodeService>("NodeServiceEndpoint", endpointAddress);
+			_channel = _httpFactory.CreateChannel();
 
 		}
 
@@ -36,11 +36,11 @@ namespace RegTesting.Node
 		/// </summary>
 		public void Dispose()
 		{
-			if (_objHttpFactory != null)
+			if (_httpFactory != null)
 			{
 				try
 				{
-					_objHttpFactory.Close();
+					_httpFactory.Close();
 				}
 				catch
 				{
@@ -56,44 +56,44 @@ namespace RegTesting.Node
 		/// <summary>
 		/// Register a node at the server
 		/// </summary>
-		/// <param name="strNode">the node</param>
-		/// <param name="lstBrowsers">the list of supported browsers</param>
+		/// <param name="nodeName">the node</param>
+		/// <param name="browsers">the list of supported browsers</param>
 		/// <returns>true if successful</returns>
-        public void Register(string strNode, List<string> lstBrowsers)
+		public void Register(string nodeName, List<string> browsers)
 		{
-			_objChannel.Register(strNode, lstBrowsers);
+			_channel.Register(nodeName, browsers);
 		}
 
 		/// <summary>
 		/// Get a WorkItem from server.
 		/// </summary>
-		/// <param name="strNode">the node</param>
+		/// <param name="nodeName">the node</param>
 		/// <returns>A workItem for tests or null if no work is available</returns>
-		public WorkItemDto GetWork(string strNode)
+		public WorkItemDto GetWork(string nodeName)
 		{
-			return _objChannel.GetWork(strNode);
+			return _channel.GetWork(nodeName);
 		}
 
-	    /// <summary>
-	    /// The node has finished some WorkItem
-	    /// </summary>
-	    /// <param name="strNode">the node</param>
-	    /// <param name="objTestResult">The results of the testrun</param>
-	    public void FinishedWork(string strNode, TestResult objTestResult)
-        {
-            _objChannel.FinishedWork(strNode, objTestResult);
-        }
+		/// <summary>
+		/// The node has finished some WorkItem
+		/// </summary>
+		/// <param name="nodeName">the node</param>
+		/// <param name="testResult">The results of the testrun</param>
+		public void FinishedWork(string nodeName, TestResult testResult)
+		{
+			_channel.FinishedWork(nodeName, testResult);
+		}
 
 
 		/// <summary>
 		/// Get the testdll for a branch
 		/// </summary>
-		/// <param name="strNode">the node</param>
-		/// <param name="strBranch">the specific branch</param>
+		/// <param name="nodeName">the node</param>
+		/// <param name="branchName">the specific branch</param>
 		/// <returns>The Testdll code</returns>
-		public byte[] FetchDll(string strNode, string strBranch)
+		public byte[] FetchDll(string nodeName, string branchName)
 		{
-			return _objChannel.FetchDLL(strNode, strBranch);
+			return _channel.FetchDLL(nodeName, branchName);
 		}
 
 	}

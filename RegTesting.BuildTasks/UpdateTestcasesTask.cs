@@ -21,18 +21,18 @@ namespace RegTesting.BuildTasks
 			try
 			{
 				Log.LogMessage(MessageImportance.Normal, "Updating Testcases: START.");
-				string strStage = Stage.ToLower();
-				Log.LogMessage(MessageImportance.Normal, "Updating Testcases: " + strStage + ".dll -> " + EndpointAdress);
-				using (WcfClient objWcfClient = new WcfClient(EndpointAdress))
+				string stage = Stage.ToLower();
+				Log.LogMessage(MessageImportance.Normal, "Updating Testcases: " + stage + ".dll -> " + EndpointAdress);
+				using (WcfClient wcfClient = new WcfClient(EndpointAdress))
 				{
-					objWcfClient.SendFile(File, strStage, ReleaseManager, Testsuite);
+					wcfClient.SendFile(File, stage, ReleaseManager, Testsuite);
 					Log.LogMessage(MessageImportance.Normal, "Updating Testcases: SUCCESS.");
 					Log.LogMessage(MessageImportance.Normal, "Testresults will be sent to " + ReleaseManager );
 				}
 			}
-			catch(Exception objException)
+			catch(Exception exception)
 			{
-				Log.LogErrorFromException(objException);
+				Log.LogErrorFromException(exception);
 				return false;
 			}
 
@@ -82,13 +82,13 @@ namespace RegTesting.BuildTasks
 		}
 
 
-        /// <summary>
-        /// The Testsuite to test
-        /// </summary>
-        public String Testsuite
-        {
-            get;
-            set;
-        }
+		/// <summary>
+		/// The Testsuite to test
+		/// </summary>
+		public String Testsuite
+		{
+			get;
+			set;
+		}
 	}
 }
