@@ -1,37 +1,35 @@
-﻿@using RegTesting.Contracts
-@using RegTesting.Contracts.Domain
-@using RegTesting.Mvc
+﻿@using RegTesting.Mvc
 @using RegTesting.Mvc.Models
 @{
 	ViewBag.Title = "Testing - RegTesting";
 
-	IList<TestsystemModel> lstTestsysteme = ((IList<TestsystemModel>)ViewBag.LstTestsystems);
-	IList<TestsuiteModel> lstTestsuites = ((IList<TestsuiteModel>)ViewBag.LstTestsuites);
+	IList<TestsystemModel> testsystems = ((IList<TestsystemModel>)ViewBag.LstTestsystems);
+	IList<TestsuiteModel> testsuites = ((IList<TestsuiteModel>)ViewBag.LstTestsuites);
 
-	TestsystemModel objCurrentTestsystem = (TestsystemModel)ViewBag.CurrentTestsystem;
-	TestsuiteModel objCurrentTestsuite = (TestsuiteModel)ViewBag.CurrentTestsuite;
+	TestsystemModel currentTestsystem = (TestsystemModel)ViewBag.CurrentTestsystem;
+	TestsuiteModel currentTestsuite = (TestsuiteModel)ViewBag.CurrentTestsuite;
 
-	TestsystemModel objDev = lstTestsysteme.FirstOrDefault(t => t.Name == "dev");
-	TestsystemModel objBeta = lstTestsysteme.FirstOrDefault(t => t.Name == "beta");
-	TestsystemModel objGamma = lstTestsysteme.FirstOrDefault(t => t.Name == "gamma");
-	IList<TestsystemModel> lstPinnedBranches = new List<TestsystemModel>();
-	lstPinnedBranches.Add(objDev);
-	lstPinnedBranches.Add(objBeta);
-	lstPinnedBranches.Add(objGamma);
-	IList<TestsystemModel> lstCurrentBranches = lstTestsysteme.Where(t => t.Name.StartsWith("dev-bt") && DateTime.Now - t.LastUpdated < new TimeSpan(7, 0, 0, 0)).ToList();
-	IList<TestsystemModel> lstOldBranches = lstTestsysteme.Where(t => t.Name.StartsWith("dev-bt") && DateTime.Now - t.LastUpdated >= new TimeSpan(7, 0, 0, 0)).ToList();
-	IList<TestsystemModel> lstMyLocalBranches = lstTestsysteme.Where(t => t.Name.StartsWith("local") && t.Name.EndsWith(User.Identity.GetLogin().ToLower())).ToList();
-	IList<TestsystemModel> lstOtherLocalBranches = lstTestsysteme.Where(t => t.Name.StartsWith("local") && !t.Name.EndsWith(User.Identity.GetLogin())).ToList();
+	TestsystemModel dev = testsystems.FirstOrDefault(t => t.Name == "dev");
+	TestsystemModel beta = testsystems.FirstOrDefault(t => t.Name == "beta");
+	TestsystemModel gamma = testsystems.FirstOrDefault(t => t.Name == "gamma");
+	IList<TestsystemModel> pinnedBranches = new List<TestsystemModel>();
+	pinnedBranches.Add(dev);
+	pinnedBranches.Add(beta);
+	pinnedBranches.Add(gamma);
+	IList<TestsystemModel> currentBranches = testsystems.Where(t => t.Name.StartsWith("dev-bt") && DateTime.Now - t.LastUpdated < new TimeSpan(7, 0, 0, 0)).ToList();
+	IList<TestsystemModel> oldBranches = testsystems.Where(t => t.Name.StartsWith("dev-bt") && DateTime.Now - t.LastUpdated >= new TimeSpan(7, 0, 0, 0)).ToList();
+	IList<TestsystemModel> myLocalBranches = testsystems.Where(t => t.Name.StartsWith("local") && t.Name.EndsWith(User.Identity.GetLogin().ToLower())).ToList();
+	IList<TestsystemModel> otherLocalBranches = testsystems.Where(t => t.Name.StartsWith("local") && !t.Name.EndsWith(User.Identity.GetLogin())).ToList();
 
-	IList<TestsuiteModel> lstPinnedTestsuites = new List<TestsuiteModel>();
-	TestsuiteModel thorMainTestsuite = lstTestsuites.FirstOrDefault(t => t.Name == RegtestingMvcConfiguration.ThorDefaulttestsuite);
-	TestsuiteModel sodaMainTestsuite = lstTestsuites.FirstOrDefault(t => t.Name == RegtestingMvcConfiguration.SodaDefaulttestsuite);
-	lstPinnedTestsuites.Add(sodaMainTestsuite);
-	lstPinnedTestsuites.Add(thorMainTestsuite);
-	IList<TestsuiteModel> lstNormalTestsuites = lstTestsuites.Where(t => !t.Name.StartsWith("Local ") && !lstPinnedTestsuites.Contains(t)).ToList();
-	IList<TestsuiteModel> lstLocalTestsuites = lstTestsuites.Where(t => t.Name.StartsWith("Local ") && !lstPinnedTestsuites.Contains(t)).ToList();
+	IList<TestsuiteModel> pinnedTestsuites = new List<TestsuiteModel>();
+	TestsuiteModel thorMainTestsuite = testsuites.FirstOrDefault(t => t.Name == RegtestingMvcConfiguration.ThorDefaulttestsuite);
+	TestsuiteModel sodaMainTestsuite = testsuites.FirstOrDefault(t => t.Name == RegtestingMvcConfiguration.SodaDefaulttestsuite);
+	pinnedTestsuites.Add(sodaMainTestsuite);
+	pinnedTestsuites.Add(thorMainTestsuite);
+	IList<TestsuiteModel> normalTestsuites = testsuites.Where(t => !t.Name.StartsWith("Local ") && !pinnedTestsuites.Contains(t)).ToList();
+	IList<TestsuiteModel> localTestsuites = testsuites.Where(t => t.Name.StartsWith("Local ") && !pinnedTestsuites.Contains(t)).ToList();
 
-	lstLocalTestsuites = lstLocalTestsuites.OrderByDescending(x => DateTime.Parse(x.Name.Substring(6))).ToList();
+	localTestsuites = localTestsuites.OrderByDescending(x => DateTime.Parse(x.Name.Substring(6))).ToList();
 }
 
 <div class="navbar navbar-default">
@@ -42,61 +40,61 @@
 				<li><a href="@Url.Action("Resulthistory", "Testing", new {})">Resulthistory</a></li>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						<b>Current Branch: </b>@objCurrentTestsystem.Name
+						<b>Current Branch: </b>@currentTestsystem.Name
 						<b class="caret"></b>
 					</a>
 					<ul class="dropdown-menu">
-						@foreach (TestsystemModel objItem in lstPinnedBranches)
+						@foreach (TestsystemModel pinnedBranch in pinnedBranches)
 						{
-							<li><a tabindex="-1" href="@Url.Action("Index", "Testing", new { testsystem = objItem.ID })">@objItem.Name</a></li>
+							<li><a tabindex="-1" href="@Url.Action("Index", "Testing", new { testsystem = pinnedBranch.ID })">@pinnedBranch.Name</a></li>
 						}
 						<li role="presentation" class="divider"></li>
 						<li role="presentation" class="dropdown-header">Current Branches</li>
-						@foreach (TestsystemModel objItem in lstCurrentBranches)
+						@foreach (TestsystemModel currentBranch in currentBranches)
 						{
-							<li><a tabindex="-1" href="@Url.Action("Index", "Testing", new { testsystem = objItem.ID })">@objItem.Name</a></li>
+							<li><a tabindex="-1" href="@Url.Action("Index", "Testing", new { testsystem = currentBranch.ID })">@currentBranch.Name</a></li>
 						}
 						<li role="presentation" class="divider"></li>
 						<li role="presentation" class="dropdown-header">My local branches</li>
-						@foreach (TestsystemModel objItem in lstMyLocalBranches)
+						@foreach (TestsystemModel myLocalBranch in myLocalBranches)
 						{
-							<li><a tabindex="-1" href="@Url.Action("Index", "Testing", new { testsystem = objItem.ID })">@objItem.Name</a></li>
+							<li><a tabindex="-1" href="@Url.Action("Index", "Testing", new { testsystem = myLocalBranch.ID })">@myLocalBranch.Name</a></li>
 						}
 						<li role="presentation" class="divider"></li>
 						<li role="presentation" class="dropdown-header">Branches with tests older as 7 days</li>
-						@foreach (TestsystemModel objItem in lstOldBranches)
+						@foreach (TestsystemModel oldBranch in oldBranches)
 						{
-							<li><a tabindex="-1" href="@Url.Action("Index", "Testing", new { testsystem = objItem.ID })">@objItem.Name</a></li>
+							<li><a tabindex="-1" href="@Url.Action("Index", "Testing", new { testsystem = oldBranch.ID })">@oldBranch.Name</a></li>
 						}
 						<li role="presentation" class="divider"></li>
 						<li role="presentation" class="dropdown-header">Other local branches</li>
-						@foreach (TestsystemModel objItem in lstOtherLocalBranches)
+						@foreach (TestsystemModel otherLocalBranch in otherLocalBranches)
 						{
-							<li><a tabindex="-1" href="@Url.Action("Index", "Testing", new { testsystem = objItem.ID })">@objItem.Name</a></li>
+							<li><a tabindex="-1" href="@Url.Action("Index", "Testing", new { testsystem = otherLocalBranch.ID })">@otherLocalBranch.Name</a></li>
 						}
 					</ul>
 				</li>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						<b>Current Testsuite: </b>@objCurrentTestsuite.Name
+						<b>Current Testsuite: </b>@currentTestsuite.Name
 						<b class="caret"></b>
 					</a>
 					<ul class="dropdown-menu">
-						@foreach (TestsuiteModel objItem in lstPinnedTestsuites)
+						@foreach (TestsuiteModel pinnedTestsuite in pinnedTestsuites)
 						{
-							<li><a tabindex="-1" href="@Url.Action("Index", "Testing", new { testsuite = objItem.ID })">@objItem.Name</a></li>
+							<li><a tabindex="-1" href="@Url.Action("Index", "Testing", new { testsuite = pinnedTestsuite.ID })">@pinnedTestsuite.Name</a></li>
 						}
 						<li role="presentation" class="divider"></li>
 
-						@foreach (TestsuiteModel objItem in lstNormalTestsuites)
+						@foreach (TestsuiteModel normalTestsuite in normalTestsuites)
 						{
-							<li><a tabindex="-1" href="@Url.Action("Index", "Testing", new { testsuite = objItem.ID })">@objItem.Name</a></li>
+							<li><a tabindex="-1" href="@Url.Action("Index", "Testing", new { testsuite = normalTestsuite.ID })">@normalTestsuite.Name</a></li>
 						}
 						<li role="presentation" class="divider"></li>
 						<li role="presentation" class="dropdown-header">Testsuites just for this branch</li>
-						@foreach (TestsuiteModel objItem in lstLocalTestsuites)
+						@foreach (TestsuiteModel localTestsuite in localTestsuites)
 						{
-							<li><a tabindex="-1" href="@Url.Action("Index", "Testing", new { testsuite = objItem.ID })">@objItem.Name</a></li>
+							<li><a tabindex="-1" href="@Url.Action("Index", "Testing", new { testsuite = localTestsuite.ID })">@localTestsuite.Name</a></li>
 						}
 					</ul>
 				  </li>

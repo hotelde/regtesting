@@ -2,18 +2,18 @@
 @using RegTesting.Mvc.Models
 @{
 	ViewBag.Title = "Testing - RegTesting";
-	TestsuiteModel objCurrentTestsuite = (TestsuiteModel)ViewBag.CurrentTestsuite;
-	TestsystemModel objCurrentTestsystem = (TestsystemModel)ViewBag.CurrentTestsystem;
+	TestsuiteModel currentTestsuite = (TestsuiteModel)ViewBag.CurrentTestsuite;
+	TestsystemModel currentTestsystem = (TestsystemModel)ViewBag.CurrentTestsystem;
 	
-	string strMessage = ViewBag.Message;
+	string message = ViewBag.Message;
 }
 
 @Html.Partial("PartialTestingMenu")
 
 <div class="page-header">
-	<h1>@objCurrentTestsystem.Name <small>@objCurrentTestsuite.Name</small></h1>
-	@objCurrentTestsystem.Description<br>
-	<b>@objCurrentTestsuite.Description</b>
+	<h1>@currentTestsystem.Name <small>@currentTestsuite.Name</small></h1>
+	@currentTestsystem.Description<br>
+	<b>@currentTestsuite.Description</b>
 </div>
 <div class="testing-hero-unit">
 	<div class="btn-group">
@@ -21,23 +21,23 @@
 		<button class="btn btn-default" id="redoerrorbtn"><i class="glyphicon glyphicon-repeat"></i> Repeat failed tests</button>
 		@if (RegtestingMvcConfiguration.Testmanager.Contains(User.Identity.GetLogin(), StringComparer.InvariantCultureIgnoreCase))
 		{
-			<a href="@Url.Action("Edit", "Testsystem", new { id = objCurrentTestsystem.ID })" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Edit info</a>
+			<a href="@Url.Action("Edit", "Testsystem", new { id = currentTestsystem.ID })" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i> Edit info</a>
 		}
 	</div>
 
 	<div class="row">
 		<div class="col-md-3">
 			<h4>Browser:</h4>
-			@foreach (BrowserModel objItem in objCurrentTestsuite.Browsers)
+			@foreach (BrowserModel browser in currentTestsuite.Browsers)
 			{
-				<span class="label label-default">@objItem.Name</span>
+				<span class="label label-default">@browser.Name</span>
 			}
 		</div>
 		<div class="col-md-3">
 			<h4>Languages:</h4>
-			@foreach (LanguageModel objItem in objCurrentTestsuite.Languages)
+			@foreach (LanguageModel language in currentTestsuite.Languages)
 			{
-				<span class="label label-default">@objItem.Name</span>
+				<span class="label label-default">@language.Name</span>
 			}
 		</div>
 	</div>
@@ -67,23 +67,23 @@
 	<hr />
 	<a class="" id="btnShowWaitingResults">Show pending tests</a>
 	<div class="panel-group" id="divWaitingResults" style="display: none">
-		@foreach (TestcaseModel objTestcase in objCurrentTestsuite.Testcases)
+		@foreach (TestcaseModel testcase in currentTestsuite.Testcases)
 		{
-			<div class="panel panel-default" id="@("resultGroup" + objTestcase.ID)">
-				<div class="panel-heading" data-toggle="collapse" data-target="@("#collapse" + objTestcase.ID)">
+			<div class="panel panel-default" id="@("resultGroup" + testcase.ID)">
+				<div class="panel-heading" data-toggle="collapse" data-target="@("#collapse" + testcase.ID)">
 					<span>
-						@objTestcase.Name
+						@testcase.Name
 						<span class="pull-right">
-							<span id="@("res" + objTestcase.ID)" class="testtabletestcase ">
+							<span id="@("res" + testcase.ID)" class="testtabletestcase ">
 								No testresults found!
 							</span>
 							<span class="glyphicon glyphicon-chevron-down"></span>
 						</span>
 					</span>
 				</div>
-				<div id="@("collapse" + objTestcase.ID)" class="panel-collapse collapse" data-tc="@objTestcase.ID">
+				<div id="@("collapse" + testcase.ID)" class="panel-collapse collapse" data-tc="@testcase.ID">
 					<div class="panel-body">
-						<div id="@("rowdetails" + objTestcase.ID)">
+						<div id="@("rowdetails" + testcase.ID)">
 							<div class="alert alert-warning"><h4>Loading data ...</h4></div>
 						</div>
 					</div>
@@ -116,14 +116,14 @@
 
 			/*set actions of buttons:*/
 			$("#addallbtn").click(function () {
-				$.get('@Url.Action("RunAllTests")' + '?testsystem=' + @objCurrentTestsystem.ID + '&testsuite=@objCurrentTestsuite.ID', {},
+				$.get('@Url.Action("RunAllTests")' + '?testsystem=' + @currentTestsystem.ID + '&testsuite=@currentTestsuite.ID', {},
 					function (data) {
 						SetNewResults(data);
 					});
 				ShowModalConfirm('Start testsuite ...');
 			});
 			$("#redoerrorbtn").click(function () {
-				$.get('@Url.Action("RedoErrorTests")' + '?testsystem=' + @objCurrentTestsystem.ID + '&testsuite=@objCurrentTestsuite.ID', {},
+				$.get('@Url.Action("RedoErrorTests")' + '?testsystem=' + @currentTestsystem.ID + '&testsuite=@currentTestsuite.ID', {},
 				function (data) {
 					SetNewResults(data);
 				});
@@ -132,7 +132,7 @@
 
 			$('.panel-collapse').on('show.bs.collapse', function () {
 				var testcase = $(this).attr("data-tc");
-				$.get('@Url.Action("GetTestcaseDetails")' + '?testsystem=@objCurrentTestsystem.ID' + '&testsuite=@objCurrentTestsuite.ID' + '&testcase=' + testcase, {},
+				$.get('@Url.Action("GetTestcaseDetails")' + '?testsystem=@currentTestsystem.ID' + '&testsuite=@currentTestsuite.ID' + '&testcase=' + testcase, {},
 					function (view) {
 						$("#rowdetails" + testcase).html(view);
 					})
@@ -180,7 +180,7 @@
 
 			if (refreshResultsAnswer == 1) {
 				refreshResultsAnswer = 0;
-				$.get('@Url.Action("RefreshResults")' + '?testsystem=@objCurrentTestsystem.ID' + '&testsuite=@objCurrentTestsuite.ID' + '&resultsSince=' + resultsSince, {},
+				$.get('@Url.Action("RefreshResults")' + '?testsystem=@currentTestsystem.ID' + '&testsuite=@currentTestsuite.ID' + '&resultsSince=' + resultsSince, {},
 						function (answer) {
 							refreshResultsAnswer = 1;
 							resultsSince = answer.ResultsUntil;
@@ -193,7 +193,7 @@
 		}
 
 		function RefreshTestJobs() {
-			$.get('@Url.Action("RefreshTestJobs")' + '?testsystem=@objCurrentTestsystem.ID', {},
+			$.get('@Url.Action("RefreshTestJobs")' + '?testsystem=@currentTestsystem.ID', {},
 					function (view) {
 						$("div#testJobsBlock").html(view);
 						setTimeout(function () {
@@ -204,7 +204,7 @@
 		RefreshTestJobs();
 
 		function RefreshMessage() {
-			$.get('@Url.Action("RefreshMessage")' + '?testsystem=@objCurrentTestsystem.ID', {},
+			$.get('@Url.Action("RefreshMessage")' + '?testsystem=@currentTestsystem.ID', {},
 					function (view) {
 						$("div#messageForBranch").html(view);
 						setTimeout(function () {

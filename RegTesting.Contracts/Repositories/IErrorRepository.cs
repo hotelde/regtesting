@@ -12,9 +12,9 @@ namespace RegTesting.Contracts.Repositories
 		/// <summary>
 		/// Get a error, if it is already existing. Else add it.
 		/// </summary>
-		/// <param name="objError">the error</param>
+		/// <param name="error">the error</param>
 		/// <returns>a error</returns>
-		Error GetOrStore(Error objError);
+		Error GetOrStore(Error error);
 
 		/// <summary>
 		/// Get a matching error that is already existing in database

@@ -24,12 +24,12 @@ namespace RegTesting.Service.Repositories
 		}
 
 
-		IList<TestJob> ITestJobRepository.GetTestJobsForTestsuiteOnTestsystem(int intTestsystemID, int intTestsuiteID)
+		IList<TestJob> ITestJobRepository.GetTestJobsForTestsuiteOnTestsystem(int testsystemId, int testsuiteId)
 		{
 			IList<TestJob> testsuite = Session
 				.CreateCriteria(typeof(TestJob))
-				.Add(Restrictions.Eq("Testsystem", intTestsystemID))
-				.Add(Restrictions.Eq("Testsuite", intTestsuiteID))
+				.Add(Restrictions.Eq("Testsystem", testsystemId))
+				.Add(Restrictions.Eq("Testsuite", testsuiteId))
 				.List<TestJob>();
 			return testsuite;
 		}

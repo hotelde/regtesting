@@ -13,12 +13,12 @@ namespace RegTesting.Mvc.Helper
 		/// <summary>
 		/// Get the status string for a teststate (int)
 		/// </summary>
-		/// <param name="enmTestState">the status</param>
+		/// <param name="testState">the status</param>
 		/// <returns>a string, describing the status</returns>
-		public static string GetStatusString(TestState enmTestState)
+		public static string GetStatusString(TestState testState)
 		{
 
-			switch (enmTestState)
+			switch (testState)
 			{
 				case TestState.Pending:
 				case TestState.Running:
@@ -39,11 +39,11 @@ namespace RegTesting.Mvc.Helper
 		/// <summary>
 		/// Get the testworker status string
 		/// </summary>
-		/// <param name="enmState">the workerState</param>
+		/// <param name="testWorkerStatus">the workerState</param>
 		/// <returns>a string, describing the testworker status</returns>
-		public static string GetTestWorkerStatusString(TestWorkerStatus enmState)
+		public static string GetTestWorkerStatusString(TestWorkerStatus testWorkerStatus)
 		{
-			switch (enmState)
+			switch (testWorkerStatus)
 			{
 				case TestWorkerStatus.Ok:
 					return "success";

@@ -15,17 +15,17 @@
 			<th></th>
 			<th></th>
 		</tr>
-		@foreach (TestJobModel objTestJobModel in Model)
+		@foreach (TestJobModel testJobModel in Model)
 		{
-			int intCount = objTestJobModel.Count;
-			int intPercentPassed = (intCount == 0 ? 0 : (objTestJobModel.Passed*100/objTestJobModel.Count));
-			int intPercentFailured = (intCount == 0 ? 0 : (objTestJobModel.Failured*100/objTestJobModel.Count));
-			int intPercentFinished = (intCount == 0 ? 0 : (objTestJobModel.Finished*100/objTestJobModel.Count));
+			int count = testJobModel.Count;
+			int intPercentPassed = (count == 0 ? 0 : (testJobModel.Passed*100/testJobModel.Count));
+			int intPercentFailured = (count == 0 ? 0 : (testJobModel.Failured*100/testJobModel.Count));
+			int intPercentFinished = (count == 0 ? 0 : (testJobModel.Finished*100/testJobModel.Count));
 			<tr>
-				<td>@objTestJobModel.TestJobStartedAt.ToString()</td> 
-				<td>@objTestJobModel.TestJobTesterName (@objTestJobModel.TestJobJobType)</td>
-				<td>@objTestJobModel.TestJobTestsystemName</td>
-				<td>@objTestJobModel.TestJobName</td>    
+				<td>@testJobModel.TestJobStartedAt.ToString()</td> 
+				<td>@testJobModel.TestJobTesterName (@testJobModel.TestJobJobType)</td>
+				<td>@testJobModel.TestJobTestsystemName</td>
+				<td>@testJobModel.TestJobName</td>    
 			  
 				<td>
 					<div class="progress">
@@ -35,24 +35,24 @@
 				</td>
 
 				<td>
-					@objTestJobModel.Finished /  @objTestJobModel.Count (@intPercentFinished%)
+					@testJobModel.Finished /  @testJobModel.Count (@intPercentFinished%)
 				</td>
 				<td>
 					<div class="btn-group">
 				
 						@if (RegtestingMvcConfiguration.Testmanager.Contains(User.Identity.GetLogin(), StringComparer.InvariantCultureIgnoreCase))
 						{
-							if (!objTestJobModel.IsCanceled)
+							if (!testJobModel.IsCanceled)
 							{
-								<a class="btn btn-default btn-xs" href="@Url.Action("PrioTestJob", "Status", new {testjob = objTestJobModel.ID})"><i class="glyphicon glyphicon-star"></i></a>
+								<a class="btn btn-default btn-xs" href="@Url.Action("PrioTestJob", "Status", new {testjob = testJobModel.ID})"><i class="glyphicon glyphicon-star"></i></a>
 							}
 						}
 
-						@if (string.Equals(objTestJobModel.TestJobTesterName, User.Identity.GetLogin(), StringComparison.InvariantCultureIgnoreCase) || RegtestingMvcConfiguration.Testmanager.Contains(User.Identity.GetLogin(), StringComparer.InvariantCultureIgnoreCase))
+						@if (string.Equals(testJobModel.TestJobTesterName, User.Identity.GetLogin(), StringComparison.InvariantCultureIgnoreCase) || RegtestingMvcConfiguration.Testmanager.Contains(User.Identity.GetLogin(), StringComparer.InvariantCultureIgnoreCase))
 						{
-							if (!objTestJobModel.IsCanceled)
+							if (!testJobModel.IsCanceled)
 							{
-								<a class="btn btn-danger btn-xs"  href="@Url.Action("CancelWorkItemGroup", "Status", new {testjob = objTestJobModel.ID})"><i class="glyphicon glyphicon-remove"></i></a>
+								<a class="btn btn-danger btn-xs"  href="@Url.Action("CancelWorkItemGroup", "Status", new {testjob = testJobModel.ID})"><i class="glyphicon glyphicon-remove"></i></a>
 
 
 							}

@@ -12,7 +12,7 @@ namespace RegTesting.Mvc.Filters
 	/// </summary>
 	public class RegAuthorizeAttribute : AuthorizeAttribute, IIoCFilter
 	{
-		private readonly ITestViewerService _objTestViewerService;
+		private readonly ITestViewerService _testViewerService;
 
 		/// <summary>
 		/// Default constructor for global.asax
@@ -24,12 +24,12 @@ namespace RegTesting.Mvc.Filters
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="objTestViewerService">the test viewer</param>
-		public RegAuthorizeAttribute(ITestViewerService objTestViewerService) :this()
+		/// <param name="testViewerService">the test viewer</param>
+		public RegAuthorizeAttribute(ITestViewerService testViewerService) :this()
 		{
-			if (objTestViewerService == null)
-				throw new ArgumentNullException("objTestViewerService");
-			_objTestViewerService = objTestViewerService;
+			if (testViewerService == null)
+				throw new ArgumentNullException("testViewerService");
+			_testViewerService = testViewerService;
 		}
 
 		/// <summary>
@@ -49,7 +49,7 @@ namespace RegTesting.Mvc.Filters
 				if (httpContext.Session["tester"] == null)
 				{
 
-					httpContext.Session["tester"] = _objTestViewerService.GetTesterIDByName(httpContext.User.Identity.GetLogin());
+					httpContext.Session["tester"] = _testViewerService.GetTesterIDByName(httpContext.User.Identity.GetLogin());
 				}
 			}
 			return true;

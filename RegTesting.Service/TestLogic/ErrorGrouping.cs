@@ -31,7 +31,7 @@ namespace RegTesting.Service.TestLogic
 				ErrorOccurrence errorOccurrence = occurrenceGroup.LstErrorOccurence.Find(objErrorOccurrenceOther => result.Error != null && objErrorOccurrenceOther.Error.ID == result.Error.ID);
 				if (errorOccurrence == null)
 				{
-					Debug.Assert(result.Error != null, "objResult.Error != null");
+					Debug.Assert(result.Error != null, "result.Error != null");
 					errorOccurrence = new ErrorOccurrence { Error = result.Error };
 					occurrenceGroup.LstErrorOccurence.Add(errorOccurrence);
 				}
@@ -72,7 +72,7 @@ namespace RegTesting.Service.TestLogic
 				ErrorOccurrence errorOccurrence = errorOccurrenceGroup.LstErrorOccurence.Find(errorOccurrenceOther => result.Error != null && errorOccurrenceOther.Error.ID == result.Error.ID);
 				if (errorOccurrence == null)
 				{
-					Debug.Assert(result.Error != null, "objResult.Error != null");
+					Debug.Assert(result.Error != null, "result.Error != null");
 					errorOccurrence = new ErrorOccurrence { Error = result.Error };
 					errorOccurrenceGroup.LstErrorOccurence.Add(errorOccurrence);
 				}

@@ -23,11 +23,11 @@ namespace RegTesting.Service.Repositories
 		}
 
 
-		Testcase ITestcaseRepository.GetByType(string strName)
+		Testcase ITestcaseRepository.GetByType(string testcaseName)
 		{
 			return Session
 				.CreateCriteria(typeof(Testcase))
-				.Add(Restrictions.Eq("Type", strName))
+				.Add(Restrictions.Eq("Type", testcaseName))
 				.UniqueResult<Testcase>();
 		}
 	}

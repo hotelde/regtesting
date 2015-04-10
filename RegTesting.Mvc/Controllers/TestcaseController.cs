@@ -15,16 +15,16 @@ namespace RegTesting.Mvc.Controllers
 	[RegAuthorize]
 	public class TestcaseController : Controller
 	{
-		private readonly ISettingsService _objSettingsService;
+		private readonly ISettingsService _settingsService;
 
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="objSettingsService">the settingsService</param>
-		public TestcaseController(ISettingsService objSettingsService)
+		/// <param name="settingsService">the settingsService</param>
+		public TestcaseController(ISettingsService settingsService)
 		{
-			_objSettingsService = objSettingsService;
+			_settingsService = settingsService;
 		}
 
 
@@ -38,7 +38,7 @@ namespace RegTesting.Mvc.Controllers
 		public ViewResult Index()
 		{
 
-			return View(Mapper.Map<IEnumerable<TestcaseModel>>(_objSettingsService.GetTestcases()));
+			return View(Mapper.Map<IEnumerable<TestcaseModel>>(_settingsService.GetTestcases()));
 		}
 
 		//
@@ -51,7 +51,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A DetailsView</returns>
 		public ViewResult Details(int id)
 		{
-			return View(Mapper.Map<TestcaseModel>(_objSettingsService.FindTestcaseByID(id)));
+			return View(Mapper.Map<TestcaseModel>(_settingsService.FindTestcaseByID(id)));
 		}
 
 		//
@@ -64,7 +64,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A EditView</returns>
 		public ActionResult Edit(int id)
 		{
-			return View(Mapper.Map<TestcaseModel>(_objSettingsService.FindTestcaseByID(id)));
+			return View(Mapper.Map<TestcaseModel>(_settingsService.FindTestcaseByID(id)));
 		}
 
 		//
@@ -80,7 +80,7 @@ namespace RegTesting.Mvc.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				_objSettingsService.EditTestcase(Mapper.Map<TestcaseDto>(TestcaseModel));
+				_settingsService.EditTestcase(Mapper.Map<TestcaseDto>(TestcaseModel));
 				return RedirectToAction("Index");
 			}
 			return View(TestcaseModel);
@@ -96,7 +96,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A DeleteView</returns>
 		public ActionResult Delete(int id)
 		{
-			return View(Mapper.Map<TestcaseModel>(_objSettingsService.FindTestcaseByID(id)));
+			return View(Mapper.Map<TestcaseModel>(_settingsService.FindTestcaseByID(id)));
 		}
 
 		//
@@ -110,7 +110,7 @@ namespace RegTesting.Mvc.Controllers
 		[HttpPost, ActionName("Delete")]
 		public ActionResult DeleteConfirmed(int id)
 		{
-			_objSettingsService.DeleteTestcaseByID(id);
+			_settingsService.DeleteTestcaseByID(id);
 			return RedirectToAction("Index");
 		}
 

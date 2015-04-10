@@ -12,8 +12,8 @@ namespace RegTesting.Mvc.WcfServices
 	public class StatusServiceWcfProxy : IDisposable, IStatusService
 	{
 
-		private readonly ChannelFactory<IStatusService> _objHttpFactory;
-		private readonly IStatusService _objChannel;
+		private readonly ChannelFactory<IStatusService> _httpFactory;
+		private readonly IStatusService _channel;
 
 
 		/// <summary>
@@ -21,10 +21,10 @@ namespace RegTesting.Mvc.WcfServices
 		/// </summary>
 		public StatusServiceWcfProxy()
 		{
-			if (_objChannel != null) return;
-			_objHttpFactory =
+			if (_channel != null) return;
+			_httpFactory =
 			  new ChannelFactory<IStatusService>("StatusServiceEndpoint");
-			_objChannel = _objHttpFactory.CreateChannel();
+			_channel = _httpFactory.CreateChannel();
 		}
 
 
@@ -33,45 +33,45 @@ namespace RegTesting.Mvc.WcfServices
 		/// </summary>
 		public void Dispose()
 		{
-			if (_objHttpFactory != null)
+			if (_httpFactory != null)
 			{
-				_objHttpFactory.Close();
+				_httpFactory.Close();
 			}
 		}
 
 		IList<TestJobDto> IStatusService.GetTestJobs()
 		{
-			return _objChannel.GetTestJobs();
+			return _channel.GetTestJobs();
 		}
 
 		IList<TestJobDto> IStatusService.GetTestJobsForTestsystem(int testsystem)
 		{
-			return _objChannel.GetTestJobsForTestsystem(testsystem);
+			return _channel.GetTestJobsForTestsystem(testsystem);
 		}
 
 		IList<TestWorkerDto> IStatusService.GetTestWorkers()
 		{
-			return _objChannel.GetTestWorkers();
+			return _channel.GetTestWorkers();
 		}
 
 		void IStatusService.PrioTestJob(int testjob)
 		{
-			_objChannel.PrioTestJob(testjob);
+			_channel.PrioTestJob(testjob);
 		}
 
 		void IStatusService.CancelTestJob(int testjob)
 		{
-			_objChannel.CancelTestJob(testjob);
+			_channel.CancelTestJob(testjob);
 		}
 
 		void IStatusService.RebootWorker(string node)
 		{
-			_objChannel.RebootWorker(node);
+			_channel.RebootWorker(node);
 		}
 
 		void IStatusService.RebootAllWorker()
 		{
-			_objChannel.RebootAllWorker();
+			_channel.RebootAllWorker();
 		}
 
 		/// <summary>
@@ -81,7 +81,7 @@ namespace RegTesting.Mvc.WcfServices
 		/// <returns>the message</returns>
 		public string GetMessage(int testsystem)
 		{
-			return _objChannel.GetMessage(testsystem);
+			return _channel.GetMessage(testsystem);
 		}
 	}
 }

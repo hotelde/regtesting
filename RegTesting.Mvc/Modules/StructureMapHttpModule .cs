@@ -9,24 +9,24 @@ namespace RegTesting.Mvc.Modules
 		/// <summary>
 		/// Initialization method for the <see cref="IHttpModule"/>.
 		/// </summary>
-		/// <param name="objApplication">
+		/// <param name="application">
 		/// An instance of the <see cref="HttpApplication"/>.
 		/// </param>
-		public void Init(HttpApplication objApplication)
+		public void Init(HttpApplication application)
 		{
-			objApplication.EndRequest += Application_EndRequest;
+			application.EndRequest += Application_EndRequest;
 		}
 
 		/// <summary>
 		/// The EndRequest-event.
 		/// </summary>
-		/// <param name="objSource">
+		/// <param name="source">
 		/// The source.
 		/// </param>
-		/// <param name="objEventArgs">
+		/// <param name="eventArgs">
 		/// The event arguments.
 		/// </param>
-		private static void Application_EndRequest(object objSource, EventArgs objEventArgs)
+		private static void Application_EndRequest(object source, EventArgs eventArgs)
 		{
 			ObjectFactory.ReleaseAndDisposeAllHttpScopedObjects();
 		}

@@ -130,10 +130,10 @@ namespace RegTesting.Service.Services
 		IList<HistoryResult> ITestViewerService.GetResultsHistory(int testsystemIndex, int testcaseId, int browserId, int languageId, int testsuiteId,
 		                               int maxResults)
 		{
-			Testsuite objTestsuite = _testsuiteRepository.GetById(testsuiteId);
-			IList<Browser> browsers = browserId == -1 ? objTestsuite.Browsers : objTestsuite.Browsers.Where(t => t.ID == browserId).ToList();
-			IList<Language> languages = languageId == -1 ? objTestsuite.Languages : objTestsuite.Languages.Where(t => t.ID == languageId).ToList();
-			IList<Testcase> testcases = testcaseId == -1 ? objTestsuite.Testcases : objTestsuite.Testcases.Where(t => t.ID == testcaseId).ToList();
+			Testsuite testsuite = _testsuiteRepository.GetById(testsuiteId);
+			IList<Browser> browsers = browserId == -1 ? testsuite.Browsers : testsuite.Browsers.Where(t => t.ID == browserId).ToList();
+			IList<Language> languages = languageId == -1 ? testsuite.Languages : testsuite.Languages.Where(t => t.ID == languageId).ToList();
+			IList<Testcase> testcases = testcaseId == -1 ? testsuite.Testcases : testsuite.Testcases.Where(t => t.ID == testcaseId).ToList();
 
 			return _historyResultRepository.GetListOfHistoryResults(testsystemIndex, browsers, testcases, languages, maxResults).ToList();
 		}

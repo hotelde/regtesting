@@ -69,20 +69,20 @@ namespace RegTesting.Contracts
 		/// <summary>
 		/// Create a workItem with an initial testjob
 		/// </summary>
-		/// <param name="objInitialTestJob">the first assigned testJob</param>
-		public WorkItem(ITestJobManager objInitialTestJob)
+		/// <param name="initialTestJob">the first assigned testJob</param>
+		public WorkItem(ITestJobManager initialTestJob)
 			: this()
 		{
-			AddTestJobManager(objInitialTestJob);
+			AddTestJobManager(initialTestJob);
 		}
 
 		/// <summary>
 		/// Add a testJob to TestJobs list
 		/// </summary>
-		/// <param name="objTestJob">the testJob</param>
-		public void AddTestJobManager(ITestJobManager objTestJob)
+		/// <param name="testJobManager">the testJob</param>
+		public void AddTestJobManager(ITestJobManager testJobManager)
 		{
-			TestJobManagers.Add(objTestJob);
+			TestJobManagers.Add(testJobManager);
 		}
 
 

@@ -15,16 +15,16 @@ namespace RegTesting.Mvc.Controllers
 	[RegAuthorize]
 	public class TestsystemController : Controller
 	{
-		private readonly ISettingsService _objSettingsService;
+		private readonly ISettingsService _settingsService;
 
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="objSettingsService">the settingsService</param>
-		public TestsystemController(ISettingsService objSettingsService)
+		/// <param name="settingsService">the settingsService</param>
+		public TestsystemController(ISettingsService settingsService)
 		{
-			_objSettingsService = objSettingsService;
+			_settingsService = settingsService;
 		}
 
 
@@ -38,7 +38,7 @@ namespace RegTesting.Mvc.Controllers
 		public ViewResult Index()
 		{
 
-			return View(Mapper.Map<IEnumerable<TestsystemModel>>(_objSettingsService.GetTestsystems()));
+			return View(Mapper.Map<IEnumerable<TestsystemModel>>(_settingsService.GetTestsystems()));
 		}
 
 		//
@@ -51,7 +51,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A DetailsView</returns>
 		public ViewResult Details(int id)
 		{
-			return View(Mapper.Map<TestsystemModel>(_objSettingsService.FindTestsystemByID(id)));
+			return View(Mapper.Map<TestsystemModel>(_settingsService.FindTestsystemByID(id)));
 		}
 
 		//
@@ -79,7 +79,7 @@ namespace RegTesting.Mvc.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				_objSettingsService.StoreTestsystem(Mapper.Map<TestsystemDto>(TestsystemModel));
+				_settingsService.StoreTestsystem(Mapper.Map<TestsystemDto>(TestsystemModel));
 				return RedirectToAction("Index");
 			}
 
@@ -96,7 +96,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A EditView</returns>
 		public ActionResult Edit(int id)
 		{
-			return View(Mapper.Map<TestsystemModel>(_objSettingsService.FindTestsystemByID(id)));
+			return View(Mapper.Map<TestsystemModel>(_settingsService.FindTestsystemByID(id)));
 		}
 
 		//
@@ -112,7 +112,7 @@ namespace RegTesting.Mvc.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				_objSettingsService.StoreTestsystem(Mapper.Map<TestsystemDto>(TestsystemModel));
+				_settingsService.StoreTestsystem(Mapper.Map<TestsystemDto>(TestsystemModel));
 				return RedirectToAction("Index");
 			}
 			return View(TestsystemModel);
@@ -128,7 +128,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A DeleteView</returns>
 		public ActionResult Delete(int id)
 		{
-			return View(Mapper.Map<TestsystemModel>(_objSettingsService.FindTestsystemByID(id)));
+			return View(Mapper.Map<TestsystemModel>(_settingsService.FindTestsystemByID(id)));
 		}
 
 		//
@@ -142,7 +142,7 @@ namespace RegTesting.Mvc.Controllers
 		[HttpPost, ActionName("Delete")]
 		public ActionResult DeleteConfirmed(int id)
 		{
-			_objSettingsService.DeleteTestsystemByID(id);
+			_settingsService.DeleteTestsystemByID(id);
 			return RedirectToAction("Index");
 		}
 

@@ -17,15 +17,15 @@ namespace RegTesting.Mvc.Controllers
 	{
 
 				
-		private readonly ISettingsService _objSettingsService;
+		private readonly ISettingsService _settingsService;
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="objSettingsService">regtesting service</param>
-		public TestsuiteController(ISettingsService objSettingsService)
+		/// <param name="settingsService">regtesting service</param>
+		public TestsuiteController(ISettingsService settingsService)
 		{
-			_objSettingsService = objSettingsService;
+			_settingsService = settingsService;
 		}
 
 
@@ -40,7 +40,7 @@ namespace RegTesting.Mvc.Controllers
 		public ViewResult Index()
 		{
 
-			return View(Mapper.Map<IEnumerable<TestsuiteModel>>(_objSettingsService.GetTestsuites()));
+			return View(Mapper.Map<IEnumerable<TestsuiteModel>>(_settingsService.GetTestsuites()));
 		}
 
 		//
@@ -53,7 +53,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A DetailsView</returns>
 		public ViewResult Details(int id)
 		{
-			return View(Mapper.Map<TestsuiteModel>(_objSettingsService.FindTestsuiteByID(id)));
+			return View(Mapper.Map<TestsuiteModel>(_settingsService.FindTestsuiteByID(id)));
 		}
 
 		//
@@ -65,7 +65,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A CreateView</returns>
 		public ActionResult Create()
 		{
-			IList<TestsuiteModel> lstTestsuites = Mapper.Map<IList<TestsuiteModel>>(_objSettingsService.GetTestsuites().Where(t=>!t.Name.StartsWith("Local ")));
+			IList<TestsuiteModel> lstTestsuites = Mapper.Map<IList<TestsuiteModel>>(_settingsService.GetTestsuites().Where(t=>!t.Name.StartsWith("Local ")));
 			ViewBag.LstTestsuites = lstTestsuites;
 			return View();
 		}
@@ -83,21 +83,21 @@ namespace RegTesting.Mvc.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				TestsuiteDto objTestsuite = Mapper.Map<TestsuiteDto>(createTestsuiteModel);
+				TestsuiteDto testsuite = Mapper.Map<TestsuiteDto>(createTestsuiteModel);
 				if (createTestsuiteModel.CopyTestsuiteSettings != 0)
 				{
 					try
 					{
-						TestsuiteDto objSourceTestsuite = _objSettingsService.FindTestsuiteByID(createTestsuiteModel.CopyTestsuiteSettings);
-						objTestsuite.Browsers = objSourceTestsuite.Browsers;
-						objTestsuite.Languages = objSourceTestsuite.Languages;
-						objTestsuite.Testcases = objSourceTestsuite.Testcases;
+						TestsuiteDto sourceTestsuite = _settingsService.FindTestsuiteByID(createTestsuiteModel.CopyTestsuiteSettings);
+						testsuite.Browsers = sourceTestsuite.Browsers;
+						testsuite.Languages = sourceTestsuite.Languages;
+						testsuite.Testcases = sourceTestsuite.Testcases;
 					}
 					catch
 					{
 					}
 				}
-				_objSettingsService.StoreTestsuite(objTestsuite);
+				_settingsService.StoreTestsuite(testsuite);
 
 				return RedirectToAction("Index");
 			}
@@ -115,7 +115,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A EditView</returns>
 		public ActionResult Edit(int id)
 		{
-			return View(Mapper.Map<TestsuiteModel>(_objSettingsService.FindTestsuiteByID(id)));
+			return View(Mapper.Map<TestsuiteModel>(_settingsService.FindTestsuiteByID(id)));
 		}
 
 		//
@@ -131,7 +131,7 @@ namespace RegTesting.Mvc.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				_objSettingsService.StoreTestsuite(Mapper.Map<TestsuiteDto>(testsuiteModel));
+				_settingsService.StoreTestsuite(Mapper.Map<TestsuiteDto>(testsuiteModel));
 				return RedirectToAction("Index");
 			}
 			return View(testsuiteModel);
@@ -147,7 +147,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A DeleteView</returns>
 		public ActionResult Delete(int id)
 		{
-			return View(Mapper.Map<TestsuiteModel>(_objSettingsService.FindTestsuiteByID(id)));
+			return View(Mapper.Map<TestsuiteModel>(_settingsService.FindTestsuiteByID(id)));
 		}
 
 		//
@@ -161,7 +161,7 @@ namespace RegTesting.Mvc.Controllers
 		[HttpPost, ActionName("Delete")]
 		public ActionResult DeleteConfirmed(int id)
 		{
-			_objSettingsService.DeleteTestsuiteByID(id);
+			_settingsService.DeleteTestsuiteByID(id);
 			return RedirectToAction("Index");
 		}
 
@@ -174,10 +174,10 @@ namespace RegTesting.Mvc.Controllers
 		public ActionResult EditTestcases(int id)
 		{
 
-			IEnumerable<TestcaseModel> lstTestcases = Mapper.Map<IEnumerable<TestcaseModel>>(_objSettingsService.GetTestcases());
-			ViewBag.LstTestcases = lstTestcases;
+			IEnumerable<TestcaseModel> testcases = Mapper.Map<IEnumerable<TestcaseModel>>(_settingsService.GetTestcases());
+			ViewBag.LstTestcases = testcases;
 			ViewBag.Testsuite = id;
-			IList<int> testcasesInTestsuite = _objSettingsService.FindTestsuiteByID(id).Testcases.Select(t => t.ID).ToList();
+			IList<int> testcasesInTestsuite = _settingsService.FindTestsuiteByID(id).Testcases.Select(t => t.ID).ToList();
 			return View(testcasesInTestsuite);
 			
 		}
@@ -190,7 +190,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>Redirect to EditView</returns>
 		public ActionResult TestcasesChanged(int testsuite, ICollection<int> testcases)
 		{
-			_objSettingsService.SetTestcasesForTestsuite(testsuite, testcases);
+			_settingsService.SetTestcasesForTestsuite(testsuite, testcases);
 			return RedirectToAction("Edit", new { id = testsuite });
 		}
 
@@ -201,10 +201,10 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A EditBrowsersView</returns>
 		public ActionResult EditBrowsers(int id)
 		{
-			IEnumerable<BrowserModel> lstBrowser = Mapper.Map<IEnumerable<BrowserModel>>(_objSettingsService.GetBrowsers());
-			ViewBag.LstBrowsers = lstBrowser;
+			IEnumerable<BrowserModel> browser = Mapper.Map<IEnumerable<BrowserModel>>(_settingsService.GetBrowsers());
+			ViewBag.LstBrowsers = browser;
 			ViewBag.Testsuite = id;
-			IList<int> browsersInTestsuite = _objSettingsService.FindTestsuiteByID(id).Browsers.Select(t=>t.ID).ToList();
+			IList<int> browsersInTestsuite = _settingsService.FindTestsuiteByID(id).Browsers.Select(t=>t.ID).ToList();
 			return View(browsersInTestsuite);
 		}
 
@@ -216,7 +216,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>Redirect to EditView</returns>
 		public ActionResult BrowsersChanged(int testsuite, ICollection<int> browsers)
 		{
-			_objSettingsService.SetBrowsersForTestsuite(testsuite, browsers);
+			_settingsService.SetBrowsersForTestsuite(testsuite, browsers);
 			return RedirectToAction("Edit", new { id = testsuite });
 		}
 
@@ -227,10 +227,10 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A EditLanguagesView</returns>
 		public ActionResult EditLanguages(int id)
 		{
-			IEnumerable<LanguageModel> lstLanguages = Mapper.Map<IEnumerable<LanguageModel>>(_objSettingsService.GetLanguages());
-			ViewBag.LstLanguages = lstLanguages;
+			IEnumerable<LanguageModel> languages = Mapper.Map<IEnumerable<LanguageModel>>(_settingsService.GetLanguages());
+			ViewBag.LstLanguages = languages;
 			ViewBag.Testsuite = id;
-			IList<int> languagesInTestsuite = _objSettingsService.FindTestsuiteByID(id).Languages.Select(t => t.ID).ToList();
+			IList<int> languagesInTestsuite = _settingsService.FindTestsuiteByID(id).Languages.Select(t => t.ID).ToList();
 			return View(languagesInTestsuite);
 		}
 
@@ -242,7 +242,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>Redirect to EditView</returns>
 		public ActionResult LanguagesChanged(int testsuite, ICollection<int> languages)
 		{
-			_objSettingsService.SetLanguagesForTestsuite(testsuite, languages);
+			_settingsService.SetLanguagesForTestsuite(testsuite, languages);
 			return RedirectToAction("Edit", new { id = testsuite });
 		}
 
@@ -253,13 +253,13 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A IndexView</returns>
 		public ViewResult Overview()
 		{
-			IList<TestcaseModel> lstTestcases = Mapper.Map<IList<TestcaseModel>>(_objSettingsService.GetTestcases());
-			ViewBag.LstTestcases = lstTestcases;
-			IList<BrowserModel> lstBrowsers = Mapper.Map<IList<BrowserModel>>(_objSettingsService.GetBrowsers());
-			ViewBag.LstBrowsers = lstBrowsers;
-			IList<LanguageModel> lstLanguages = Mapper.Map<IList<LanguageModel>>(_objSettingsService.GetLanguages());
-			ViewBag.LstLanguages = lstLanguages;
-			return View(Mapper.Map<IEnumerable<TestsuiteModel>>(_objSettingsService.GetTestsuites()));
+			IList<TestcaseModel> testcases = Mapper.Map<IList<TestcaseModel>>(_settingsService.GetTestcases());
+			ViewBag.LstTestcases = testcases;
+			IList<BrowserModel> browsers = Mapper.Map<IList<BrowserModel>>(_settingsService.GetBrowsers());
+			ViewBag.LstBrowsers = browsers;
+			IList<LanguageModel> languages = Mapper.Map<IList<LanguageModel>>(_settingsService.GetLanguages());
+			ViewBag.LstLanguages = languages;
+			return View(Mapper.Map<IEnumerable<TestsuiteModel>>(_settingsService.GetTestsuites()));
 		}
 		
 	}

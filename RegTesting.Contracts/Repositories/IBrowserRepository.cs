@@ -10,8 +10,8 @@ namespace RegTesting.Contracts.Repositories
 		/// <summary>
 		/// Get a Browser by Name
 		/// </summary>
-		/// <param name="strName">The name</param>
+		/// <param name="browserName">The name</param>
 		/// <returns>A Browser</returns>
-		Browser GetByName(string strName);
+		Browser GetByName(string browserName);
 	}
 }

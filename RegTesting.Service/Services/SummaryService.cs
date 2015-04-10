@@ -93,10 +93,10 @@ namespace RegTesting.Service.Services
 			lock (cache.GetLock(testsystem.ID))
 			{
 				
-				TestsystemSummary objCachedResult = cache.Get(testsystem.ID);
+				TestsystemSummary cachedResult = cache.Get(testsystem.ID);
 
-				if (objCachedResult != null)
-					return objCachedResult;
+				if (cachedResult != null)
+					return cachedResult;
 
 
 				IList<Result> results = _resultRepository.GetListOfResults(testsystem.ID, testsuite.Browsers, testsuite.Testcases,

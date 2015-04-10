@@ -14,10 +14,10 @@ namespace RegTesting.Contracts.Services
 		/// <summary>
 		/// send a testcase file
 		/// </summary>
-		/// <param name="strTestsystem">the testsystem</param>
-		/// <param name="arrData">the testfiledata</param>
+		/// <param name="testsystemName">the testsystem</param>
+		/// <param name="data">the testfiledata</param>
 		[OperationContract]
-		void SendTestcaseFile(string strTestsystem, byte[] arrData);
+		void SendTestcaseFile(string testsystemName, byte[] data);
 
 		/// <summary>
 		/// Get languages
@@ -34,13 +34,13 @@ namespace RegTesting.Contracts.Services
 		/// <summary>
 		/// add a local test task
 		/// </summary>
-		/// <param name="strUser">the user</param>
-		/// <param name="strTestsystemName">the testsystem</param>
-		/// <param name="strTestsystemUrl">the testurl</param>
-		/// <param name="lstBrowser">the browsers</param>
-		/// <param name="lstTestcases">the testcases</param>
-		/// <param name="lstLanguages">the languages</param>
+		/// <param name="userName">the user</param>
+		/// <param name="testsystemName">the testsystem</param>
+		/// <param name="testsystemUrl">the testurl</param>
+		/// <param name="browsers">the browsers</param>
+		/// <param name="testcases">the testcases</param>
+		/// <param name="languages">the languages</param>
 		[OperationContract]
-		void AddLocalTestTasks(string strUser, string strTestsystemName, string strTestsystemUrl, List<string> lstBrowser, List<string> lstTestcases, List<string> lstLanguages);
+		void AddLocalTestTasks(string userName, string testsystemName, string testsystemUrl, List<string> browsers, List<string> testcases, List<string> languages);
 	}
 }

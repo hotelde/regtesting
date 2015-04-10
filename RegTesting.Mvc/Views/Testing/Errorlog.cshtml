@@ -1,13 +1,11 @@
-﻿
-@using RegTesting.Contracts
-@using RegTesting.Contracts.Domain
+﻿@using RegTesting.Contracts
 @using RegTesting.Mvc.Models
 @model IList<RegTesting.Contracts.ErrorOccurrenceGroup>
 
 @{
 	ViewBag.Title = "Log - RegTesting";
-	List<TestsystemModel> lstTestsysteme = ((List<TestsystemModel>)ViewBag.LstTestsystems);
-	List<TestsuiteModel> lstTestsuites = ((List<TestsuiteModel>)ViewBag.LstTestsuites);
+	List<TestsystemModel> testsystems = ((List<TestsystemModel>)ViewBag.LstTestsystems);
+	List<TestsuiteModel> testsuites = ((List<TestsuiteModel>)ViewBag.LstTestsuites);
 }
 
 @Html.Partial("PartialTestingMenu")

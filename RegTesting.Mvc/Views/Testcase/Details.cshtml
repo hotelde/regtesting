@@ -1,25 +1,25 @@
 ﻿@model RegTesting.Mvc.Models.TestcaseModel
 
 @{
-    ViewBag.Title = "Details";
+	ViewBag.Title = "Details";
 }
 
 <h2>Details</h2>
 
 <fieldset>
-    <legend>Testcases</legend>
+	<legend>Testcases</legend>
 
-    <div class="display-label">Name</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Name)
-    </div>
+	<div class="display-label">Name</div>
+	<div class="display-field">
+		@Html.DisplayFor(model => model.Name)
+	</div>
 
-    <div class="display-label">Activated</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.Activated)
-    </div>
+	<div class="display-label">Activated</div>
+	<div class="display-field">
+		@Html.DisplayFor(model => model.Activated)
+	</div>
 
-    <div class="display-label">Type</div>
+	<div class="display-label">Type</div>
 	<div class="display-field">
 		@Html.DisplayFor(model => model.Type)
 	</div>
@@ -30,6 +30,6 @@
 	</div>
 </fieldset>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+	@Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
+	@Html.ActionLink("Back to List", "Index")
 </p>

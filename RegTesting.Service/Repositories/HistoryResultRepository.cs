@@ -62,14 +62,14 @@ namespace RegTesting.Service.Repositories
 		}
 
 		IList<HistoryResult> IHistoryResultRepository.GetListOfErrorHistoryResults(int testsystemId, IList<Browser> browsers, IList<Testcase> testcases, IList<Language> languages,
-			DateTime dateFrom, DateTime dateTo)
+			DateTime fromDate, DateTime toDate)
 		{
 
 			return GetHistoryResultListQuery(testsystemId, browsers, testcases, languages)
 				.Where(
 						r =>
 							r.ResultCode == TestState.KnownError || r.ResultCode == TestState.Error || r.ResultCode == TestState.ErrorRepeat)
-				.Where(r => r.Testtime >= dateFrom && r.Testtime <= dateTo)
+				.Where(r => r.Testtime >= fromDate && r.Testtime <= toDate)
 				.ToList();
 
 		}

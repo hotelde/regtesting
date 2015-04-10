@@ -15,16 +15,16 @@ namespace RegTesting.Mvc.Controllers
 	[RegAuthorize]
     public class BrowserController : Controller
 	{
-		private readonly ISettingsService _objSettingsService;
+		private readonly ISettingsService _settingsService;
 
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="objSettingsService">the settingsService</param>
-		public BrowserController(ISettingsService objSettingsService)
+		/// <param name="settingsService">the settingsService</param>
+		public BrowserController(ISettingsService settingsService)
 		{
-			_objSettingsService = objSettingsService;
+			_settingsService = settingsService;
 		}
 
 
@@ -38,7 +38,7 @@ namespace RegTesting.Mvc.Controllers
         public ViewResult Index()
 		{
 			
-			return View(Mapper.Map<IEnumerable<BrowserModel>>(_objSettingsService.GetBrowsers()));
+			return View(Mapper.Map<IEnumerable<BrowserModel>>(_settingsService.GetBrowsers()));
         }
 
         //
@@ -51,7 +51,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A DetailsView</returns>
 		public ViewResult Details(int id)
 		{
-			return View(Mapper.Map <BrowserModel>(_objSettingsService.FindBrowserByID(id)));
+			return View(Mapper.Map <BrowserModel>(_settingsService.FindBrowserByID(id)));
 		}
 
 		//
@@ -79,7 +79,7 @@ namespace RegTesting.Mvc.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				_objSettingsService.StoreBrowser(Mapper.Map<BrowserDto>(browserModel));
+				_settingsService.StoreBrowser(Mapper.Map<BrowserDto>(browserModel));
 				return RedirectToAction("Index");
 			}
 
@@ -96,7 +96,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A EditView</returns>
 		public ActionResult Edit(int id)
 		{
-			return View(Mapper.Map<BrowserModel>(_objSettingsService.FindBrowserByID(id)));
+			return View(Mapper.Map<BrowserModel>(_settingsService.FindBrowserByID(id)));
 		}
 
 		//
@@ -112,7 +112,7 @@ namespace RegTesting.Mvc.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				_objSettingsService.StoreBrowser(Mapper.Map<BrowserDto>(browserModel));
+				_settingsService.StoreBrowser(Mapper.Map<BrowserDto>(browserModel));
 				return RedirectToAction("Index");
 			}
 			return View(browserModel);
@@ -128,7 +128,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A DeleteView</returns>
 		public ActionResult Delete(int id)
 		{
-			return View(Mapper.Map<BrowserModel>(_objSettingsService.FindBrowserByID(id)));
+			return View(Mapper.Map<BrowserModel>(_settingsService.FindBrowserByID(id)));
 		}
 
 		//
@@ -142,7 +142,7 @@ namespace RegTesting.Mvc.Controllers
 		[HttpPost, ActionName("Delete")]
 		public ActionResult DeleteConfirmed(int id)
 		{
-			_objSettingsService.DeleteBrowserByID(id);
+			_settingsService.DeleteBrowserByID(id);
 			return RedirectToAction("Index");
 		}
 

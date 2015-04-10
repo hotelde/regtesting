@@ -41,8 +41,8 @@ namespace RegTesting.Service.Repositories
 
 		IList<TEntity> IRepository<TEntity>.GetAll()
 		{
-			IList<TEntity> lstTestsuite = Session.CreateCriteria(typeof(TEntity)).List<TEntity>();
-			return lstTestsuite;
+			IList<TEntity> entities = Session.CreateCriteria(typeof(TEntity)).List<TEntity>();
+			return entities;
 		}
 
 		TEntity IRepository<TEntity>.GetById(int id)
@@ -52,31 +52,31 @@ namespace RegTesting.Service.Repositories
 
 		void IRepository<TEntity>.Store(TEntity entity)
 		{
-			using (ITransaction objTransaction = Session.BeginTransaction())
+			using (ITransaction transaction = Session.BeginTransaction())
 			{
 				Session.SaveOrUpdate(entity);
-				objTransaction.Commit();
+				transaction.Commit();
 			}
 		}
 
 		void IRepository<TEntity>.Store(IEnumerable<TEntity> entities)
 		{
-			using (ITransaction objTransaction = Session.BeginTransaction())
+			using (ITransaction transaction = Session.BeginTransaction())
 			{
 				foreach (TEntity entity in entities)
 				{
 					Session.SaveOrUpdate(entity);
 				}
-				objTransaction.Commit();
+				transaction.Commit();
 			}
 		}
 
 		void IRepository<TEntity>.Remove(TEntity entity)
 		{
-			using (ITransaction objTransaction = Session.BeginTransaction())
+			using (ITransaction transaction = Session.BeginTransaction())
 			{
 				Session.Delete(entity);
-				objTransaction.Commit();
+				transaction.Commit();
 			}
 		}
 

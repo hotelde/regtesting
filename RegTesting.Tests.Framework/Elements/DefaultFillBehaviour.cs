@@ -23,10 +23,10 @@ namespace RegTesting.Tests.Framework.Elements
 
 		public void Type(DateTime dateTime)
 		{
-			CultureInfo objCurrent = Thread.CurrentThread.CurrentUICulture;
-			string strDateString = dateTime.ToString("d", objCurrent);
-			TestLog.Add("FillDate (use culture " + objCurrent + "): " + _pageElement.By + " -> " + strDateString);
-			_pageElement.WebDriver.WaitForElement(_pageElement.By).Type(strDateString);
+			CultureInfo currentUiCulture = Thread.CurrentThread.CurrentUICulture;
+			string dateString = dateTime.ToString("d", currentUiCulture);
+			TestLog.Add("FillDate (use culture " + currentUiCulture + "): " + _pageElement.By + " -> " + dateString);
+			_pageElement.WebDriver.WaitForElement(_pageElement.By).Type(dateString);
 		}
 	}
 }

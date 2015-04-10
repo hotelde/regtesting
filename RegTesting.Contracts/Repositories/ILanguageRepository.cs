@@ -10,8 +10,8 @@ namespace RegTesting.Contracts.Repositories
 		/// <summary>
 		/// Get a Language by LanguageCode
 		/// </summary>
-		/// <param name="strCode">The languageCode</param>
+		/// <param name="languageCode">The languageCode</param>
 		/// <returns>A Language</returns>
-		Language GetByLanguageCode(string strCode);
+		Language GetByLanguageCode(string languageCode);
 	}
 }

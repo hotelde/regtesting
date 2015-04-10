@@ -20,23 +20,23 @@ namespace RegTesting.Tests.Framework.Elements
 
 		public void SelectByText(string text)
 		{
-			IWebElement objWebElement =  _pageElement.WebDriver.WaitForElement(_pageElement.By);
+			IWebElement webElement =  _pageElement.WebDriver.WaitForElement(_pageElement.By);
 
-			SelectElement objSelectElement = new SelectElement(objWebElement);
-			objSelectElement.SelectByText(text);
+			SelectElement selectElement = new SelectElement(webElement);
+			selectElement.SelectByText(text);
 		}
 
 		public void SelectByValue(string value)
 		{
-			IWebElement objElement = _pageElement.WebDriver.WaitForElement(_pageElement.By);
-			SelectValue(objElement, value);
+			IWebElement webElement = _pageElement.WebDriver.WaitForElement(_pageElement.By);
+			SelectValue(webElement, value);
 		}
 
 		public void SelectByIndex(int index)
 		{
-			IWebElement objWebElement = _pageElement.WebDriver.WaitForElement(_pageElement.By);
-			SelectElement objSelectElement = new SelectElement(objWebElement);
-			objSelectElement.SelectByIndex(index);
+			IWebElement webElement = _pageElement.WebDriver.WaitForElement(_pageElement.By);
+			SelectElement selectElement = new SelectElement(webElement);
+			selectElement.SelectByIndex(index);
 		}
 
 

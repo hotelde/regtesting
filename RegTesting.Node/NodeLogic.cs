@@ -189,15 +189,15 @@ namespace RegTesting.Node
 			}
 			catch (NotSupportedException notSupportedException)
 			{
-				Error objError = CreateErrorFromException(notSupportedException);
+				Error error = CreateErrorFromException(notSupportedException);
 				testResult.TestState = TestState.NotSupported;
-				testResult.Error = objError;
+				testResult.Error = error;
 			}
 			catch (TaskCanceledException taskCanceledException)
 			{
-				Error objError = CreateErrorFromException(taskCanceledException);
+				Error error = CreateErrorFromException(taskCanceledException);
 				testResult.TestState = TestState.Canceled;
-				testResult.Error = objError;
+				testResult.Error = error;
 			}
 			catch (Exception exception)
 			{
@@ -242,14 +242,14 @@ namespace RegTesting.Node
 
 		private Error CreateErrorFromException(Exception exception)
 		{
-			Error objError = new Error
+			Error error = new Error
 			{
 				Type = exception.GetType().ToString(),
 				Message = exception.Message,
 				StackTrace = exception.StackTrace ?? "",
 				InnerException = (exception.InnerException != null ? exception.InnerException.ToString() : null),
 			};
-			return objError;
+			return error;
 		}
 
 		private void WaitOnWebExceptions(WorkItem workItem)

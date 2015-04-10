@@ -21,16 +21,16 @@ namespace RegTesting.Service.Repositories
 		{
 		}
 
-		Tester ITesterRepository.GetByName(string strName)
+		Tester ITesterRepository.GetByName(string testerName)
 		{
 			Tester tester = Session
 					.CreateCriteria(typeof(Tester))
-                    .Add(Restrictions.Eq("Name", strName))
+                    .Add(Restrictions.Eq("Name", testerName))
 					.UniqueResult<Tester>();
 			if (tester != null)
 				return tester;
 
-			tester = new Tester { Name = strName, Mail = strName + "@hotel.de"};
+			tester = new Tester { Name = testerName, Mail = testerName + "@hotel.de"};
 			((IRepository<Tester>)this).Store(tester);
 			return tester;
 		}

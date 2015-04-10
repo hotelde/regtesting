@@ -10,8 +10,8 @@ namespace RegTesting.Contracts.Repositories
 		/// <summary>
 		/// Get a Testcase by Type
 		/// </summary>
-		/// <param name="strName">The type</param>
+		/// <param name="testcaseName">The type</param>
 		/// <returns>A Testcase</returns>
-		Testcase GetByType(string strName);
+		Testcase GetByType(string testcaseName);
 	}
 }

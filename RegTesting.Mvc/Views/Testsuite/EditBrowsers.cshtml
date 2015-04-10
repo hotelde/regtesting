@@ -3,7 +3,7 @@
 
 @{
 	ViewBag.Title = "Edit Testsuite - RegTesting";
-	var lstBrowsers = ((List<BrowserModel>) ViewBag.LstBrowsers);
+	var browsers = ((List<BrowserModel>) ViewBag.LstBrowsers);
 }
 
 <h2>Edit Testsuite - Set Browsers</h2>
@@ -14,18 +14,18 @@
 	
 		<input type = "hidden" name = "testsuite" value = "@ViewBag.Testsuite" />
 
-		@foreach (BrowserModel browsers in lstBrowsers)
+		@foreach (BrowserModel browserModel in browsers)
 		{
-			if (!Model.Contains(browsers.ID))
+			if (!Model.Contains(browserModel.ID))
 			{
-				<input type = "checkbox" name = "browsers" value = "@browsers.ID"/>
-				@browsers.Name
+				<input type = "checkbox" name = "browsers" value = "@browserModel.ID"/>
+				@browserModel.Name
 				<br/>
 			}
 			else
 			{
-				<input type = "checkbox" name = "browsers" value = "@browsers.ID" checked="checked" />
-				@browsers.Name
+				<input type = "checkbox" name = "browsers" value = "@browserModel.ID" checked="checked" />
+				@browserModel.Name
 				<br/>
 			}
 		}

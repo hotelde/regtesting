@@ -14,9 +14,9 @@ namespace RegTesting.Contracts
 		/// <summary>
 		/// Get the lock specific for a testsystem
 		/// </summary>
-		/// <param name="strTestsystem">the testsystem</param>
+		/// <param name="testsystem">the testsystem</param>
 		/// <returns>the lock</returns>
-		object GetLock(string strTestsystem);
+		object GetLock(string testsystem);
 
 	}
 

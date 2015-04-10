@@ -102,11 +102,11 @@ namespace RegTesting.Service.Services
 
 		}
 		
-		void IBuildTaskService.AddRegTestTasks(string testsystemName, string releaseManager, string testsuiteName)
+		void IBuildTaskService.AddRegTestTasks(string testsystemName, string emailReceiver, string testsuiteName)
 		{
 			Testsuite testsuite = _testsuiteRepository.GetByName(testsuiteName);
 			Testsystem testsystem = _testsystemRepository.GetByName(testsystemName);
-			Tester tester = _testerRepository.GetByName(releaseManager);
+			Tester tester = _testerRepository.GetByName(emailReceiver);
 
 			TestJob testjob = new TestJob
 			{

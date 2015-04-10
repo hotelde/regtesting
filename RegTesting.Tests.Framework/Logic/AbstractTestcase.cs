@@ -68,10 +68,10 @@ namespace RegTesting.Tests.Framework.Logic
 			if (_webDriver == null) return "";
 			try
 			{
-				Screenshot objScreenshot = ((ITakesScreenshot)_webDriver).GetScreenshot();
-				if (objScreenshot != null)
+				Screenshot screenshot = ((ITakesScreenshot)_webDriver).GetScreenshot();
+				if (screenshot != null)
 				{
-					return objScreenshot.AsBase64EncodedString;
+					return screenshot.AsBase64EncodedString;
 				}
 				return String.Empty;
 			}

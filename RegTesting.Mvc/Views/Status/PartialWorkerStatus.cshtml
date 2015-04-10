@@ -13,37 +13,37 @@
 				<th>Actions</th>
 			</tr>
 
-			@foreach (TestWorkerModel objTestWorker in Model)
+			@foreach (TestWorkerModel testWorker in Model)
 			{
 				<tr>
-					<td><span class="@("label label-" + StatusHelper.GetTestWorkerStatusString(objTestWorker.State))">@objTestWorker.Name</span></td>
+					<td><span class="@("label label-" + StatusHelper.GetTestWorkerStatusString(testWorker.State))">@testWorker.Name</span></td>
 
 					<td>
-						@foreach (string browser in objTestWorker.SupportedBrowsers)
+						@foreach (string browser in testWorker.SupportedBrowsers)
 						{
 							<text>@browser </text>
 						}
 
 				</td>
 				<td>
-					@if (objTestWorker.State == TestWorkerStatus.Rebooting)
+					@if (testWorker.State == TestWorkerStatus.Rebooting)
 					{
 						<b>*** Rebooting... ***</b>
 					}
 					else
 					{
-						@((objTestWorker.WorkItemTestcaseName != null) ? objTestWorker.WorkItemTestcaseName + " " + objTestWorker.WorkItemBrowserName + " (" + objTestWorker.WorkItemTestsystemName + "/" +  objTestWorker.WorkItemLanguageLanguagecode  +")": "Idle")
+						@((testWorker.WorkItemTestcaseName != null) ? testWorker.WorkItemTestcaseName + " " + testWorker.WorkItemBrowserName + " (" + testWorker.WorkItemTestsystemName + "/" +  testWorker.WorkItemLanguageLanguagecode  +")": "Idle")
 					}
 				</td>
-				<td>@objTestWorker.TestruntimeString</td>
+				<td>@testWorker.TestruntimeString</td>
 				<td>
 					<div class="btn-group">
 @*
-						<a class="btn btn-default btn-xs" href="@Url.Action("PauseWorker", "Status", new {node = objTestWorker.Name})"><i class="glyphicon glyphicon-pause"></i></a>
+						<a class="btn btn-default btn-xs" href="@Url.Action("PauseWorker", "Status", new {node = testWorker.Name})"><i class="glyphicon glyphicon-pause"></i></a>
 *@
-						@if ((objTestWorker.State != TestWorkerStatus.Rebooting && !objTestWorker.Name.Contains("mac")))
+						@if ((testWorker.State != TestWorkerStatus.Rebooting && !testWorker.Name.Contains("mac")))
 						{
-							<a class="btn btn-default btn-xs" href="@Url.Action("RebootWorker", "Status", new { node = objTestWorker.Name })"><i class="glyphicon glyphicon-repeat"></i> Reboot</a>
+							<a class="btn btn-default btn-xs" href="@Url.Action("RebootWorker", "Status", new { node = testWorker.Name })"><i class="glyphicon glyphicon-repeat"></i> Reboot</a>
 						}
 					</div>
 

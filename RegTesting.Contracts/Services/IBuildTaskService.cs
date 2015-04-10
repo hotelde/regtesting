@@ -11,18 +11,18 @@ namespace RegTesting.Contracts.Services
 		/// <summary>
 		/// send a testcase file
 		/// </summary>
-		/// <param name="strTestsystem">the testsystem</param>
-		/// <param name="arrData">the testfiledata</param>
+		/// <param name="testsystemName">the testsystem</param>
+		/// <param name="data">the testfiledata</param>
 		[OperationContract]
-		void SendTestcaseFile(string strTestsystem, byte[] arrData);
+		void SendTestcaseFile(string testsystemName, byte[] data);
 		/// <summary>
 		/// add a regtest task
 		/// </summary>
-		/// <param name="strTestsystem">the testsystem</param>
-		/// <param name="strReleaseManager">the releasemanager</param>
-		/// <param name="strTestsuite">the testsuite</param>
+		/// <param name="testsystemName">the testsystem</param>
+		/// <param name="emailReceiver">the releasemanager</param>
+		/// <param name="testsuiteName">the testsuite</param>
 		[OperationContract]
-		void AddRegTestTasks(string strTestsystem, string strReleaseManager, string strTestsuite);
+		void AddRegTestTasks(string testsystemName, string emailReceiver, string testsuiteName);
 	}
 
 }

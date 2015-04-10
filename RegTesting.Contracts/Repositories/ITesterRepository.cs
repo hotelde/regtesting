@@ -11,8 +11,8 @@ namespace RegTesting.Contracts.Repositories
 		/// <summary>
 		/// Get a Tester by Name
 		/// </summary>
-		/// <param name="strName">The name</param>
+		/// <param name="testerName">The name</param>
 		/// <returns>A Tester</returns>
-		Tester GetByName(string strName);
+		Tester GetByName(string testerName);
 	}
 }

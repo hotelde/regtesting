@@ -23,21 +23,21 @@ namespace RegTesting.Mvc.Extensions
 		/// <returns>fullcreated Htmlcode for Use in a View</returns>
 		public static MvcHtmlString ActionImage(this HtmlHelper html, string action, object routeValues, string imagePath, string alt, string classname, string tooltip)
 		{
-			UrlHelper objURL = new UrlHelper(html.ViewContext.RequestContext);
+			UrlHelper urlHelper = new UrlHelper(html.ViewContext.RequestContext);
 
 			// build the <img> tag
-			TagBuilder objImgBuilder = new TagBuilder("img");
-			objImgBuilder.MergeAttribute("src", objURL.Content(imagePath));
-			objImgBuilder.MergeAttribute("alt", alt);
-			objImgBuilder.MergeAttribute("class", classname);
-			string objImgHtml = objImgBuilder.ToString(TagRenderMode.SelfClosing);
+			TagBuilder imgBuilder = new TagBuilder("img");
+			imgBuilder.MergeAttribute("src", urlHelper.Content(imagePath));
+			imgBuilder.MergeAttribute("alt", alt);
+			imgBuilder.MergeAttribute("class", classname);
+			string imgHtml = imgBuilder.ToString(TagRenderMode.SelfClosing);
 
 			
 
 			// build the <a> tag
 			TagBuilder anchorBuilder = new TagBuilder("a");
-			anchorBuilder.MergeAttribute("href", objURL.Action(action, routeValues));
-			anchorBuilder.InnerHtml = objImgHtml; // include the <img> tag inside
+			anchorBuilder.MergeAttribute("href", urlHelper.Action(action, routeValues));
+			anchorBuilder.InnerHtml = imgHtml; // include the <img> tag inside
 			anchorBuilder.MergeAttribute("title", tooltip);
 			anchorBuilder.MergeAttribute("class", "tooltip");
 
@@ -60,14 +60,14 @@ namespace RegTesting.Mvc.Extensions
 		public static MvcHtmlString JqueryCell(this HtmlHelper html, int testid, int templateid , string testsuite, string innerHtml)
 		{
 			// build the <td> tag
-			TagBuilder objCellBuilder = new TagBuilder("td");
-			objCellBuilder.MergeAttribute("class", "testtablecell testaction");
-			objCellBuilder.MergeAttribute("testid", testid.ToString(CultureInfo.InvariantCulture));
-			objCellBuilder.MergeAttribute("browserid", templateid.ToString(CultureInfo.InvariantCulture));
-			objCellBuilder.InnerHtml = innerHtml;
-			string objCellHtml = objCellBuilder.ToString(TagRenderMode.Normal);
+			TagBuilder cellBuilder = new TagBuilder("td");
+			cellBuilder.MergeAttribute("class", "testtablecell testaction");
+			cellBuilder.MergeAttribute("testid", testid.ToString(CultureInfo.InvariantCulture));
+			cellBuilder.MergeAttribute("browserid", templateid.ToString(CultureInfo.InvariantCulture));
+			cellBuilder.InnerHtml = innerHtml;
+			string cellHtml = cellBuilder.ToString(TagRenderMode.Normal);
 
-			return MvcHtmlString.Create(objCellHtml);
+			return MvcHtmlString.Create(cellHtml);
 		}
 
 
@@ -84,14 +84,14 @@ namespace RegTesting.Mvc.Extensions
 		public static MvcHtmlString JqueryHeaderCell(this HtmlHelper html, int testid, int templateid, string testsuite, string innerHtml)
 		{
 			// build the <td> tag
-			TagBuilder objCellBuilder = new TagBuilder("th");
-			objCellBuilder.MergeAttribute("class", "testtableheader testaction");
-			objCellBuilder.MergeAttribute("testid", testid.ToString(CultureInfo.InvariantCulture));
-			objCellBuilder.MergeAttribute("browserid", templateid.ToString(CultureInfo.InvariantCulture));
-			objCellBuilder.InnerHtml = innerHtml;
-			string objCellHtml = objCellBuilder.ToString(TagRenderMode.Normal);
+			TagBuilder cellBuilder = new TagBuilder("th");
+			cellBuilder.MergeAttribute("class", "testtableheader testaction");
+			cellBuilder.MergeAttribute("testid", testid.ToString(CultureInfo.InvariantCulture));
+			cellBuilder.MergeAttribute("browserid", templateid.ToString(CultureInfo.InvariantCulture));
+			cellBuilder.InnerHtml = innerHtml;
+			string cellHtml = cellBuilder.ToString(TagRenderMode.Normal);
 
-			return MvcHtmlString.Create(objCellHtml);
+			return MvcHtmlString.Create(cellHtml);
 		}
 
 
@@ -110,24 +110,24 @@ namespace RegTesting.Mvc.Extensions
 		public static MvcHtmlString ResultCell(this HtmlHelper html, int systemid, int testid, int browserid, int languageid, string innerHtml, string extraclasses = "")
 		{
 			// build the <td> tag
-			TagBuilder objCellBuilder = new TagBuilder("td");
-			objCellBuilder.MergeAttribute("id", "res"+testid +"-" + browserid + "-" + languageid);
+			TagBuilder cellBuilder = new TagBuilder("td");
+			cellBuilder.MergeAttribute("id", "res"+testid +"-" + browserid + "-" + languageid);
 			if (languageid == -1)
 			{
-				objCellBuilder.MergeAttribute("class", "testtablecell testaction testactionalllanguages "+ extraclasses);
+				cellBuilder.MergeAttribute("class", "testtablecell testaction testactionalllanguages "+ extraclasses);
 			}
 			else
 			{
-				objCellBuilder.MergeAttribute("class", "testtablecell testaction testactionlanguage " + extraclasses);
+				cellBuilder.MergeAttribute("class", "testtablecell testaction testactionlanguage " + extraclasses);
 			}
-			objCellBuilder.MergeAttribute("testid", testid.ToString(CultureInfo.InvariantCulture));
-			objCellBuilder.MergeAttribute("browserid", browserid.ToString(CultureInfo.InvariantCulture));
-			objCellBuilder.MergeAttribute("systemid", systemid.ToString(CultureInfo.InvariantCulture));
-			objCellBuilder.MergeAttribute("languageid", languageid.ToString(CultureInfo.InvariantCulture));
-			objCellBuilder.InnerHtml = innerHtml;
-			string objCellHtml = objCellBuilder.ToString(TagRenderMode.Normal);
+			cellBuilder.MergeAttribute("testid", testid.ToString(CultureInfo.InvariantCulture));
+			cellBuilder.MergeAttribute("browserid", browserid.ToString(CultureInfo.InvariantCulture));
+			cellBuilder.MergeAttribute("systemid", systemid.ToString(CultureInfo.InvariantCulture));
+			cellBuilder.MergeAttribute("languageid", languageid.ToString(CultureInfo.InvariantCulture));
+			cellBuilder.InnerHtml = innerHtml;
+			string cellHtml = cellBuilder.ToString(TagRenderMode.Normal);
 
-			return MvcHtmlString.Create(objCellHtml);
+			return MvcHtmlString.Create(cellHtml);
 		}
 
 
@@ -142,9 +142,9 @@ namespace RegTesting.Mvc.Extensions
 		/// <returns>a menulink item</returns>
 		public static MvcHtmlString MenuLink(this HtmlHelper htmlHelper, string linkText, string actionName, string controllerName, object routeValues){
 			//string currentAction = htmlHelper.ViewContext.RouteData.GetRequiredString("action");
-			string strCurrentController = htmlHelper.ViewContext.RouteData.GetRequiredString("controller");
+			string currentController = htmlHelper.ViewContext.RouteData.GetRequiredString("controller");
 			//if (actionName == currentAction && controllerName == currentController)
-			if (controllerName == strCurrentController)
+			if (controllerName == currentController)
 			{
 				return htmlHelper.ActionLink(
 					linkText,

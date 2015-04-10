@@ -16,9 +16,9 @@ namespace RegTesting.Service.TestLogic
 	{
 		private volatile ConcurrentDictionary<string, object> _locks = new ConcurrentDictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
 
-		object ITestFileLocker.GetLock(string strTestsystem)
+		object ITestFileLocker.GetLock(string testsystem)
 		{
-			return _locks.GetOrAdd(strTestsystem, (strName) => new object());
+			return _locks.GetOrAdd(testsystem, (strName) => new object());
 		}
 
 	}

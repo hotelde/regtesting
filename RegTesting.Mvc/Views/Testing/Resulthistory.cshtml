@@ -5,15 +5,15 @@
 	@{
 		ViewBag.Title = "History - RegTesting";
 
-		IList<TestcaseModel> lstTestcases = ((IList<TestcaseModel>)ViewBag.LstTestcases);
-		IList<BrowserModel> lstBrowsers = ((IList<BrowserModel>)ViewBag.LstBrowsers);
-		IList<LanguageModel> lstLanguages = ((IList<LanguageModel>)ViewBag.LstLanguages);
+		IList<TestcaseModel> testcases = ((IList<TestcaseModel>)ViewBag.LstTestcases);
+		IList<BrowserModel> browsers = ((IList<BrowserModel>)ViewBag.LstBrowsers);
+		IList<LanguageModel> languages = ((IList<LanguageModel>)ViewBag.LstLanguages);
 
-		int intTestsystemID = @ViewBag.Testsystem;
-		int intTestsuiteID = @ViewBag.Testsuite;
-		int intTestcaseID = @ViewBag.Testcase;
-		int intLanguageID = @ViewBag.Language;
-		int intBrowserID = @ViewBag.Browser;
+		int testsystemId = @ViewBag.Testsystem;
+		int testsuiteId = @ViewBag.Testsuite;
+		int testcaseId = @ViewBag.Testcase;
+		int languageId = @ViewBag.Language;
+		int browserId = @ViewBag.Browser;
 		int tableWidth = 2;
 	}
 
@@ -26,28 +26,28 @@
 				<select id="ddlTestcases" class="form-control" onchange="OnDdlChanged();">
 					string strAttributes = ViewBag.Testcase  == -1 ? "selected=selected" : "";
 					<option value=-1 strattributes>All Testcases</option>
-					@foreach (TestcaseModel objTestcase in lstTestcases)
+					@foreach (TestcaseModel testcase in testcases)
 					{
-						string strAttributes = objTestcase.ID == ViewBag.Testcase ? "selected=selected" : "";
-						<option value=@objTestcase.ID @strAttributes>@objTestcase.Name</option>
+						string strAttributes = testcase.ID == ViewBag.Testcase ? "selected=selected" : "";
+						<option value=@testcase.ID @strAttributes>@testcase.Name</option>
 					}
 				</select>
 
 				<select id="ddlBrowser" class="form-control" onchange="OnDdlChanged();">
 					string strAttributes = ViewBag.Browser  == -1 ? "selected=selected" : "";
 					<option value=-1 strattributes>All Browsers</option>
-					@foreach (BrowserModel objBrowser in lstBrowsers)
+					@foreach (BrowserModel browser in browsers)
 					{
-						string strAttributes = objBrowser.ID == ViewBag.Browser ? "selected=selected" : "";
-						<option value=@objBrowser.ID @strAttributes>@objBrowser.Name</option>
+						string strAttributes = browser.ID == ViewBag.Browser ? "selected=selected" : "";
+						<option value=@browser.ID @strAttributes>@browser.Name</option>
 					}
 				</select><select id="ddlLanguages" class="form-control" onchange="OnDdlChanged();">
 					string strAttributes = ViewBag.Language  == -1 ? "selected=selected" : "";
 					<option value=-1 strattributes>All Languages</option>
-					@foreach (LanguageModel objLanguage in lstLanguages)
+					@foreach (LanguageModel language in languages)
 					{
-						string strAttributes = objLanguage.ID == ViewBag.Language ? "selected=selected" : "";
-						<option value=@objLanguage.ID @strAttributes>@objLanguage.Languagecode</option>
+						string strAttributes = language.ID == ViewBag.Language ? "selected=selected" : "";
+						<option value=@language.ID @strAttributes>@language.Languagecode</option>
 					}
 				</select>
 			</div>
@@ -59,77 +59,77 @@
 	<table class="table">
 		<tr>
 			<th class="testtableheader">Tester</th>
-			@if (intTestcaseID == -1)
+			@if (testcaseId == -1)
 			{
 				tableWidth++;
 				<th class="testtableheader">Testcase</th>
 			}
-			@if (intBrowserID == -1)
+			@if (browserId == -1)
 			{
 				tableWidth++;
 				<th class="testtableheader">Browser</th>
 			}
-			@if (intLanguageID == -1)
+			@if (languageId == -1)
 			{
 				tableWidth++;
 				<th class="testtableheader">Language</th>
 			}
 			<th class="testtableheader">Ergebnis</th>
 		</tr>
-		@foreach (HistoryResult objResultsHistory in Model)
+		@foreach (HistoryResult historyResult in Model)
 		{
 
-			string strClass = "resultsmall label label-" + StatusHelper.GetStatusString(@objResultsHistory.ResultCode);
+			string strClass = "resultsmall label label-" + StatusHelper.GetStatusString(historyResult.ResultCode);
 
 			<tr class="toggleDetails">
-				<td>@objResultsHistory.Tester.Name</td>
-				@if (intTestcaseID == -1)
+				<td>@historyResult.Tester.Name</td>
+				@if (testcaseId == -1)
 				{
-					<td>@objResultsHistory.Testcase.Name</td>
+					<td>@historyResult.Testcase.Name</td>
 				}
-				@if (intBrowserID == -1)
+				@if (browserId == -1)
 				{
-					<td>@objResultsHistory.Browser.Name</td>
+					<td>@historyResult.Browser.Name</td>
 				}
-				@if (intLanguageID == -1)
+				@if (languageId == -1)
 				{
-					<td>@objResultsHistory.Language.Languagecode</td>
+					<td>@historyResult.Language.Languagecode</td>
 				}
 
 				<td>
 					<span class="@strClass">
-						@objResultsHistory.Testtime
+						@historyResult.Testtime
 					</span>
 				</td>
 			</tr>
 			<tr style="display: none">
 				<td colspan="@(tableWidth)">
-					@if (objResultsHistory.Error != null)
+					@if (historyResult.Error != null)
 					{
-						<b>@objResultsHistory.Error.Message</b><br />
+						<b>@historyResult.Error.Message</b><br />
 
-						<text>@objResultsHistory.Error.Type</text>
+						<text>@historyResult.Error.Type</text>
 						<small>
-							@Html.Raw(@objResultsHistory.Error.StackTrace.Replace(" at ", "<br>at "))
-							@if (objResultsHistory.Error.InnerException != null)
+							@Html.Raw(historyResult.Error.StackTrace.Replace(" at ", "<br>at "))
+							@if (historyResult.Error.InnerException != null)
 							{
-								<br /><text>InnerException: @objResultsHistory.Error.InnerException</text>
+								<br /><text>InnerException: @historyResult.Error.InnerException</text>
 							}
 						</small>
 					}
 
-					@if (!String.IsNullOrEmpty(objResultsHistory.ScreenshotFile))
+					@if (!String.IsNullOrEmpty(historyResult.ScreenshotFile))
 					{
-						<br/><a class="btn btn-xs" href="@("/screenshots/" + objResultsHistory.ScreenshotFile)" target="_blank"><img class="testscreenshot" src="@("/screenshots/" + objResultsHistory.ScreenshotFile)" /></a>
+						<br/><a class="btn btn-xs" href="@("/screenshots/" + historyResult.ScreenshotFile)" target="_blank"><img class="testscreenshot" src="@("/screenshots/" + historyResult.ScreenshotFile)" /></a>
 					}
 
-					<pre class="detaillog">@Html.Raw(objResultsHistory.DetailLog)</pre>
+					<pre class="detaillog">@Html.Raw(historyResult.DetailLog)</pre>
 				</td>
 			</tr>
 		}
 	</table>
 	<br />
-	@Html.ActionLink("Back", "Index", "Testing", new { testsystem = intTestsystemID, testsuite = intTestsuiteID }, null)
+	@Html.ActionLink("Back", "Index", "Testing", new { testsystem = testsystemId, testsuite = testsuiteId }, null)
 
 	<script type="text/javascript">
 		function OnDdlChanged() {

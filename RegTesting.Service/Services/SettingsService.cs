@@ -64,9 +64,9 @@ namespace RegTesting.Service.Services
 			return Mapper.Map<BrowserDto>(_browserRepository.GetById(browserId));
 		}
 
-		void ISettingsService.StoreBrowser(BrowserDto browserDto)
+		void ISettingsService.StoreBrowser(BrowserDto browser)
 		{
-			_browserRepository.Store(Mapper.Map<Browser>(browserDto));
+			_browserRepository.Store(Mapper.Map<Browser>(browser));
 		}
 
 		void ISettingsService.DeleteBrowserByID(int browserId)
@@ -86,9 +86,9 @@ namespace RegTesting.Service.Services
 		}
 
 
-		void ISettingsService.StoreLanguage(LanguageDto languageDto)
+		void ISettingsService.StoreLanguage(LanguageDto language)
 		{
-			_languageRepository.Store(Mapper.Map<Language>(languageDto));
+			_languageRepository.Store(Mapper.Map<Language>(language));
 		}
 
 		void ISettingsService.DeleteLanguageByID(int languageId)
@@ -107,9 +107,9 @@ namespace RegTesting.Service.Services
 		}
 
 
-		void ISettingsService.StoreTester(TesterDto testerDto)
+		void ISettingsService.StoreTester(TesterDto tester)
 		{
-			_testerRepository.Store(Mapper.Map<Tester>(testerDto));
+			_testerRepository.Store(Mapper.Map<Tester>(tester));
 		}
 
 		void ISettingsService.DeleteTesterByID(int testerId)
@@ -129,9 +129,9 @@ namespace RegTesting.Service.Services
 		}
 
 
-		void ISettingsService.StoreTestsystem(TestsystemDto testsystemDto)
+		void ISettingsService.StoreTestsystem(TestsystemDto testsystem)
 		{
-			_testsystemRepository.Store(Mapper.Map<Testsystem>(testsystemDto));
+			_testsystemRepository.Store(Mapper.Map<Testsystem>(testsystem));
 		}
 
 		void ISettingsService.DeleteTestsystemByID(int testsystemId)
@@ -150,20 +150,20 @@ namespace RegTesting.Service.Services
 			return Mapper.Map<TestsuiteDto>(_testsuiteRepository.GetById(testsuiteId));
 		}
 
-		void ISettingsService.StoreTestsuite(TestsuiteDto testsuiteDto)
+		void ISettingsService.StoreTestsuite(TestsuiteDto testsuite)
 		{
-			if (testsuiteDto.ID == 0)
+			if (testsuite.ID == 0)
 			{
-				_testsuiteRepository.Store(Mapper.Map<Testsuite>(testsuiteDto));
+				_testsuiteRepository.Store(Mapper.Map<Testsuite>(testsuite));
 			}
 			else
 			{
-				Testsuite objTestsuiteCurrent = _testsuiteRepository.GetById(testsuiteDto.ID);
+				Testsuite testsuiteCurrent = _testsuiteRepository.GetById(testsuite.ID);
 
-				objTestsuiteCurrent.Name = testsuiteDto.Name;
-				objTestsuiteCurrent.Description = testsuiteDto.Description;
+				testsuiteCurrent.Name = testsuite.Name;
+				testsuiteCurrent.Description = testsuite.Description;
 
-				_testsuiteRepository.Store(objTestsuiteCurrent);
+				_testsuiteRepository.Store(testsuiteCurrent);
 			}
 	
 		}
@@ -185,9 +185,9 @@ namespace RegTesting.Service.Services
 			return Mapper.Map<TestcaseDto>(_testcaseRepository.GetById(testcaseId));
 		}
 
-		void ISettingsService.EditTestcase(TestcaseDto testcaseDto)
+		void ISettingsService.EditTestcase(TestcaseDto testcase)
 		{
-			_testcaseRepository.Store(Mapper.Map<Testcase>(testcaseDto));
+			_testcaseRepository.Store(Mapper.Map<Testcase>(testcase));
 		}
 
 		void ISettingsService.DeleteTestcaseByID(int testcaseId)
