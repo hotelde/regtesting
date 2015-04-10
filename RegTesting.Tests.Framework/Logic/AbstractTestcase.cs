@@ -62,7 +62,7 @@ namespace RegTesting.Tests.Framework.Logic
 		/// Get and save a screenshot.
 		/// </summary>
 		/// <returns>the filename (not the path) of the screenshot</returns>
-		string ITestable.SaveScreenshot(string strFolder)
+		string ITestable.SaveScreenshot(string folderPath)
 		{
 
 			if (_webDriver == null) return "";
@@ -88,10 +88,10 @@ namespace RegTesting.Tests.Framework.Logic
 		public abstract String GetName();
 
 		/// <summary>
-		/// Initialize the test with a driver and a baseurl. Then start this specific test with Test().
+		/// Initialize the test with a driver and a baseURL. Then start this specific test with Test().
 		/// </summary>
 		/// <param name="webDriver">Webdriverobject to test on. In most cases some RemoteWebdriver.</param>
-		/// <param name="baseurl">The baseurl to test on<example>gamma</example></param>
+		/// <param name="baseurl">The baseURL to test on<example>gamma</example></param>
 		/// <param name="languagecode">Languagecode for Test<example>DE</example></param>
 		private void SetupTest(IWebDriver webDriver, string baseurl, string languagecode)
 		{
@@ -136,10 +136,10 @@ namespace RegTesting.Tests.Framework.Logic
 		/// </summary>
 		/// <param name="webDriverInitStrategy">the webDriver init strategy</param>
 		/// <param name="browser">the template to test on</param>
-		/// <param name="baseurl">the baseurl of our testsystem</param>
-		/// <param name="languagecode">the languagecode to test on</param>
+		/// <param name="baseURL">the baseURL of our testsystem</param>
+		/// <param name="languageCode">the languageCode to test on</param>
 		/// <param name="timeOut">A optional timeout</param>
-		void ITestable.SetupTest(WebDriverInitStrategy webDriverInitStrategy,  Browser browser, string baseurl, string languagecode, int timeOut)
+		void ITestable.SetupTest(WebDriverInitStrategy webDriverInitStrategy,  Browser browser, string baseURL, string languageCode, int timeOut)
 		{
 			TestStatusManager.IsCanceled = false;
 			/*if (timeOut != 0)
@@ -161,7 +161,7 @@ namespace RegTesting.Tests.Framework.Logic
 			}
 
 			_webDriver = webDriverFactory.GetWebDriver(browser);
-			SetupTest(_webDriver, baseurl, languagecode);
+			SetupTest(_webDriver, baseURL, languageCode);
 		}
 
 		/// <summary>

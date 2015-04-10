@@ -14,14 +14,14 @@ namespace RegTesting.Tests.Core
 		/// <summary>
 		/// Initialize the test with a driver and a baseurl. Then start this specific test with Test().
 		/// </summary>
-		/// <param name="objWebDriverInitStrategy">the Webdriver init strategy</param>
-		/// <param name="objTemplate">Browser to Test on </param>
-		/// <param name="strBaseurl">The baseurl to test on<example>http://gamma</example></param>
-		/// <param name="strLanguagecode">Languagecode for Test<example>DE</example></param>
-		/// <param name="intTimeOut">a test timeout</param>
+		/// <param name="webDriverInitStrategy">the Webdriver init strategy</param>
+		/// <param name="browser">Browser to Test on </param>
+		/// <param name="baseURL">The baseurl to test on<example>http://gamma</example></param>
+		/// <param name="languageCode">Languagecode for Test<example>DE</example></param>
+		/// <param name="timeOut">a test timeout</param>
 		/// <returns>Currently returning a empty string, later on we can contain errormessages etc.</returns>
 		[OperationContract]
-		void SetupTest(WebDriverInitStrategy objWebDriverInitStrategy, Browser objTemplate, string strBaseurl, string strLanguagecode, int intTimeOut = 0);
+		void SetupTest(WebDriverInitStrategy webDriverInitStrategy, Browser browser, string baseURL, string languageCode, int timeOut = 0);
 
 		/// <summary>
 		/// Our mainfunction of the Testclasses, here comes the logic of the testcases.
@@ -52,9 +52,9 @@ namespace RegTesting.Tests.Core
 		/// <summary>
 		/// Save a Screenshot
 		/// </summary>
-		/// <param name="strFolder">The folder, where to save screenshot</param>
+		/// <param name="folderPath">The folder, where to save screenshot</param>
 		/// <returns>A string with the filename to the screenshot</returns>
-		string SaveScreenshot(string strFolder);
+		string SaveScreenshot(string folderPath);
 
 		/// <summary>
 		/// Implementation of Dispose 

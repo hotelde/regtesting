@@ -10,10 +10,10 @@ namespace RegTesting.Tests.Core
 		/// <summary>
 		/// Create a Factory
 		/// </summary>
-		/// <param name="strAssemblyFile">the Assembly</param>
-		/// <param name="strTypeName">the type to create</param>
-		/// <param name="objConstructArgs">constructor arguments</param>
+		/// <param name="assemblyFile">the Assembly</param>
+		/// <param name="typeName">the type to create</param>
+		/// <param name="constructArgs">constructor arguments</param>
 		/// <returns>A new class of type typeName</returns>
-		ITypesLoader Create(string strAssemblyFile, string strTypeName, object[] objConstructArgs);
+		ITypesLoader Create(string assemblyFile, string typeName, object[] constructArgs);
 	}
 }

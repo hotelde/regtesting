@@ -11,17 +11,17 @@ namespace RegTesting.Tests.Core
 		/// <summary>
 		/// Create a Factory
 		/// </summary>
-		/// <param name="strAssemblyFile">Our Assembly</param>
-		/// <param name="strTypeName">the type to create</param>
-		/// <param name="objConstructArgs">constructor arguments</param>
+		/// <param name="assemblyFile">Our Assembly</param>
+		/// <param name="typeName">the type to create</param>
+		/// <param name="constructArgs">constructor arguments</param>
 		/// <returns>A new class of type typeName</returns>
-		public ITypesLoader Create(string strAssemblyFile, string strTypeName,
-								object[] objConstructArgs)
+		public ITypesLoader Create(string assemblyFile, string typeName,
+								object[] constructArgs)
 		{
 			//Ignore all errors and return null in error case.
 			try
 			{
-				return (ITypesLoader)Activator.CreateInstance(strAssemblyFile, strTypeName, objConstructArgs).Unwrap();
+				return (ITypesLoader)Activator.CreateInstance(assemblyFile, typeName, constructArgs).Unwrap();
 			}
 			catch (InvalidCastException)
 			{
