@@ -11,10 +11,7 @@ namespace RegTesting.Tests.Framework.Elements
 	/// </summary>
 	class HiddenElement : BasicPageElement
 	{
-		/// <summary>
-		/// The By Locator
-		/// </summary>
-		public By By { get; set; }
+
 
 
 		/// <summary>
@@ -28,8 +25,6 @@ namespace RegTesting.Tests.Framework.Elements
 		public HiddenElement(By byLocator, IWebDriver webDriver, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours clickBehaviour = ClickBehaviours.Default)
 			: base(byLocator, webDriver, waitModel, parentPageObject, clickBehaviour)
 		{
-			By = byLocator;
-
 		}
 		
 		/// <summary>
@@ -37,7 +32,7 @@ namespace RegTesting.Tests.Framework.Elements
 		/// </summary>
 		/// <param name="propertyName">the css property</param>
 		/// <returns>the value for the css property</returns>
-		public string GetCssValue(string propertyName)
+		public new string GetCssValue(string propertyName)
 		{
 			return WebDriver.WaitForElement(By, Visibility.Hidden).GetCssValue(propertyName);
 		}
@@ -47,7 +42,7 @@ namespace RegTesting.Tests.Framework.Elements
 		/// </summary>
 		/// <param name="attributeName">the attribute name</param>
 		/// <returns>the value for the attribute</returns>
-		public string GetAttribute(string attributeName)
+        public new string GetAttribute(string attributeName)
 		{
 			return WebDriver.WaitForElement(By, Visibility.Hidden).GetAttribute(attributeName);
 		}
@@ -55,7 +50,7 @@ namespace RegTesting.Tests.Framework.Elements
 		/// <summary>
 		/// The size of the element
 		/// </summary>
-		public Size Size
+        public new Size Size
 		{
 			get
 			{
@@ -67,16 +62,16 @@ namespace RegTesting.Tests.Framework.Elements
 		/// Check if an element is displayed
 		/// </summary>
 		/// <returns>A bool if the element is displayed</returns>
-		public bool IsElementDisplayed()
+        public new bool IsElementDisplayed(int timeoutInSeconds = 3)
 		{
-			return WebDriver.IsElementDisplayed(By);
+            return WebDriver.IsElementDisplayed(By, timeoutInSeconds);
 		}
 
 		/// <summary>
 		/// Get the inner text of an element
 		/// </summary>
 		/// <returns>the inner text of the element</returns>
-		public string GetInnerText()
+        public new string GetInnerText()
 		{
 			TestLog.Add("ReadInnerText: " + By);
 			return WebDriver.WaitForElement(By, Visibility.Hidden).Text;

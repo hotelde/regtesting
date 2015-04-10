@@ -24,10 +24,13 @@ using System.Runtime.InteropServices;
 
 // Version information for an assembly consists of the following four values:
 //
-//      Major Version <- upper this for breaking api changes
-//      Minor Version  <- upper this for new functionality
-//      Build Number <- auto generated while build
-//      Revision <- auto generated while build
-//
-[assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyFileVersion("1.0.*")]
+//      Major Version
+//      Minor Version 
+//      Build Number
+//      Revision
+[assembly: AssemblyFileVersion("1.1.0.30")]
+[assembly: AssemblyInformationalVersion("1.1.0.30")]
+
+// Change AssemblyVersion for breaking api changes
+// http://stackoverflow.com/questions/64602/what-are-differences-between-assemblyversion-assemblyfileversion-and-assemblyin
+[assembly: AssemblyVersion("1.1.0.0")]

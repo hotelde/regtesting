@@ -74,7 +74,7 @@ namespace RegTesting.Tests.Core
 				}
 				return Types;
 			}
-			catch (NullReferenceException objException)
+			catch (NullReferenceException)
 			{
 				//No types found for this branch
 				return new string[0];
