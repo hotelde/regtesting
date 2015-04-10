@@ -14,18 +14,18 @@ namespace RegTesting.Tests.Framework.Elements
 			_pageElement = pageElement;
 		}
 
-		public void Type(string strText)
+		public void Type(string text)
 		{
 			TestLog.Add(GetTestLogString());
 			_pageElement.Click();
-			_fillBehaviour.Type(strText);
+			_fillBehaviour.Type(text);
 		}
 
-		public void Type(DateTime datDateTime)
+		public void Type(DateTime dateTime)
 		{
 			TestLog.Add(GetTestLogString());
 			_pageElement.Click();
-			_fillBehaviour.Type(datDateTime);
+			_fillBehaviour.Type(dateTime);
 		}
 
 		private string GetTestLogString()

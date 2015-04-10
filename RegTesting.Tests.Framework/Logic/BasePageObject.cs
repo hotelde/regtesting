@@ -62,7 +62,7 @@ namespace RegTesting.Tests.Framework.Logic
 		/// Waits for an element to get visible.
 		/// </summary>
 		/// <param name="element">the element</param>
-		/// <param name="timeout">A optional custom timeout (how long should we wait?)</param>
+		/// <param name="timeout">A optional custom timeoutInSeconds (how long should we wait?)</param>
 		public void WaitForElementDisplayed(BasicPageElement element, TimeSpan? timeout = null)
 		{
 			TestLog.Add("WaitForElementDisplayed: " + element.By);
@@ -143,9 +143,9 @@ namespace RegTesting.Tests.Framework.Logic
 		/// </summary>
 		public void SwitchToTab()
 		{
-			PagePropsAttribute[] objPageAttributes = (PagePropsAttribute[])GetType().GetCustomAttributes(typeof(PagePropsAttribute), true);
+			PagePropsAttribute[] pageAttributes = (PagePropsAttribute[])GetType().GetCustomAttributes(typeof(PagePropsAttribute), true);
 
-			string pageObjectUrl = objPageAttributes.Length > 0 ? objPageAttributes[0].PageUrl : string.Empty;
+			string pageObjectUrl = pageAttributes.Length > 0 ? pageAttributes[0].PageUrl : string.Empty;
 
 			if(string.IsNullOrWhiteSpace(pageObjectUrl))
 				throw new ArgumentException("You´re trying to switch the WebDriverActions to a tab with a PageObject that doesn´t have defined a PagePropsAttribute 'PageUrl'. " +

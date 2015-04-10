@@ -8,25 +8,25 @@ namespace RegTesting.Tests.Framework.Elements
 {
 	public class DefaultFillBehaviour : IFillable
 	{
-		private readonly BasicPageElement _objPageElement;
+		private readonly BasicPageElement _pageElement;
 
-		public DefaultFillBehaviour(BasicPageElement objPageElement)
+		public DefaultFillBehaviour(BasicPageElement pageElement)
 		{
-			_objPageElement = objPageElement;
+			_pageElement = pageElement;
 		}
 
-		public void Type(string strText)
+		public void Type(string text)
 		{
-			TestLog.Add("Fill: " + _objPageElement.By + " -> " + strText);
-			_objPageElement.WebDriver.WaitForElement(_objPageElement.By).Type(strText);
+			TestLog.Add("Fill: " + _pageElement.By + " -> " + text);
+			_pageElement.WebDriver.WaitForElement(_pageElement.By).Type(text);
 		}
 
-		public void Type(DateTime datValue)
+		public void Type(DateTime dateTime)
 		{
 			CultureInfo objCurrent = Thread.CurrentThread.CurrentUICulture;
-			string strDateString = datValue.ToString("d", objCurrent);
-			TestLog.Add("FillDate (use culture " + objCurrent + "): " + _objPageElement.By + " -> " + strDateString);
-			_objPageElement.WebDriver.WaitForElement(_objPageElement.By).Type(strDateString);
+			string strDateString = dateTime.ToString("d", objCurrent);
+			TestLog.Add("FillDate (use culture " + objCurrent + "): " + _pageElement.By + " -> " + strDateString);
+			_pageElement.WebDriver.WaitForElement(_pageElement.By).Type(strDateString);
 		}
 	}
 }

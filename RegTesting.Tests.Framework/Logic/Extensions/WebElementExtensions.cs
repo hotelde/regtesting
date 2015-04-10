@@ -12,14 +12,14 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 		/// <summary>
 		///  Like Sendkeys, but with with an Clear() before SendKeys().
 		/// </summary>
-		/// <param name="objElement">Extension hook</param>
-		/// <param name="strText">string to type</param>
-		public static void Type(this IWebElement objElement, string strText)
+		/// <param name="webElement">Extension hook</param>
+		/// <param name="text">string to type</param>
+		public static void Type(this IWebElement webElement, string text)
 		{
-			if (strText == null) return;
+			if (text == null) return;
 			try
 			{
-				objElement.Clear();
+				webElement.Clear();
 			}
 				// ReSharper disable EmptyGeneralCatchClause
 			catch (Exception)
@@ -27,26 +27,26 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 			{
 				//Some older browser don't like clearing, so we should instead just begin sending our text.
 			}
-			objElement.SendKeys(strText);
+			webElement.SendKeys(text);
 		}
 
 		/// <summary>
 		/// Wait for the element to have a specific value
 		/// </summary>
-		/// <param name="objElement">Element for use</param>
-		/// <param name="strValue">Value to wait for</param>
-		/// <param name="strErrorMessage">A optional errorMessage</param>
-		/// <param name="intTimeout">A optional custom Timeout</param>
-		public static void WaitForSpecificValue(this IWebElement objElement, string strValue, string strErrorMessage = null,  int intTimeout = -1)
+		/// <param name="webElement">Element for use</param>
+		/// <param name="value">Value to wait for</param>
+		/// <param name="errorMessage">A optional errorMessage</param>
+		/// <param name="timeoutInSeconds">A optional custom Timeout in seconds</param>
+		public static void WaitForSpecificValue(this IWebElement webElement, string value, string errorMessage = null,  int timeoutInSeconds = -1)
 		{
-			if (intTimeout == -1) intTimeout = Properties.Settings.Default.TestTimeout;
+			if (timeoutInSeconds == -1) timeoutInSeconds = Properties.Settings.Default.TestTimeout;
 
-			for (int objSecond = 0; ; objSecond++)
+			for (int second = 0; ; second++)
 			{
 
-				if (objSecond == intTimeout) throw new TimeoutException(strErrorMessage ?? ( "(" + intTimeout + "s): Timeout: Element value is still not " + strValue));
+				if (second == timeoutInSeconds) throw new TimeoutException(errorMessage ?? ( "(" + timeoutInSeconds + "s): Timeout: Element value is still not " + value));
 
-				if (objElement.GetAttribute("value").Equals(strValue, StringComparison.InvariantCultureIgnoreCase))
+				if (webElement.GetAttribute("value").Equals(value, StringComparison.InvariantCultureIgnoreCase))
 					break;
 
 				Thread.Sleep(1000);

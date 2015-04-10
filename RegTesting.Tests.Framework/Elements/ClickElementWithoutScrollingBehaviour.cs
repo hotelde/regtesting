@@ -7,11 +7,11 @@ namespace RegTesting.Tests.Framework.Elements
 {
 	public class ClickElementWithoutScrollingBehaviour : IClickable
 	{
-		private readonly BasicPageElement _objPageElement;
+		private readonly BasicPageElement _pageElement;
 
-		public ClickElementWithoutScrollingBehaviour(BasicPageElement objPageElement)
+		public ClickElementWithoutScrollingBehaviour(BasicPageElement pageElement)
 		{
-			_objPageElement = objPageElement;
+			_pageElement = pageElement;
 		}
 
 		public void Click(TimeSpan waitBeforeClick, TimeSpan waitAfterClick)
@@ -21,8 +21,8 @@ namespace RegTesting.Tests.Framework.Elements
 				Thread.Sleep(waitBeforeClick);
 				TestLog.Add("Waited '" + Convert.ToInt32(waitBeforeClick.TotalMilliseconds) + "' milliseconds before click.");
 			}
-			TestLog.Add("Click(WithoutScrolling): " + _objPageElement.By);
-			_objPageElement.WebDriver.ClickElementWithoutScrolling(_objPageElement);
+			TestLog.Add("Click(WithoutScrolling): " + _pageElement.By);
+			_pageElement.WebDriver.ClickElementWithoutScrolling(_pageElement);
 
 			if (waitAfterClick > TimeSpan.Zero)
 			{
@@ -34,7 +34,7 @@ namespace RegTesting.Tests.Framework.Elements
 		public T ClickToPageObject<T>(TimeSpan waitBeforeClick) where T : BasePageObject
 		{
 			Click(waitBeforeClick, TimeSpan.Zero);
-			return PageObjectFactory.GetPageObjectByType<T>(_objPageElement.WebDriver);
+			return PageObjectFactory.GetPageObjectByType<T>(_pageElement.WebDriver);
 		}
 	}
 }

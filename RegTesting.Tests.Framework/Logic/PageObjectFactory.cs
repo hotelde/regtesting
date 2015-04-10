@@ -23,54 +23,54 @@ namespace RegTesting.Tests.Framework.Logic
 		/// Creates the and navigate to.
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
-		/// <param name="objWebDriver">The web driver.</param>
-		/// <param name="strBaseUrl">The base URL.</param>
-		/// <param name="bolSuppressLanguageParameter">Supresses the language parameter</param>
+		/// <param name="webDriver">The web driver.</param>
+		/// <param name="baseUrl">The base URL.</param>
+		/// <param name="suppressLanguageParameter">Supresses the language parameter</param>
 		/// <param name="hashTagParams">hash tag parameters</param>
-		/// <param name="arrFurtherUrlParameters">
+		/// <param name="furtherUrlParameters">
 		/// The further URL param after the lng param. 
 		/// The example input value "cpn=2553 would navigate us to: www.hotel.de?lng=de&cpn=2553
 		/// </param>
 		/// <returns>A PageObject, navigated to the PageUrl.</returns>
-		public static T CreateAndNavigateTo<T>(IWebDriver objWebDriver, string strBaseUrl, bool bolSuppressLanguageParameter = false, string[] hashTagParams = null, params string[] arrFurtherUrlParameters) where T : BasePageObject
+		public static T CreateAndNavigateTo<T>(IWebDriver webDriver, string baseUrl, bool suppressLanguageParameter = false, string[] hashTagParams = null, params string[] furtherUrlParameters) where T : BasePageObject
 		{
-			T pageObject = CreatePageObject<T>(objWebDriver);
-			Type objType = typeof(T);
-			PagePropsAttribute objPageAttribute = (PagePropsAttribute)objType.GetCustomAttribute(typeof(PagePropsAttribute), true);
-			string pageUrl = strBaseUrl;
+			T pageObject = CreatePageObject<T>(webDriver);
+			Type type = typeof(T);
+			PagePropsAttribute pageAttribute = (PagePropsAttribute)type.GetCustomAttribute(typeof(PagePropsAttribute), true);
+			string pageUrl = baseUrl;
 			if (!pageUrl.EndsWith("/"))
 				pageUrl = pageUrl + "/";
 
 			if (pageObject.PageSettings.IsSeoRoute)
 			{
-				pageUrl = CreateSeoRoute(pageUrl, objPageAttribute, arrFurtherUrlParameters);
+				pageUrl = CreateSeoRoute(pageUrl, pageAttribute, furtherUrlParameters);
 			}
 			else
 			{
-				pageUrl = CreateRoute(pageUrl, objPageAttribute, bolSuppressLanguageParameter, arrFurtherUrlParameters);
+				pageUrl = CreateRoute(pageUrl, pageAttribute, suppressLanguageParameter, furtherUrlParameters);
 			}
 
 			if (hashTagParams != null)
 				pageUrl = string.Concat(pageUrl, "#?", string.Join("&", hashTagParams));
 
-			TestLog.AddWithoutTime("<br><b>>>>" + objType.Name + "</b>");
-			TestLog.Add("CreateAndNavigate: " + objType.Name + " -> " + pageUrl);
-			objWebDriver.Navigate().GoToUrl(pageUrl);
+			TestLog.AddWithoutTime("<br><b>>>>" + type.Name + "</b>");
+			TestLog.Add("CreateAndNavigate: " + type.Name + " -> " + pageUrl);
+			webDriver.Navigate().GoToUrl(pageUrl);
 			return pageObject;
 		}
 
 
-		public static T CreateAndNavigateTo<T>(IWebDriver objWebDriver, string strBaseUrl, params string[] arrFurtherUrlParameters) where T : BasePageObject
+		public static T CreateAndNavigateTo<T>(IWebDriver webDriver, string baseUrl, params string[] furtherUrlParameters) where T : BasePageObject
 		{
-			return CreateAndNavigateTo<T>(objWebDriver, strBaseUrl, false, null, arrFurtherUrlParameters);
+			return CreateAndNavigateTo<T>(webDriver, baseUrl, false, null, furtherUrlParameters);
 		}
 
-		private static string CreateSeoRoute(string pageUrl, PagePropsAttribute objPageAttribute, params string[] arrFurtherUrlParameters)
+		private static string CreateSeoRoute(string pageUrl, PagePropsAttribute pageAttribute, params string[] furtherUrlParameters)
 		{
-			string seoRoute = objPageAttribute != null && objPageAttribute.PageUrl != null ? objPageAttribute.PageUrl.ToLower() : string.Empty;
+			string seoRoute = pageAttribute != null && pageAttribute.PageUrl != null ? pageAttribute.PageUrl.ToLower() : string.Empty;
 
-			List<string> lstRemainingParams = new List<string>();
-			foreach (string param in arrFurtherUrlParameters)
+			List<string> remainingParams = new List<string>();
+			foreach (string param in furtherUrlParameters)
 			{
 				string key = param.Split('=')[0].ToLower();
 				string value = param.Split('=')[1];
@@ -81,95 +81,95 @@ namespace RegTesting.Tests.Framework.Logic
 				}
 				else
 				{
-					lstRemainingParams.Add(param);
+					remainingParams.Add(param);
 				}
 			}
-			return string.Concat(pageUrl, Thread.CurrentThread.CurrentUICulture.Name, "/", seoRoute, GetUrlParams(lstRemainingParams.ToArray()));
+			return string.Concat(pageUrl, Thread.CurrentThread.CurrentUICulture.Name, "/", seoRoute, GetUrlParams(remainingParams.ToArray()));
 
 		}
 
-		private static string CreateRoute(string pageUrl, PagePropsAttribute objPageAttribute, bool bolSuppressLanguageParameter = false, params string[] arrFurtherUrlParameters)
+		private static string CreateRoute(string pageUrl, PagePropsAttribute pageAttribute, bool suppressLanguageParameter = false, params string[] furtherUrlParameters)
 		{
-			string returnUrl = string.Concat(pageUrl, objPageAttribute != null && objPageAttribute.PageUrl != null ? objPageAttribute.PageUrl : string.Empty);
-			returnUrl = string.Concat(returnUrl, GetUrlParams(arrFurtherUrlParameters));
-			if (!bolSuppressLanguageParameter)
+			string returnUrl = string.Concat(pageUrl, pageAttribute != null && pageAttribute.PageUrl != null ? pageAttribute.PageUrl : string.Empty);
+			returnUrl = string.Concat(returnUrl, GetUrlParams(furtherUrlParameters));
+			if (!suppressLanguageParameter)
 				returnUrl = string.Concat(returnUrl, string.Format("&lng={0}", Thread.CurrentThread.CurrentUICulture.Name));
 			return returnUrl;
 		}
 
-		private static string GetUrlParams(string[] arrUrlParameters)
+		private static string GetUrlParams(string[] urlParameters)
 		{
-			string parameters = string.Join("&", arrUrlParameters);
+			string parameters = string.Join("&", urlParameters);
 			if (!string.IsNullOrEmpty(parameters))
 				return string.Concat("?", parameters);
 			return String.Empty;
 		}
 
 		
-		public static T GetPageObjectByType<T>(IWebDriver objWebDriver) where T : BasePageObject
+		public static T GetPageObjectByType<T>(IWebDriver webDriver) where T : BasePageObject
 		{
 			TestLog.AddWithoutTime("<br><b>>>>" + typeof(T).Name + "</b>");
 			TestLog.Add("GetPageObjectByType: " + typeof(T).Name);
-			return CreatePageObject<T>(objWebDriver);
+			return CreatePageObject<T>(webDriver);
 		}
 
-		private static T CreatePageObject<T>(IWebDriver objWebDriver) where T : BasePageObject
+		private static T CreatePageObject<T>(IWebDriver webDriver) where T : BasePageObject
 		{
 			try
 			{
-				T pageObject = (T)Activator.CreateInstance(typeof(T), objWebDriver, PageSettingsFactory);
+				T pageObject = (T)Activator.CreateInstance(typeof(T), webDriver, PageSettingsFactory);
 
-				InitElements(objWebDriver, pageObject);
+				InitElements(webDriver, pageObject);
 				
 				TestLog.Add("Applying Page settings for '" + pageObject.GetType().Name + "'");
 				pageObject.PageSettings.ApplySettings();
 				
 				return pageObject;
 			}
-			catch (TargetInvocationException objException)
+			catch (TargetInvocationException exception)
 			{
-				if (objException.InnerException != null) throw objException.InnerException;
+				if (exception.InnerException != null) throw exception.InnerException;
 				throw;
 			}
 		}
 
-		private static void InitElements(IWebDriver driver, BasePageObject objPageObject)
+		private static void InitElements(IWebDriver driver, BasePageObject pageObject)
 		{
-			if (objPageObject == null)
+			if (pageObject == null)
 			{
-				throw new ArgumentNullException("objPageObject");
+				throw new ArgumentNullException("pageObject");
 			}
 
-			Type objType = objPageObject.GetType();
-			List<MemberInfo> lstMemberInfos = new List<MemberInfo>();
+			Type type = pageObject.GetType();
+			List<MemberInfo> memberInfos = new List<MemberInfo>();
 			const BindingFlags publicBindingOptions = BindingFlags.Instance | BindingFlags.Public;
-			lstMemberInfos.AddRange(objType.GetFields(publicBindingOptions));
-			lstMemberInfos.AddRange(objType.GetProperties(publicBindingOptions));
+			memberInfos.AddRange(type.GetFields(publicBindingOptions));
+			memberInfos.AddRange(type.GetProperties(publicBindingOptions));
 
-			while (objType != null)
+			while (type != null)
 			{
 				const BindingFlags nonPublicBindingOptions = BindingFlags.Instance | BindingFlags.NonPublic;
-				lstMemberInfos.AddRange(objType.GetFields(nonPublicBindingOptions));
-				lstMemberInfos.AddRange(objType.GetProperties(nonPublicBindingOptions));
-				objType = objType.BaseType;
+				memberInfos.AddRange(type.GetFields(nonPublicBindingOptions));
+				memberInfos.AddRange(type.GetProperties(nonPublicBindingOptions));
+				type = type.BaseType;
 			}
 
-			Type pageObjectType = objPageObject.GetType();
-			foreach (MemberInfo objMember in lstMemberInfos)
+			Type pageObjectType = pageObject.GetType();
+			foreach (MemberInfo member in memberInfos)
 			{
-				LocateAttribute objLocateAttribute = GetAttribute<LocateAttribute>(objMember);
-				ClickBehaviourAttribute objClickBehaviourAttribute = GetAttribute<ClickBehaviourAttribute>(objMember);
-				ClickBehaviours enmClickBehaviour = objClickBehaviourAttribute != null
-					                                    ? objClickBehaviourAttribute.Using
+				LocateAttribute locateAttribute = GetAttribute<LocateAttribute>(member);
+				ClickBehaviourAttribute clickBehaviourAttribute = GetAttribute<ClickBehaviourAttribute>(member);
+				ClickBehaviours clickBehaviour = clickBehaviourAttribute != null
+					                                    ? clickBehaviourAttribute.Using
 					                                    : ClickBehaviours.Default;
 
-				FillBehaviourAttribute fillBehaviourAttribute = GetAttribute<FillBehaviourAttribute>(objMember);
+				FillBehaviourAttribute fillBehaviourAttribute = GetAttribute<FillBehaviourAttribute>(member);
 				FillBehaviour fillBehaviour = fillBehaviourAttribute != null 
 												? fillBehaviourAttribute.Using 
 												: FillBehaviour.Default;
 				
-				WaitAttribute waitAttribute = GetAttribute<WaitAttribute>(objMember);
-				WaitForElementsOnActionAttribute waitForElementsOnActionAttribute = GetAttribute<WaitForElementsOnActionAttribute>(objMember);
+				WaitAttribute waitAttribute = GetAttribute<WaitAttribute>(member);
+				WaitForElementsOnActionAttribute waitForElementsOnActionAttribute = GetAttribute<WaitForElementsOnActionAttribute>(member);
 
 				WaitModel waitModel = new WaitModel
 				{
@@ -183,115 +183,115 @@ namespace RegTesting.Tests.Framework.Logic
 					WaitForElementsAfterAction = CreateLocateOptionsFromAttribute(waitForElementsOnActionAttribute, pageObjectType, When.After),
 				};
 
-				if (objLocateAttribute != null)
+				if (locateAttribute != null)
 				{
-					By objBy = CreateLocator(objMember);
-					object objCreatedElementObject;
-					FieldInfo objField = objMember as FieldInfo;
-					PropertyInfo objProperty = objMember as PropertyInfo;
-					if (objField != null)
+					By by = CreateLocator(member);
+					object createdElementObject;
+					FieldInfo field = member as FieldInfo;
+					PropertyInfo property = member as PropertyInfo;
+					if (field != null)
 					{
-						objCreatedElementObject = CreateElementObject(objField.FieldType, driver, objBy, waitModel, objPageObject, enmClickBehaviour, fillBehaviour);
-						if (objCreatedElementObject == null)
+						createdElementObject = CreateElementObject(field.FieldType, driver, by, waitModel, pageObject, clickBehaviour, fillBehaviour);
+						if (createdElementObject == null)
 						{
-							throw new ArgumentException("Type of field '" + objField.Name + "' is not IWebElement or IList<IWebElement>");
+							throw new ArgumentException("Type of field '" + field.Name + "' is not IWebElement or IList<IWebElement>");
 						}
 
-						objField.SetValue(objPageObject, objCreatedElementObject);
+						field.SetValue(pageObject, createdElementObject);
 					}
-					else if (objProperty != null)
+					else if (property != null)
 					{
-						objCreatedElementObject = CreateElementObject(objProperty.PropertyType, driver, objBy, waitModel, objPageObject, enmClickBehaviour, fillBehaviour);
-						if (objCreatedElementObject == null)
+						createdElementObject = CreateElementObject(property.PropertyType, driver, by, waitModel, pageObject, clickBehaviour, fillBehaviour);
+						if (createdElementObject == null)
 						{
-							throw new ArgumentException("Type of property '" + objProperty.Name + "' is not IWebElement or IList<IWebElement>");
+							throw new ArgumentException("Type of property '" + property.Name + "' is not IWebElement or IList<IWebElement>");
 						}
 
-						objProperty.SetValue(objPageObject, objCreatedElementObject, null);
+						property.SetValue(pageObject, createdElementObject, null);
 					}
 				}
 
-				PartialPageObjectAttribute objPartialPageObjectAttribute = GetAttribute<PartialPageObjectAttribute>(objMember);
-				if (objPartialPageObjectAttribute != null)
+				PartialPageObjectAttribute partialPageObjectAttribute = GetAttribute<PartialPageObjectAttribute>(member);
+				if (partialPageObjectAttribute != null)
 				{
-					PropertyInfo objProperty = objMember as PropertyInfo;
-					if (objProperty != null)
+					PropertyInfo property = member as PropertyInfo;
+					if (property != null)
 					{
 
-						MethodInfo objCastMethod = typeof(PageObjectFactory).GetMethod("CreatePageObject", BindingFlags.Static | BindingFlags.NonPublic).MakeGenericMethod(objProperty.PropertyType);
-						object objCreatedElementObject = objCastMethod.Invoke(null, new object[] { driver });
-						if (objCreatedElementObject == null)
+						MethodInfo castMethod = typeof(PageObjectFactory).GetMethod("CreatePageObject", BindingFlags.Static | BindingFlags.NonPublic).MakeGenericMethod(property.PropertyType);
+						object createdElementObject = castMethod.Invoke(null, new object[] { driver });
+						if (createdElementObject == null)
 						{
-							throw new ArgumentException("Type of property '" + objProperty.Name + "' is not IWebElement or IList<IWebElement>");
+							throw new ArgumentException("Type of property '" + property.Name + "' is not IWebElement or IList<IWebElement>");
 						}
 
-						objProperty.SetValue(objPageObject, objCreatedElementObject, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null,null,null);
+						property.SetValue(pageObject, createdElementObject, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null,null,null);
 					}
 				}
 			}
 		}
 
-		internal static BasicPageElement CreateElementObject(Type objFieldType, IWebDriver objDriver, By objBy, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours enmClickBehaviour = ClickBehaviours.Default, FillBehaviour fillBehaviour = FillBehaviour.Default)
+		internal static BasicPageElement CreateElementObject(Type fieldType, IWebDriver webDriver, By @by, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours clickBehaviours = ClickBehaviours.Default, FillBehaviour fillBehaviour = FillBehaviour.Default)
 		{
-			if (objFieldType == typeof (Button))
+			if (fieldType == typeof (Button))
 			{
-				return new Button(objBy, objDriver, waitModel, parentPageObject, enmClickBehaviour);
+				return new Button(@by, webDriver, waitModel, parentPageObject, clickBehaviours);
 			}
-			if (objFieldType == typeof (Link))
+			if (fieldType == typeof (Link))
 			{
-				return new Link(objBy, objDriver, waitModel, parentPageObject, enmClickBehaviour);
+				return new Link(@by, webDriver, waitModel, parentPageObject, clickBehaviours);
 			}
-			if (objFieldType == typeof(Image))
+			if (fieldType == typeof(Image))
 			{
-				return new Image(objBy, objDriver, waitModel, parentPageObject, enmClickBehaviour);
+				return new Image(@by, webDriver, waitModel, parentPageObject, clickBehaviours);
 			}
-			if (objFieldType == typeof(BasicPageElement))
+			if (fieldType == typeof(BasicPageElement))
 			{
-				return new BasicPageElement(objBy, objDriver, waitModel, parentPageObject);
+				return new BasicPageElement(@by, webDriver, waitModel, parentPageObject);
 			}
-			if (objFieldType == typeof(SelectBox))
+			if (fieldType == typeof(SelectBox))
 			{
-				return new SelectBox(objBy, objDriver, waitModel, parentPageObject);
+				return new SelectBox(@by, webDriver, waitModel, parentPageObject);
 			}
-			if (objFieldType == typeof(CheckBox))
+			if (fieldType == typeof(CheckBox))
 			{
-				return new CheckBox(objBy, objDriver, waitModel, parentPageObject, enmClickBehaviour);
+				return new CheckBox(@by, webDriver, waitModel, parentPageObject, clickBehaviours);
 			}
-			if (objFieldType == typeof(Input))
+			if (fieldType == typeof(Input))
 			{
-				return new Input(objBy, objDriver, waitModel, parentPageObject, enmClickBehaviour, fillBehaviour);
+				return new Input(@by, webDriver, waitModel, parentPageObject, clickBehaviours, fillBehaviour);
 			}
-			if (objFieldType == typeof(HiddenElement))
+			if (fieldType == typeof(HiddenElement))
 			{
-				return new HiddenElement(objBy, objDriver, waitModel, parentPageObject, enmClickBehaviour);
+				return new HiddenElement(@by, webDriver, waitModel, parentPageObject, clickBehaviours);
 			}
 			return null;
 		}
 
 		public static T GetAttribute<T>(MemberInfo member) where T : Attribute
 		{
-			Attribute[] arrAttributes = Attribute.GetCustomAttributes(member, typeof(T), true);
-			if (arrAttributes.Length > 1)
-				throw new ArgumentException("Member " + member.Name + " has " + arrAttributes.Length + " Attributes instead of only one.");
-			if (arrAttributes.Length == 0)
+			Attribute[] attributes = Attribute.GetCustomAttributes(member, typeof(T), true);
+			if (attributes.Length > 1)
+				throw new ArgumentException("Member " + member.Name + " has " + attributes.Length + " Attributes instead of only one.");
+			if (attributes.Length == 0)
 				return null;
 
-			Attribute objAttribute = arrAttributes[0];
+			Attribute attribute = attributes[0];
 
-			return (T) objAttribute;
+			return (T) attribute;
 
 		}
 		
 		private static By CreateLocator(MemberInfo member)
 		{
-			LocateAttribute objCastedAttribute = GetAttribute<LocateAttribute>(member);
-			if (objCastedAttribute.Using == null)
+			LocateAttribute castedAttribute = GetAttribute<LocateAttribute>(member);
+			if (castedAttribute.Using == null)
 			{
-				objCastedAttribute.Using = member.Name;
+				castedAttribute.Using = member.Name;
 
 			}
 
-			return objCastedAttribute.Finder;
+			return castedAttribute.Finder;
 		}
 
 		private static By CreateLocatorForRelatedElement(string elementName, Type pageObjectType)

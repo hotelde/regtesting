@@ -6,8 +6,8 @@ namespace RegTesting.Tests.Framework.Elements
 {
 	public class Image : BasicPageElement
 	{
-		public Image(By objBy, IWebDriver objWebDriver, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours objClickBehaviour = ClickBehaviours.Default)
-			: base(objBy, objWebDriver, waitModel, parentPageObject, objClickBehaviour)
+		public Image(By byLocator, IWebDriver webDriver, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours clickBehaviour = ClickBehaviours.Default)
+			: base(byLocator, webDriver, waitModel, parentPageObject, clickBehaviour)
 		{
 		}
 	}

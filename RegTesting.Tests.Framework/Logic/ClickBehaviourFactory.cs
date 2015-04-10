@@ -6,16 +6,16 @@ namespace RegTesting.Tests.Framework.Logic
 {
 	public class ClickBehaviourFactory
 	{
-		public static IClickable Create(ClickBehaviours enmClickBehaviour, BasicPageElement objElement)
+		public static IClickable Create(ClickBehaviours clickBehaviour, BasicPageElement pageElement)
 		{
-			switch (enmClickBehaviour)
+			switch (clickBehaviour)
 			{
 				case ClickBehaviours.Default:
-					return new DefaultClickBehaviour(objElement);
+					return new DefaultClickBehaviour(pageElement);
 				case ClickBehaviours.ClickWithoutScrolling:
-					return new ClickElementWithoutScrollingBehaviour(objElement);
+					return new ClickElementWithoutScrollingBehaviour(pageElement);
 				default:
-					throw new Exception("Unknown clickBehaviour. RegTesting.Logic.ClickBehaviourFactory does not know the ClickBehaviour '" + enmClickBehaviour + "'.");
+					throw new Exception("Unknown clickBehaviour. RegTesting.Logic.ClickBehaviourFactory does not know the ClickBehaviour '" + clickBehaviour + "'.");
 			}
 		}
 	}

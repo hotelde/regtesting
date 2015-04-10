@@ -20,7 +20,7 @@ namespace RegTesting.Tests.Framework.Elements
 			_pageElement = pageElement;
 		}
 
-		public void Type(string strText)
+		public void Type(string text)
 		{
 			Stopwatch stopwatch = Stopwatch.StartNew();
 
@@ -36,10 +36,10 @@ namespace RegTesting.Tests.Framework.Elements
 			}
 			stopwatch.Stop();
 			TestLog.Add("Waited " + stopwatch.ElapsedMilliseconds + " milliseconds for input-field to be empty.");
-			_fillBehaviour.Type(strText);
+			_fillBehaviour.Type(text);
 		}
 
-		public void Type(DateTime datDateTime)
+		public void Type(DateTime dateTime)
 		{
 			Stopwatch stopwatch = Stopwatch.StartNew();
 			WebDriverWait wait = new WebDriverWait(new SystemClock(), _pageElement.WebDriver, _timeOut, new TimeSpan(0, 0, 0, 0, 500))
@@ -49,7 +49,7 @@ namespace RegTesting.Tests.Framework.Elements
 			wait.Until(InputIsEmptyOrNotExampleText);
 			stopwatch.Stop();
 			TestLog.Add("Waited " + stopwatch.ElapsedMilliseconds + " milliseconds for input-field to be empty.");
-			_fillBehaviour.Type(datDateTime);
+			_fillBehaviour.Type(dateTime);
 		}
 
 		private string GetErrorMessage()
@@ -57,12 +57,12 @@ namespace RegTesting.Tests.Framework.Elements
 			return "Wait for InputField is empty or not example text before typing timed out after " + _timeOut.Seconds + " seconds.";
 		}
 
-		private bool InputIsEmptyOrNotExampleText(IWebDriver driver)
+		private bool InputIsEmptyOrNotExampleText(IWebDriver webDriver)
 		{
 			IWebElement foundElement = null;
 			try
 			{
-				foundElement = driver.WaitForElement(_pageElement.By, timeout: new TimeSpan(0, 0, 1));
+				foundElement = webDriver.WaitForElement(_pageElement.By, timeout: new TimeSpan(0, 0, 1));
 			}
 			catch (WebDriverTimeoutException)
 			{

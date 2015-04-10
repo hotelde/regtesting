@@ -16,10 +16,10 @@ namespace RegTesting.Tests.Framework.Attributes
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="arrBrowsers">the supported Browsers</param>
-		public SupportedBrowsers(params string[] arrBrowsers )
+		/// <param name="browsers">the supported Browsers</param>
+		public SupportedBrowsers(params string[] browsers )
 		{
-			Browsers = arrBrowsers;
+			Browsers = browsers;
 		}
 
 	}

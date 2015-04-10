@@ -16,10 +16,10 @@ namespace RegTesting.Tests.Framework.Attributes
 		/// <summary>
 		/// constructor
 		/// </summary>
-		/// <param name="arrLanguages">the supported languages</param>
-		public SupportedLanguages(params string[] arrLanguages )
+		/// <param name="languages">the supported languages</param>
+		public SupportedLanguages(params string[] languages )
 		{
-			Languages = arrLanguages;
+			Languages = languages;
 		}
 
 	}

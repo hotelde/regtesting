@@ -7,8 +7,8 @@ namespace RegTesting.Tests.Framework.Elements
 {
 	public class CheckBox : BasicPageElement
 	{
-		public CheckBox(By objBy, IWebDriver objWebDriver, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours objClickBehaviour = ClickBehaviours.Default)
-			: base(objBy, objWebDriver, waitModel, parentPageObject, objClickBehaviour)
+		public CheckBox(By byLocator, IWebDriver webDriver, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours clickBehaviour = ClickBehaviours.Default)
+			: base(byLocator, webDriver, waitModel, parentPageObject, clickBehaviour)
 		{
 		}
 

@@ -10,26 +10,26 @@ namespace RegTesting.Tests.Framework.Elements
 	{
 		private readonly ISelectable _selectBehaviour;
 
-		public SelectBox(By objBy, IWebDriver objWebDriver, WaitModel waitModel, BasePageObject parentPageObject, ISelectable objClickBehaviour = null)
-			: base(objBy, objWebDriver, waitModel, parentPageObject, ClickBehaviours.Default)
+		public SelectBox(By objBy, IWebDriver webDriver, WaitModel waitModel, BasePageObject parentPageObject, ISelectable clickBehaviour = null)
+			: base(objBy, webDriver, waitModel, parentPageObject, ClickBehaviours.Default)
 		{
-			_selectBehaviour = objClickBehaviour ?? new DefaultSelectBehaviour(this);
+			_selectBehaviour = clickBehaviour ?? new DefaultSelectBehaviour(this);
 		}
 
 
-		public void SelectByText(string strText)
+		public void SelectByText(string text)
 		{
-			_selectBehaviour.SelectByText(strText);
+			_selectBehaviour.SelectByText(text);
 		}
 
-		public void SelectByValue(string strValue)
+		public void SelectByValue(string value)
 		{
-			_selectBehaviour.SelectByValue(strValue);
+			_selectBehaviour.SelectByValue(value);
 		}
 
-		public void SelectByIndex(int intValue)
+		public void SelectByIndex(int index)
 		{
-			_selectBehaviour.SelectByIndex(intValue);
+			_selectBehaviour.SelectByIndex(index);
 		}
 
 		public string GetValue()

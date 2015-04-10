@@ -2,8 +2,8 @@
 {
 	public interface ISelectable
 	{
-		void SelectByText(string strText);
-		void SelectByValue(string strValue);
-		void SelectByIndex(int intValue);
+		void SelectByText(string text);
+		void SelectByValue(string value);
+		void SelectByIndex(int index);
 	}
 }

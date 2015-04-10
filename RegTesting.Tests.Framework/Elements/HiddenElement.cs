@@ -21,35 +21,35 @@ namespace RegTesting.Tests.Framework.Elements
 		/// Construct a new HiddenElement
 		/// </summary>
 		/// <param name="objBy">The By Locator.</param>
-		/// <param name="objWebDriver">The WebDriver.</param>
+		/// <param name="webDriver">The WebDriver.</param>
 		/// <param name="waitModel">Wait-Options for this element.</param>
 		/// <param name="parentPageObject">The <see cref="BasePageObject"/> this <see cref="BasicPageElement"/> belongs to.</param>
-		/// <param name="objClickBehaviour">The ClickBehaviour.</param>
-		public HiddenElement(By objBy, IWebDriver objWebDriver, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours objClickBehaviour = ClickBehaviours.Default)
-			: base(objBy, objWebDriver, waitModel, parentPageObject, objClickBehaviour)
+		/// <param name="clickBehaviour">The ClickBehaviour.</param>
+		public HiddenElement(By byLocator, IWebDriver webDriver, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours clickBehaviour = ClickBehaviours.Default)
+			: base(byLocator, webDriver, waitModel, parentPageObject, clickBehaviour)
 		{
-			By = objBy;
+			By = byLocator;
 
 		}
 		
 		/// <summary>
 		/// Get a css value from the element
 		/// </summary>
-		/// <param name="strPropertyName">the css property</param>
+		/// <param name="propertyName">the css property</param>
 		/// <returns>the value for the css property</returns>
-		public string GetCssValue(string strPropertyName)
+		public string GetCssValue(string propertyName)
 		{
-			return WebDriver.WaitForElement(By, Visibility.Hidden).GetCssValue(strPropertyName);
+			return WebDriver.WaitForElement(By, Visibility.Hidden).GetCssValue(propertyName);
 		}
 
 		/// <summary>
 		/// Get a attribute from the element
 		/// </summary>
-		/// <param name="strAttributeName">the attribute name</param>
+		/// <param name="attributeName">the attribute name</param>
 		/// <returns>the value for the attribute</returns>
-		public string GetAttribute(string strAttributeName)
+		public string GetAttribute(string attributeName)
 		{
-			return WebDriver.WaitForElement(By, Visibility.Hidden).GetAttribute(strAttributeName);
+			return WebDriver.WaitForElement(By, Visibility.Hidden).GetAttribute(attributeName);
 		}
 
 		/// <summary>
