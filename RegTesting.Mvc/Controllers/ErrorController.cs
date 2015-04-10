@@ -38,17 +38,16 @@ namespace RegTesting.Mvc.Controllers
 		}
 
 
-
 		/// <summary>
 		/// Edit an error
 		/// </summary>
-		/// <param name="error">the error to edit</param>
+		/// <param name="errorId"></param>
 		/// <returns>a Edit error view</returns>
-		public ActionResult Edit(int error)
+		public ActionResult Edit(int errorId)
 		{
 			Error error;
 
-			error = _settingsService.GetError(error);
+			error = _settingsService.GetError(errorId);
 			
 			return View("Edit", error);
 		}
