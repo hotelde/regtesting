@@ -3,7 +3,7 @@
 
 @{
 	ViewBag.Title = "Edit Testsuite - RegTesting";
-	var lstTestcases = ((IEnumerable<TestcaseModel>) ViewBag.LstTestcases);
+	var testcases = ((IEnumerable<TestcaseModel>) ViewBag.LstTestcases);
 }
 
 <h2>Testsuite bearbeiten - Testfälle zuordnen</h2>
@@ -13,18 +13,18 @@
 
 		<input type = "hidden" name = "testsuite" value = "@ViewBag.Testsuite" />
 
-		@foreach (TestcaseModel testcases in lstTestcases)
+		@foreach (TestcaseModel testcase in testcases)
 		{
-			if (!Model.Contains(testcases.ID))
+			if (!Model.Contains(testcase.ID))
 			{
-				<input type = "checkbox" name = "testcases" value = "@testcases.ID"/>
-				@testcases.Type <text> (@testcases.Name)</text>
+				<input type = "checkbox" name = "testcases" value = "@testcase.ID"/>
+				@testcase.Type <text> (@testcase.Name)</text>
 				<br/>
 			}
 			else
 			{
-				<input type = "checkbox" name = "testcases" value = "@testcases.ID" checked="checked" />
-				@testcases.Type <text> (@testcases.Name)</text>
+				<input type = "checkbox" name = "testcases" value = "@testcase.ID" checked="checked" />
+				@testcase.Type <text> (@testcase.Name)</text>
 				<br/>
 			}
 		}

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.TeamFoundation.Client;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Linq;
@@ -19,62 +18,62 @@ namespace RegTesting.Service.Repositories
 		/// <summary>
 		/// Create a TestsuiteRepository
 		/// </summary>
-		/// <param name="objSession">the session</param>
-		public TestsuiteRepository(Func<ISession> objSession)
-			: base(objSession)
+		/// <param name="session">the session</param>
+		public TestsuiteRepository(Func<ISession> session)
+			: base(session)
 		{
 		}
 
-		Testsuite ITestsuiteRepository.GetByName(string strName)
+		Testsuite ITestsuiteRepository.GetByName(string name)
 		{
-			Testsuite objTestsuite = Session
+			Testsuite testsuite = Session
 					.CreateCriteria(typeof(Testsuite))
-                    .Add(Restrictions.Eq("Name", strName))
+                    .Add(Restrictions.Eq("Name", name))
 					.UniqueResult<Testsuite>();
 
-			if (objTestsuite != null)
-				return objTestsuite;
+			if (testsuite != null)
+				return testsuite;
 
-			objTestsuite=new Testsuite {Name = strName, Description = "Auto Added"};
-			((IRepository<Testsuite>) this).Store(objTestsuite);
-			return objTestsuite;
+			testsuite=new Testsuite {Name = name, Description = "Auto Added"};
+			((IRepository<Testsuite>) this).Store(testsuite);
+			return testsuite;
 		}
 
-		void ITestsuiteRepository.SetTestcasesForTestsuite(int intTestsuite, ICollection<int> colTestcases)
+		void ITestsuiteRepository.SetTestcasesForTestsuite(int testsuiteId, ICollection<int> testcases)
 		{
-			using (ITransaction objTransaction = Session.BeginTransaction())
+			using (ITransaction transaction = Session.BeginTransaction())
 			{
-				Testsuite objTestsuite = Session.Get<Testsuite>(intTestsuite);
-				objTestsuite.Testcases = Session.Query<Testcase>().Where(t => colTestcases.Contains(t.ID)).ToList();
-				objTransaction.Commit();
+				Testsuite testsuite = Session.Get<Testsuite>(testsuiteId);
+				testsuite.Testcases = Session.Query<Testcase>().Where(t => testcases.Contains(t.ID)).ToList();
+				transaction.Commit();
 			}
 		}
 
-		void ITestsuiteRepository.SetBrowsersForTestsuite(int intTestsuite, ICollection<int> colBrowsers)
+		void ITestsuiteRepository.SetBrowsersForTestsuite(int testsuiteId, ICollection<int> browsers)
 		{
-			using (ITransaction objTransaction = Session.BeginTransaction())
+			using (ITransaction transaction = Session.BeginTransaction())
 			{
-				Testsuite objTestsuite = Session.Get<Testsuite>(intTestsuite);
-				objTestsuite.Browsers = Session.Query<Browser>().Where(t => colBrowsers.Contains(t.ID)).ToList();
-				objTransaction.Commit();
+				Testsuite testsuite = Session.Get<Testsuite>(testsuiteId);
+				testsuite.Browsers = Session.Query<Browser>().Where(t => browsers.Contains(t.ID)).ToList();
+				transaction.Commit();
 			}
 		}
 
-		void ITestsuiteRepository.SetLanguagesForTestsuite(int intTestsuite, ICollection<int> colLanguages)
+		void ITestsuiteRepository.SetLanguagesForTestsuite(int testsuiteId, ICollection<int> languages)
 		{
-			using (ITransaction objTransaction = Session.BeginTransaction())
+			using (ITransaction transaction = Session.BeginTransaction())
 			{
-				Testsuite objTestsuite = Session.Get<Testsuite>(intTestsuite);
-				objTestsuite.Languages = Session.Query<Language>().Where(t => colLanguages.Contains(t.ID)).ToList();
-				objTransaction.Commit();
+				Testsuite testsuite = Session.Get<Testsuite>(testsuiteId);
+				testsuite.Languages = Session.Query<Language>().Where(t => languages.Contains(t.ID)).ToList();
+				transaction.Commit();
 			}
 		}
 
 		
 		IList<Testsuite> IRepository<Testsuite>.GetAll()
 		{
-			IList<Testsuite> lstTestsuite = Session.CreateCriteria(typeof(Testsuite)).AddOrder(Order.Asc("Name")).List<Testsuite>();
-			return lstTestsuite;
+			IList<Testsuite> testsuites = Session.CreateCriteria(typeof(Testsuite)).AddOrder(Order.Asc("Name")).List<Testsuite>();
+			return testsuites;
 		}
 	}
 }

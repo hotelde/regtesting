@@ -20,72 +20,72 @@ namespace RegTesting.Service.Repositories
 		{
 			get
 			{
-				return _objSession();
+				return _session();
 			}
 		}
-		private readonly Func<ISession> _objSession;
+		private readonly Func<ISession> _session;
 
 		/// <summary>
 		/// Create a new BaseRepostitory
 		/// </summary>
-		/// <param name="objSession">the func for the session</param>
-		protected BaseRepository(Func<ISession> objSession)
+		/// <param name="session">the func for the session</param>
+		protected BaseRepository(Func<ISession> session)
 		{
-			_objSession = objSession;
-			if (objSession == null)
-					throw new ArgumentNullException("objSession");
-			_objSession = objSession;
+			_session = session;
+			if (session == null)
+					throw new ArgumentNullException("session");
+			_session = session;
 		}
 
 
 
 		IList<TEntity> IRepository<TEntity>.GetAll()
 		{
-			IList<TEntity> lstTestsuite = Session.CreateCriteria(typeof(TEntity)).List<TEntity>();
-			return lstTestsuite;
+			IList<TEntity> entities = Session.CreateCriteria(typeof(TEntity)).List<TEntity>();
+			return entities;
 		}
 
-		TEntity IRepository<TEntity>.GetById(int intID)
+		TEntity IRepository<TEntity>.GetById(int id)
 		{
-			return Session.Get<TEntity>(intID);
+			return Session.Get<TEntity>(id);
 		}
 
-		void IRepository<TEntity>.Store(TEntity objEntity)
+		void IRepository<TEntity>.Store(TEntity entity)
 		{
-			using (ITransaction objTransaction = Session.BeginTransaction())
+			using (ITransaction transaction = Session.BeginTransaction())
 			{
-				Session.SaveOrUpdate(objEntity);
-				objTransaction.Commit();
+				Session.SaveOrUpdate(entity);
+				transaction.Commit();
 			}
 		}
 
-		void IRepository<TEntity>.Store(IEnumerable<TEntity> objEntities)
+		void IRepository<TEntity>.Store(IEnumerable<TEntity> entities)
 		{
-			using (ITransaction objTransaction = Session.BeginTransaction())
+			using (ITransaction transaction = Session.BeginTransaction())
 			{
-				foreach (TEntity objEntity in objEntities)
+				foreach (TEntity entity in entities)
 				{
-					Session.SaveOrUpdate(objEntity);
+					Session.SaveOrUpdate(entity);
 				}
-				objTransaction.Commit();
+				transaction.Commit();
 			}
 		}
 
-		void IRepository<TEntity>.Remove(TEntity objTestsuite)
+		void IRepository<TEntity>.Remove(TEntity entity)
 		{
-			using (ITransaction objTransaction = Session.BeginTransaction())
+			using (ITransaction transaction = Session.BeginTransaction())
 			{
-				Session.Delete(objTestsuite);
-				objTransaction.Commit();
+				Session.Delete(entity);
+				transaction.Commit();
 			}
 		}
 
-		void IRepository<TEntity>.RemoveById(int intID)
+		void IRepository<TEntity>.RemoveById(int id)
 		{
-			using (ITransaction objTransaction = Session.BeginTransaction())
+			using (ITransaction transaction = Session.BeginTransaction())
 			{
-				Session.Delete(Session.Load<TEntity>(intID));
-				objTransaction.Commit();
+				Session.Delete(Session.Load<TEntity>(id));
+				transaction.Commit();
 			}
 		}
 	}

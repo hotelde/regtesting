@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.TeamFoundation.Build.Client;
 using Microsoft.TeamFoundation.Client;
-using RegTesting.Contracts;
 using RegTesting.Contracts.Domain;
 
 namespace RegTesting.Service.Tfs
@@ -11,59 +9,59 @@ namespace RegTesting.Service.Tfs
 	internal static class TfsBuildQuery
 	{
 
-		private static DateTime _datLastQueryed = DateTime.MinValue;
-		private static readonly object ObjLock = new object();
-		private static IQueuedBuild[] _objQueuedBuilds;
+		private static DateTime _lastQueryed = DateTime.MinValue;
+		private static readonly object Lock = new object();
+		private static IQueuedBuild[] _queuedBuilds;
 
-		public static bool IsDeploymentRunning(string strDeployname)
+		public static bool IsDeploymentRunning(string deployname)
 		{
-			lock (ObjLock)
+			lock (Lock)
 			{
 				//Cache the query results for some seconds...
-				if (DateTime.Now - _datLastQueryed > new TimeSpan(0, 0, 30) || _objQueuedBuilds == null)
+				if (DateTime.Now - _lastQueryed > new TimeSpan(0, 0, 30) || _queuedBuilds == null)
 				{
 					QueryQueuedBuilds();
 				}
 			}
 			try
 			{
-				if (_objQueuedBuilds.Any(objQueuedBuild => objQueuedBuild.Status == QueueStatus.InProgress && objQueuedBuild.BuildDefinition != null
-				                                           && objQueuedBuild.BuildDefinition.Name != null && objQueuedBuild.BuildDefinition.Name.ToLower().Equals(strDeployname.ToLower())))
+				if (_queuedBuilds.Any(queuedBuild => queuedBuild.Status == QueueStatus.InProgress && queuedBuild.BuildDefinition != null
+				                                           && queuedBuild.BuildDefinition.Name != null && queuedBuild.BuildDefinition.Name.ToLower().Equals(deployname.ToLower())))
 				{
 					return true;
 				}
 			}
-			catch(Exception objException)
+			catch(Exception exception)
 			{
 				Console.ForegroundColor = ConsoleColor.Red;
-				Console.Out.WriteLine(objException);
+				Console.Out.WriteLine(exception);
 				Console.ResetColor();
 			}
 			return false;
 
 		}
 
-		public static bool IsDeploymentRunning(Testsystem objTestsystem)
+		public static bool IsDeploymentRunning(Testsystem testsystem)
 		{
-			return IsDeploymentRunning(GetDeploymentName(objTestsystem));
+			return IsDeploymentRunning(GetDeploymentName(testsystem));
 		}
 
 
 		private static void QueryQueuedBuilds()
 		{
-			TfsTeamProjectCollection objTfs =
+			TfsTeamProjectCollection tfsTeamProjectCollection =
 				TfsTeamProjectCollectionFactory.GetTeamProjectCollection(new Uri(RegtestingServerConfiguration.TfsUrl));
 
-			objTfs.EnsureAuthenticated();
+			tfsTeamProjectCollection.EnsureAuthenticated();
 
-			IBuildServer objBuildServer = objTfs.GetService<IBuildServer>();
-			_objQueuedBuilds = objBuildServer.QueryQueuedBuilds(objBuildServer.CreateBuildQueueSpec("*")).QueuedBuilds;
-			_datLastQueryed = DateTime.Now;
+			IBuildServer buildServer = tfsTeamProjectCollection.GetService<IBuildServer>();
+			_queuedBuilds = buildServer.QueryQueuedBuilds(buildServer.CreateBuildQueueSpec("*")).QueuedBuilds;
+			_lastQueryed = DateTime.Now;
 		}
 
-		public static String GetDeploymentName(Testsystem objTestsystem)
+		public static String GetDeploymentName(Testsystem testsystem)
 		{
-			return objTestsystem.Url;
+			return testsystem.Url;
 
 		}
 	}

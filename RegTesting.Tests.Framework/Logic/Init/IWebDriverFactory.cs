@@ -12,8 +12,8 @@ namespace RegTesting.Tests.Framework.Logic.Init
 		/// <summary>
 		/// Get a WebDriver
 		/// </summary>
-		/// <param name="objBrowser">the Browser to test on</param>
+		/// <param name="browser">the Browser to test on</param>
 		/// <returns>a IWebDriver</returns>
-		IWebDriver GetWebDriver(Browser objBrowser);
+		IWebDriver GetWebDriver(Browser browser);
 	}
 }

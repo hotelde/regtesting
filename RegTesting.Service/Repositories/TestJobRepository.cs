@@ -17,21 +17,21 @@ namespace RegTesting.Service.Repositories
 		/// <summary>
 		/// Create a TestJobRepository
 		/// </summary>
-		/// <param name="objSession">the session</param>
-		public TestJobRepository(Func<ISession> objSession)
-			: base(objSession)
+		/// <param name="session">the session</param>
+		public TestJobRepository(Func<ISession> session)
+			: base(session)
 		{
 		}
 
 
-		IList<TestJob> ITestJobRepository.GetTestJobsForTestsuiteOnTestsystem(int intTestsystemID, int intTestsuiteID)
+		IList<TestJob> ITestJobRepository.GetTestJobsForTestsuiteOnTestsystem(int testsystemId, int testsuiteId)
 		{
-			IList<TestJob> objTestsuite = Session
+			IList<TestJob> testsuite = Session
 				.CreateCriteria(typeof(TestJob))
-				.Add(Restrictions.Eq("Testsystem", intTestsystemID))
-				.Add(Restrictions.Eq("Testsuite", intTestsuiteID))
+				.Add(Restrictions.Eq("Testsystem", testsystemId))
+				.Add(Restrictions.Eq("Testsuite", testsuiteId))
 				.List<TestJob>();
-			return objTestsuite;
+			return testsuite;
 		}
 	}
 }

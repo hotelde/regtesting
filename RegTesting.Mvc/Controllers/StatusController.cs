@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using AutoMapper;
-using RegTesting.Contracts.DTO;
 using RegTesting.Contracts.Services;
 using RegTesting.Mvc.Filters;
 using RegTesting.Mvc.Models;
@@ -13,17 +12,17 @@ namespace RegTesting.Mvc.Controllers
 	/// The StatusController
 	/// </summary>
 	[RegAuthorize]
-    public class StatusController : Controller
-    {
+	public class StatusController : Controller
+	{
 
-		private readonly IStatusService _objStatusService;
+		private readonly IStatusService _statusService;
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
 		public StatusController()
 		{
-			_objStatusService = ObjectFactory.GetInstance<IStatusService>();
+			_statusService = ObjectFactory.GetInstance<IStatusService>();
 		}
 
 
@@ -32,14 +31,14 @@ namespace RegTesting.Mvc.Controllers
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="objStatusService">the status service</param>
-		public StatusController(IStatusService objStatusService)
+		/// <param name="statusService">the status service</param>
+		public StatusController(IStatusService statusService)
 		{
-			_objStatusService = objStatusService;
+			_statusService = statusService;
 		}
 
-        //
-        // GET: /Status/
+		//
+		// GET: /Status/
 
 		/// <summary>
 		/// Get StatusView for viewing running and waiting tests in detail.
@@ -56,7 +55,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>Worker View</returns>
 		public ActionResult Worker()
 		{
-			return View( Mapper.Map<List<TestWorkerModel>>(_objStatusService.GetTestWorkers()));
+			return View( Mapper.Map<List<TestWorkerModel>>(_statusService.GetTestWorkers()));
 		}
 
 		/// <summary>
@@ -66,7 +65,7 @@ namespace RegTesting.Mvc.Controllers
 		[AcceptVerbs(HttpVerbs.Get)]
 		public ActionResult RefreshWorkerStatus()
 		{
-			return PartialView("PartialWorkerStatus", Mapper.Map<List<TestWorkerModel>>(_objStatusService.GetTestWorkers()));
+			return PartialView("PartialWorkerStatus", Mapper.Map<List<TestWorkerModel>>(_statusService.GetTestWorkers()));
 		}
 
 		/// <summary>
@@ -75,7 +74,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>Status View</returns>
 		public ActionResult TestJobs()
 		{
-			IList<TestJobModel> testJobModels = Mapper.Map<List<TestJobModel>>(_objStatusService.GetTestJobs());
+			IList<TestJobModel> testJobModels = Mapper.Map<List<TestJobModel>>(_statusService.GetTestJobs());
 
 			if (Request.IsAjaxRequest())
 			{
@@ -91,7 +90,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>Redirect to TestJobs View</returns>
 		public ActionResult CancelWorkItemGroup(int testjob)
 		{
-			_objStatusService.CancelTestJob(testjob);
+			_statusService.CancelTestJob(testjob);
 			return RedirectToAction("TestJobs");
 		}
 
@@ -102,7 +101,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>returns to the testJobs site</returns>
 		public ActionResult PrioTestJob(int testjob)
 		{
-			_objStatusService.PrioTestJob(testjob);
+			_statusService.PrioTestJob(testjob);
 			return RedirectToAction("TestJobs");
 		}
 
@@ -113,7 +112,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>returns to the worker site</returns>
 		public ActionResult RebootWorker(string node)
 		{
-			_objStatusService.RebootWorker(node);
+			_statusService.RebootWorker(node);
 			return RedirectToAction("Worker");
 
 		}
@@ -125,9 +124,9 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>returns to the worker site</returns>
 		public ActionResult RebootAllWorker()
 		{
-			_objStatusService.RebootAllWorker();
+			_statusService.RebootAllWorker();
 			return RedirectToAction("Worker");
 
 		}
-    }
+	}
 }

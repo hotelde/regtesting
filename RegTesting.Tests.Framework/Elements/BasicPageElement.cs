@@ -36,40 +36,40 @@ namespace RegTesting.Tests.Framework.Elements
 		/// Construct a new BasicPageElement
 		/// </summary>
 		/// <param name="objBy">The By Locator.</param>
-		/// <param name="objWebDriver">The WebDriver.</param>
+		/// <param name="webDriver">The WebDriver.</param>
 		/// <param name="waitModel">Wait-Options for this element.</param>
 		/// <param name="parentPageObject">The <see cref="BasePageObject"/> this <see cref="BasicPageElement"/> belongs to.</param>
-		/// <param name="objClickBehaviour">The ClickBehaviour.</param>
-		public BasicPageElement(By objBy, IWebDriver objWebDriver, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours objClickBehaviour = ClickBehaviours.Default)
+		/// <param name="clickBehaviour">The ClickBehaviour.</param>
+		public BasicPageElement(By byLocator, IWebDriver webDriver, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours clickBehaviour = ClickBehaviours.Default)
 		{
 			_waitAfterClick = waitModel.WaitAfterAction == 0 ? TimeSpan.Zero : new TimeSpan(0, 0, 0, 0, waitModel.WaitAfterAction);
 			_waitBeforeClick = waitModel.WaitBeforeAction == 0 ? TimeSpan.Zero : new TimeSpan(0, 0, 0, 0, waitModel.WaitBeforeAction);
 			_elementsBeforeClick = waitModel.WaitForElementsBeforeAction;
 			_elementsAfterClick = waitModel.WaitForElementsAfterAction;
-			By = objBy;
-			WebDriver = objWebDriver;
+			By = byLocator;
+			WebDriver = webDriver;
 			ParentPageObject = parentPageObject;
-			ClickBehaviour = ClickBehaviourFactory.Create(objClickBehaviour, this);
+			ClickBehaviour = ClickBehaviourFactory.Create(clickBehaviour, this);
 		}
 
 		/// <summary>
 		/// Get a css value from the element
 		/// </summary>
-		/// <param name="strPropertyName">the css property</param>
+		/// <param name="propertyName">the css property</param>
 		/// <returns>the value for the css property</returns>
-		public string GetCssValue(string strPropertyName)
+		public string GetCssValue(string propertyName)
 		{
-			return WebDriver.WaitForElement(By, Visibility.Any).GetCssValue(strPropertyName);
+			return WebDriver.WaitForElement(By, Visibility.Any).GetCssValue(propertyName);
 		}
 
 		/// <summary>
 		/// Get a attribute from the element
 		/// </summary>
-		/// <param name="strAttributeName">the attribute name</param>
+		/// <param name="attributeName">the attribute name</param>
 		/// <returns>the value for the attribute</returns>
-		public string GetAttribute(string strAttributeName)
+		public string GetAttribute(string attributeName)
 		{
-			return WebDriver.WaitForElement(By, Visibility.Any).GetAttribute(strAttributeName);
+			return WebDriver.WaitForElement(By, Visibility.Any).GetAttribute(attributeName);
 		}
 
 		/// <summary>

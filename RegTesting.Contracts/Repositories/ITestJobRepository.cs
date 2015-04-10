@@ -11,10 +11,10 @@ namespace RegTesting.Contracts.Repositories
 		/// <summary>
 		/// Get the testjobs for a testsuite on a testsystem
 		/// </summary>
-		/// <param name="intTestsystemID">The testsystem ID</param>
-		/// <param name="intTestsuiteID">The testsuite ID</param>
+		/// <param name="testsystemId">The testsystem ID</param>
+		/// <param name="testsuiteId">The testsuite ID</param>
 		/// <returns>A Testsuite</returns>
-		IList<TestJob> GetTestJobsForTestsuiteOnTestsystem(int intTestsystemID, int intTestsuiteID);
+		IList<TestJob> GetTestJobsForTestsuiteOnTestsystem(int testsystemId, int testsuiteId);
 	}
 
 }

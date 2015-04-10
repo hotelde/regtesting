@@ -10,38 +10,38 @@ namespace RegTesting.Mvc.WcfServices
 	public class TestServiceWcfProxy : IDisposable, ITestService
 	{
 
-		private readonly ChannelFactory<ITestService> _objHttpFactory;
-		private readonly ITestService _objChannel;
+		private readonly ChannelFactory<ITestService> _httpFactory;
+		private readonly ITestService _channel;
 
 		/// <summary>
 		/// create a new TestServiceWcfProxy
 		/// </summary>
 		public TestServiceWcfProxy()
 		{
-			if (_objChannel != null) return;
-			_objHttpFactory =
+			if (_channel != null) return;
+			_httpFactory =
 			  new ChannelFactory<ITestService>("TestServiceEndpoint");
-			_objChannel = _objHttpFactory.CreateChannel();
+			_channel = _httpFactory.CreateChannel();
 		}
 
-		void ITestService.TestTestsuite(int intTester, int intTestsystem, int intTestsuite)
+		void ITestService.TestTestsuite(int testerId, int testsystemId, int testsuiteId)
 		{
-			_objChannel.TestTestsuite(intTester, intTestsystem, intTestsuite);
+			_channel.TestTestsuite(testerId, testsystemId, testsuiteId);
 		}
 
-		void ITestService.TestTestcaseOfTestsuite(int intTester, int intTestsystem, int intTestsuite, int intTestcase)
+		void ITestService.TestTestcaseOfTestsuite(int testerId, int testsystemId, int testsuiteId, int testcaseId)
 		{
-			_objChannel.TestTestcaseOfTestsuite(intTester, intTestsystem, intTestsuite, intTestcase);
+			_channel.TestTestcaseOfTestsuite(testerId, testsystemId, testsuiteId, testcaseId);
 		}
 
-		void ITestService.TestFailedTestsOfTestsuite(int intTester, int intTestsystem, int intTestsuite)
+		void ITestService.TestFailedTestsOfTestsuite(int testerId, int testsystemId, int testsuiteId)
 		{
-			_objChannel.TestFailedTestsOfTestsuite(intTester, intTestsystem, intTestsuite);
+			_channel.TestFailedTestsOfTestsuite(testerId, testsystemId, testsuiteId);
 		}
 
-		void ITestService.TestFailedTestsOfTestcaseOfTestsuite(int intTester, int intTestsystem, int intTestsuite, int intTestcase)
+		void ITestService.TestFailedTestsOfTestcaseOfTestsuite(int testerId, int testsystemId, int testsuiteId, int testcaseId)
 		{
-			_objChannel.TestFailedTestsOfTestcaseOfTestsuite(intTester, intTestsystem, intTestsuite, intTestcase);
+			_channel.TestFailedTestsOfTestcaseOfTestsuite(testerId, testsystemId, testsuiteId, testcaseId);
 		}
 
 
@@ -50,9 +50,9 @@ namespace RegTesting.Mvc.WcfServices
 		/// </summary>
 		public void Dispose()
 		{
-			if (_objHttpFactory != null)
+			if (_httpFactory != null)
 			{
-				_objHttpFactory.Close();
+				_httpFactory.Close();
 			}
 		}
 	}

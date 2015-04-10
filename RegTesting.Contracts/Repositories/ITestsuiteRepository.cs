@@ -12,29 +12,29 @@ namespace RegTesting.Contracts.Repositories
 		/// <summary>
 		/// Get a Testsuite by Name
 		/// </summary>
-		/// <param name="strName">The name</param>
+		/// <param name="name">The name</param>
 		/// <returns>A Testsuite</returns>
-		Testsuite GetByName(string strName);
+		Testsuite GetByName(string name);
 
 		/// <summary>
 		/// Set the testcases for a testsuite
 		/// </summary>
-		/// <param name="intTestsuite">the testsuite</param>
-		/// <param name="colTestcases">the testcases</param>
-		void SetTestcasesForTestsuite(int intTestsuite, ICollection<int> colTestcases);
+		/// <param name="testsuiteId">the testsuite</param>
+		/// <param name="testcases">the testcases</param>
+		void SetTestcasesForTestsuite(int testsuiteId, ICollection<int> testcases);
 
 		/// <summary>
 		/// Set the browsers for a testsuite
 		/// </summary>
-		/// <param name="intTestsuite">the testsuite</param>
-		/// <param name="colBrowsers">the browsers</param>
-		void SetBrowsersForTestsuite(int intTestsuite, ICollection<int> colBrowsers);
+		/// <param name="testsuiteId">the testsuite</param>
+		/// <param name="browsers">the browsers</param>
+		void SetBrowsersForTestsuite(int testsuiteId, ICollection<int> browsers);
 
 		/// <summary>
 		/// Set the languages for a testsuite
 		/// </summary>
-		/// <param name="intTestsuite">the testsuite</param>
-		/// <param name="colLanguages">the languages</param>
-		void SetLanguagesForTestsuite(int intTestsuite, ICollection<int> colLanguages);
+		/// <param name="testsuiteId">the testsuite</param>
+		/// <param name="languages">the languages</param>
+		void SetLanguagesForTestsuite(int testsuiteId, ICollection<int> languages);
 	}
 }

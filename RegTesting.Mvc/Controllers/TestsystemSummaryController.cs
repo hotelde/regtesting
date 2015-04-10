@@ -10,36 +10,36 @@ namespace RegTesting.Mvc.Controllers
 	/// <summary>
 	/// TestsystemSummaryController class
 	/// </summary>
-    public class TestsystemSummaryController : Controller
-    {
+	public class TestsystemSummaryController : Controller
+	{
 
-		private readonly ISummaryService _objSummaryService;
+		private readonly ISummaryService _summaryService;
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="objSummaryService">regtesting service</param>
-		public TestsystemSummaryController(ISummaryService objSummaryService)
+		/// <param name="summaryService">regtesting service</param>
+		public TestsystemSummaryController(ISummaryService summaryService)
 		{
-			_objSummaryService = objSummaryService;
+			_summaryService = summaryService;
 		}
 
-        // 
-        // GET: /TestsuiteSummary/
+		// 
+		// GET: /TestsuiteSummary/
 		/// <summary>
 		/// Get the Testsummary
 		/// </summary>
 		/// <returns>View</returns>
-        public ActionResult Index()
-        {
+		public ActionResult Index()
+		{
 			
 			Dictionary<string, IList<TestsystemSummary>> summaries = new Dictionary<string, IList<TestsystemSummary>>();
 			
-			summaries.Add("THOR", _objSummaryService.GetTestsystemSummaryForThorMainBranches());
-			summaries.Add("SODA", _objSummaryService.GetTestsystemSummaryForSodaMainBranches());
+			summaries.Add("THOR", _summaryService.GetTestsystemSummaryForThorMainBranches());
+			summaries.Add("SODA", _summaryService.GetTestsystemSummaryForSodaMainBranches());
 
 			return View(summaries);
-        }
+		}
 
 		/// <summary>
 		/// Get the branchSummariesTable
@@ -48,7 +48,7 @@ namespace RegTesting.Mvc.Controllers
 		[AcceptVerbs(HttpVerbs.Get)]
 		public ActionResult GetThorBranchSummariesTable()
 		{
-			return PartialView("BranchSummariesTablePartial", _objSummaryService.GetTestsystemSummaryForAllThorBranches().Where(t=>!t.TestsystemName.StartsWith("local",StringComparison.InvariantCultureIgnoreCase)).ToList());
+			return PartialView("BranchSummariesTablePartial", _summaryService.GetTestsystemSummaryForAllThorBranches().Where(t=>!t.TestsystemName.StartsWith("local",StringComparison.InvariantCultureIgnoreCase)).ToList());
 		}
 
 		/// <summary>
@@ -58,7 +58,7 @@ namespace RegTesting.Mvc.Controllers
 		[AcceptVerbs(HttpVerbs.Get)]
 		public ActionResult GetSodaBranchSummariesTable()
 		{
-			return PartialView("BranchSummariesTablePartial", _objSummaryService.GetTestsystemSummaryForAllSodaBranches().Where(t => !t.TestsystemName.StartsWith("local", StringComparison.InvariantCultureIgnoreCase)).ToList());
+			return PartialView("BranchSummariesTablePartial", _summaryService.GetTestsystemSummaryForAllSodaBranches().Where(t => !t.TestsystemName.StartsWith("local", StringComparison.InvariantCultureIgnoreCase)).ToList());
 		}
 
 		/// <summary>
@@ -68,7 +68,7 @@ namespace RegTesting.Mvc.Controllers
 		[AcceptVerbs(HttpVerbs.Get)]
 		public ActionResult GetThorMainBranchSummaries()
 		{
-			return PartialView("MainBranchSummariesPartial", _objSummaryService.GetTestsystemSummaryForThorMainBranches());
+			return PartialView("MainBranchSummariesPartial", _summaryService.GetTestsystemSummaryForThorMainBranches());
 		}
 
 		/// <summary>
@@ -78,7 +78,7 @@ namespace RegTesting.Mvc.Controllers
 		[AcceptVerbs(HttpVerbs.Get)]
 		public ActionResult GetSodaMainBranchSummaries()
 		{
-			return PartialView("MainBranchSummariesPartial", _objSummaryService.GetTestsystemSummaryForSodaMainBranches());
+			return PartialView("MainBranchSummariesPartial", _summaryService.GetTestsystemSummaryForSodaMainBranches());
 		}
-    }
+	}
 }

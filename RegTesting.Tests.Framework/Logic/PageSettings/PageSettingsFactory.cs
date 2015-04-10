@@ -8,11 +8,11 @@ namespace RegTesting.Tests.Framework.Logic.PageSettings
 
 		public AbstractPageSettings GetPageSettings(BasePageObject pageObject)
 		{
-			PagePropsAttribute objPageAttributes = (PagePropsAttribute)pageObject.GetType().GetCustomAttribute(typeof(PagePropsAttribute), true);
+			PagePropsAttribute pageAttributes = (PagePropsAttribute)pageObject.GetType().GetCustomAttribute(typeof(PagePropsAttribute), true);
 			
-			if (objPageAttributes != null && objPageAttributes.PageSettings != null)
+			if (pageAttributes != null && pageAttributes.PageSettings != null)
 			{
-				return (AbstractPageSettings)Activator.CreateInstance(objPageAttributes.PageSettings, pageObject);
+				return (AbstractPageSettings)Activator.CreateInstance(pageAttributes.PageSettings, pageObject);
 			}
 
 			return new DefaultSettings(pageObject);

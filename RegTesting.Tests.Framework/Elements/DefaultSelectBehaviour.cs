@@ -6,45 +6,45 @@ namespace RegTesting.Tests.Framework.Elements
 {
 	public class DefaultSelectBehaviour : ISelectable
 	{
-		private readonly BasicPageElement _objPageElement;
+		private readonly BasicPageElement _pageElement;
 
-		public DefaultSelectBehaviour(BasicPageElement objPageElement)
+		public DefaultSelectBehaviour(BasicPageElement pageElement)
 		{
-			_objPageElement = objPageElement;
+			_pageElement = pageElement;
 		}
 
-		public void Type(string strText)
+		public void Type(string text)
 		{
-			_objPageElement.WebDriver.WaitForElement(_objPageElement.By).Type(strText);
+			_pageElement.WebDriver.WaitForElement(_pageElement.By).Type(text);
 		}
 
-		public void SelectByText(string strText)
+		public void SelectByText(string text)
 		{
-			IWebElement objWebElement =  _objPageElement.WebDriver.WaitForElement(_objPageElement.By);
+			IWebElement webElement =  _pageElement.WebDriver.WaitForElement(_pageElement.By);
 
-			SelectElement objSelectElement = new SelectElement(objWebElement);
-			objSelectElement.SelectByText(strText);
+			SelectElement selectElement = new SelectElement(webElement);
+			selectElement.SelectByText(text);
 		}
 
-		public void SelectByValue(string strValue)
+		public void SelectByValue(string value)
 		{
-			IWebElement objElement = _objPageElement.WebDriver.WaitForElement(_objPageElement.By);
-			SelectValue(objElement, strValue);
+			IWebElement webElement = _pageElement.WebDriver.WaitForElement(_pageElement.By);
+			SelectValue(webElement, value);
 		}
 
-		public void SelectByIndex(int intIndex)
+		public void SelectByIndex(int index)
 		{
-			IWebElement objWebElement = _objPageElement.WebDriver.WaitForElement(_objPageElement.By);
-			SelectElement objSelectElement = new SelectElement(objWebElement);
-			objSelectElement.SelectByIndex(intIndex);
+			IWebElement webElement = _pageElement.WebDriver.WaitForElement(_pageElement.By);
+			SelectElement selectElement = new SelectElement(webElement);
+			selectElement.SelectByIndex(index);
 		}
 
 
-		private bool SelectValue(IWebElement objElement, string objValueToSelect)
+		private bool SelectValue(IWebElement webElement, string valueToSelect)
 		{
 			try
 			{
-				objElement.FindElement(By.CssSelector(string.Format("option[value='{0}']", objValueToSelect))).Click();
+				webElement.FindElement(By.CssSelector(string.Format("option[value='{0}']", valueToSelect))).Click();
 				return true;
 			}
 			catch (NoSuchElementException)

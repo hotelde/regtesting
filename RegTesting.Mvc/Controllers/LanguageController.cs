@@ -15,16 +15,16 @@ namespace RegTesting.Mvc.Controllers
 	[RegAuthorize]
 	public class LanguageController : Controller
 	{
-		private readonly ISettingsService _objSettingsService;
+		private readonly ISettingsService _settingsService;
 
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="objSettingsService">the settingsService</param>
-		public LanguageController(ISettingsService objSettingsService)
+		/// <param name="settingsService">the settingsService</param>
+		public LanguageController(ISettingsService settingsService)
 		{
-			_objSettingsService = objSettingsService;
+			_settingsService = settingsService;
 		}
 
 
@@ -38,7 +38,7 @@ namespace RegTesting.Mvc.Controllers
 		public ViewResult Index()
 		{
 
-			return View(Mapper.Map<IEnumerable<LanguageModel>>(_objSettingsService.GetLanguages()));
+			return View(Mapper.Map<IEnumerable<LanguageModel>>(_settingsService.GetLanguages()));
 		}
 
 		//
@@ -51,7 +51,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A DetailsView</returns>
 		public ViewResult Details(int id)
 		{
-			return View(Mapper.Map<LanguageModel>(_objSettingsService.FindLanguageByID(id)));
+			return View(Mapper.Map<LanguageModel>(_settingsService.FindLanguageByID(id)));
 		}
 
 		//
@@ -79,7 +79,7 @@ namespace RegTesting.Mvc.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				_objSettingsService.StoreLanguage(Mapper.Map<LanguageDto>(LanguageModel));
+				_settingsService.StoreLanguage(Mapper.Map<LanguageDto>(LanguageModel));
 				return RedirectToAction("Index");
 			}
 
@@ -96,7 +96,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A EditView</returns>
 		public ActionResult Edit(int id)
 		{
-			return View(Mapper.Map<LanguageModel>(_objSettingsService.FindLanguageByID(id)));
+			return View(Mapper.Map<LanguageModel>(_settingsService.FindLanguageByID(id)));
 		}
 
 		//
@@ -112,7 +112,7 @@ namespace RegTesting.Mvc.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				_objSettingsService.StoreLanguage(Mapper.Map<LanguageDto>(LanguageModel));
+				_settingsService.StoreLanguage(Mapper.Map<LanguageDto>(LanguageModel));
 				return RedirectToAction("Index");
 			}
 			return View(LanguageModel);
@@ -128,7 +128,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>A DeleteView</returns>
 		public ActionResult Delete(int id)
 		{
-			return View(Mapper.Map<LanguageModel>(_objSettingsService.FindLanguageByID(id)));
+			return View(Mapper.Map<LanguageModel>(_settingsService.FindLanguageByID(id)));
 		}
 
 		//
@@ -142,7 +142,7 @@ namespace RegTesting.Mvc.Controllers
 		[HttpPost, ActionName("Delete")]
 		public ActionResult DeleteConfirmed(int id)
 		{
-			_objSettingsService.DeleteLanguageByID(id);
+			_settingsService.DeleteLanguageByID(id);
 			return RedirectToAction("Index");
 		}
 

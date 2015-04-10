@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using RegTesting.Contracts.Enums;
 
 namespace RegTesting.Contracts.Domain

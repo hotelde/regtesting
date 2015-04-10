@@ -7,8 +7,8 @@ namespace RegTesting.Tests.Framework.Elements
 	public class Link : BasicPageElement
 	{
 
-		public Link(By objBy, IWebDriver objWebDriver, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours objClickBehaviour = ClickBehaviours.Default)
-			: base(objBy, objWebDriver, waitModel, parentPageObject, objClickBehaviour)
+		public Link(By objBy, IWebDriver webDriver, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours clickBehaviour = ClickBehaviours.Default)
+			: base(objBy, webDriver, waitModel, parentPageObject, clickBehaviour)
 		{
 		}
 	}

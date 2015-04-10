@@ -3,7 +3,7 @@
 
 @{
 	ViewBag.Title = "Edit Testsuite - RegTesting";
-	var lstLanguages = ((List<LanguageModel>) ViewBag.LstLanguages);
+	var languages = ((List<LanguageModel>) ViewBag.LstLanguages);
 }
 
 <h2>Edit Testsuite - Set languages</h2>
@@ -14,18 +14,18 @@
 	
 		<input type = "hidden" name = "testsuite" value = "@ViewBag.Testsuite" />
 
-		@foreach (LanguageModel languages in lstLanguages)
+		@foreach (LanguageModel languageModel in languages)
 		{
-			if (!Model.Contains(languages.ID))
+			if (!Model.Contains(languageModel.ID))
 			{
-				<input type = "checkbox" name = "languages" value = "@languages.ID"/>
-				@languages.Name
+				<input type = "checkbox" name = "languages" value = "@languageModel.ID"/>
+				@languageModel.Name
 				<br/>
 			}
 			else
 			{
-				<input type = "checkbox" name = "languages" value = "@languages.ID" checked="checked" />
-				@languages.Name
+				<input type = "checkbox" name = "languages" value = "@languageModel.ID" checked="checked" />
+				@languageModel.Name
 				<br/>
 			}
 		}

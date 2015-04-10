@@ -18,9 +18,9 @@ namespace RegTesting.Tests.Framework.Elements
         /// <returns>An instance of the <see cref="By"/> class.</returns>
 		public static By From(LocateAttribute attribute)
         {
-            How objHow = attribute.How;
+            How how = attribute.How;
             string strUsingValue = attribute.Using;
-            switch (objHow)
+            switch (how)
             {
                 case How.Id:
                     return By.Id(strUsingValue);
@@ -40,7 +40,7 @@ namespace RegTesting.Tests.Framework.Elements
                     return By.XPath(strUsingValue);
             }
 
-            throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Did not know how to construct How from how {0}, using {1}", objHow, strUsingValue));
+            throw new ArgumentException(string.Format(CultureInfo.InvariantCulture, "Did not know how to construct How from how {0}, using {1}", how, strUsingValue));
         }
     }
 }

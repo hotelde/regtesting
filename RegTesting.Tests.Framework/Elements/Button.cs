@@ -6,9 +6,9 @@ namespace RegTesting.Tests.Framework.Elements
 {
 	public class Button : BasicPageElement
 	{
-		
-		public Button(By objBy, IWebDriver objWebDriver, WaitModel waitModel, BasePageObject parentBasePageObject, ClickBehaviours objClickBehaviour = ClickBehaviours.Default)
-			: base(objBy, objWebDriver, waitModel, parentBasePageObject, objClickBehaviour)
+
+		public Button(By byLocator, IWebDriver webDriver, WaitModel waitModel, BasePageObject parentBasePageObject, ClickBehaviours clickBehaviour = ClickBehaviours.Default)
+			: base(byLocator, webDriver, waitModel, parentBasePageObject, clickBehaviour)
 		{
 		}
 	}

@@ -63,12 +63,12 @@ namespace RegTesting.Contracts
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="objTestjob">the testJob to manage</param>
-		public TestJobManager(TestJob objTestjob)
+		/// <param name="testjob">the testJob to manage</param>
+		public TestJobManager(TestJob testjob)
 		{
-			if (objTestjob == null)
-				throw new ArgumentNullException("objTestjob");
-			TestJob = objTestjob;
+			if (testjob == null)
+				throw new ArgumentNullException("testjob");
+			TestJob = testjob;
 			WorkItems = new List<WorkItem>();
 		}
 

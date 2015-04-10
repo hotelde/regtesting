@@ -14,62 +14,62 @@ namespace RegTesting.Service.Repositories
 	/// </summary>
 	public class HistoryResultRepository : BaseRepository<HistoryResult>, IHistoryResultRepository
 	{
-		private readonly IErrorRepository _objErrorRepository;
+		private readonly IErrorRepository _errorRepository;
 
 		/// <summary>
 		/// Create a new HistoryResultRepository
 		/// </summary>
-		/// <param name="objSession">the session</param>
-		/// <param name="objErrorRepository">the errorRepository</param>
-		public HistoryResultRepository(Func<ISession> objSession, IErrorRepository objErrorRepository)
-			: base(objSession)
+		/// <param name="session">the session</param>
+		/// <param name="errorRepository">the errorRepository</param>
+		public HistoryResultRepository(Func<ISession> session, IErrorRepository errorRepository)
+			: base(session)
 		{
-			if (objErrorRepository == null)
-				throw new ArgumentNullException("objErrorRepository");
-			_objErrorRepository = objErrorRepository;
+			if (errorRepository == null)
+				throw new ArgumentNullException("errorRepository");
+			_errorRepository = errorRepository;
 		}
 
-		IList<HistoryResult> IHistoryResultRepository.GetHistoryResultsOfTestJob(int intTestJob, int intTestsystem)
+		IList<HistoryResult> IHistoryResultRepository.GetHistoryResultsOfTestJob(int testJobId, int testsystemId)
 		{
 			return Session.Query<HistoryResult>()
-				   .Where(result => result.TestJob.ID == intTestJob)
-				   .Where(result => result.Testsystem.ID == intTestsystem)
+				   .Where(result => result.TestJob.ID == testJobId)
+				   .Where(result => result.Testsystem.ID == testsystemId)
 				   .ToList();
 		}
 
-		IList<HistoryResult> IHistoryResultRepository.GetListOfHistoryResults(int intTestsystem, IEnumerable<Browser> lstBrowsers, IEnumerable<Testcase> lstTestcases, IEnumerable<Language> lstLanguages, int intMaxResults)
+		IList<HistoryResult> IHistoryResultRepository.GetListOfHistoryResults(int testsystemId, IEnumerable<Browser> browsers, IEnumerable<Testcase> testcases, IEnumerable<Language> languages, int maxResults)
 		{
-			return GetHistoryResultListQuery(intTestsystem, lstBrowsers, lstTestcases, lstLanguages)
-				.Take(intMaxResults)
+			return GetHistoryResultListQuery(testsystemId, browsers, testcases, languages)
+				.Take(maxResults)
 				   .ToList();
 		}
 
 
-		private IQueryable<HistoryResult> GetHistoryResultListQuery(int intTestsystem, IEnumerable<Browser> lstBrowsers, IEnumerable<Testcase> lstTestcases, IEnumerable<Language> lstLanguages)
+		private IQueryable<HistoryResult> GetHistoryResultListQuery(int testsystemId, IEnumerable<Browser> browsers, IEnumerable<Testcase> testcases, IEnumerable<Language> languages)
 		{
 			return Session.Query<HistoryResult>()
-				.Where(result => lstBrowsers.Contains(result.Browser))
-				.Where(result => lstLanguages.Contains(result.Language))
-				.Where(result => lstTestcases.Contains(result.Testcase))
-				.Where(result => result.Testsystem.ID == intTestsystem)
+				.Where(result => browsers.Contains(result.Browser))
+				.Where(result => languages.Contains(result.Language))
+				.Where(result => testcases.Contains(result.Testcase))
+				.Where(result => result.Testsystem.ID == testsystemId)
 				.OrderByDescending(result => result.Testtime);
 		}
 
-		void IHistoryResultRepository.Store(HistoryResult objResult)
+		void IHistoryResultRepository.Store(HistoryResult historyResult)
 		{
-			if (objResult.Error != null) objResult.Error = _objErrorRepository.GetOrStore(objResult.Error);
-			((IRepository<HistoryResult>)this).Store(objResult);
+			if (historyResult.Error != null) historyResult.Error = _errorRepository.GetOrStore(historyResult.Error);
+			((IRepository<HistoryResult>)this).Store(historyResult);
 		}
 
-		IList<HistoryResult> IHistoryResultRepository.GetListOfErrorHistoryResults(int intTestsystem, IList<Browser> lstBrowsers, IList<Testcase> lstTestcases, IList<Language> lstLanguages,
-			DateTime datFromDateTime, DateTime datToDateTime)
+		IList<HistoryResult> IHistoryResultRepository.GetListOfErrorHistoryResults(int testsystemId, IList<Browser> browsers, IList<Testcase> testcases, IList<Language> languages,
+			DateTime fromDate, DateTime toDate)
 		{
 
-			return GetHistoryResultListQuery(intTestsystem, lstBrowsers, lstTestcases, lstLanguages)
+			return GetHistoryResultListQuery(testsystemId, browsers, testcases, languages)
 				.Where(
 						r =>
 							r.ResultCode == TestState.KnownError || r.ResultCode == TestState.Error || r.ResultCode == TestState.ErrorRepeat)
-				.Where(r => r.Testtime >= datFromDateTime && r.Testtime <= datToDateTime)
+				.Where(r => r.Testtime >= fromDate && r.Testtime <= toDate)
 				.ToList();
 
 		}

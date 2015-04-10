@@ -9,32 +9,32 @@ namespace RegTesting.Tests.Framework.Logic
 	public static class TestLog
 	{
 
-		private static List<string> _lstEntries = new List<string>();
-		private static DateTime _datStartTime;
+		private static List<string> entries = new List<string>();
+		private static DateTime _startTime;
 
 
 
 		/// <summary>
 		/// Add a log entry
 		/// </summary>
-		/// <param name="strEntry">the logentry string</param>
-		public static void Add(string strEntry)
+		/// <param name="entry">the logentry string</param>
+		public static void Add(string entry)
 		{
 			DateTime datNow = DateTime.Now;
-			if (_lstEntries.Count == 0) _datStartTime = datNow;
-			_lstEntries.Add((datNow - _datStartTime).ToString(@"mm\:ss") + ": " + strEntry);
+			if (entries.Count == 0) _startTime = datNow;
+			entries.Add((datNow - _startTime).ToString(@"mm\:ss") + ": " + entry);
 		}
 
 		/// <summary>
 		/// Add a log entry
 		/// </summary>
-		/// <param name="strEntry">the logentry string</param>
-		public static void AddWithoutTime(string strEntry)
+		/// <param name="entry">the logentry string</param>
+		public static void AddWithoutTime(string entry)
 		{
-			if (_lstEntries.Count == 0)
-				_datStartTime = DateTime.Now; ;
+			if (entries.Count == 0)
+				_startTime = DateTime.Now; ;
 			
-			_lstEntries.Add(strEntry);
+			entries.Add(entry);
 		}
 
 		/// <summary>
@@ -43,7 +43,7 @@ namespace RegTesting.Tests.Framework.Logic
 		/// <returns>A list of string with a logentry per string</returns>
 		public static List<string> Get()
 		{
-			return _lstEntries;
+			return entries;
 		}
 
 
@@ -53,9 +53,9 @@ namespace RegTesting.Tests.Framework.Logic
 		/// <returns>A list of string with a logentry per string</returns>
 		public static List<string> GetAndDelete()
 		{
-			List<string> lstLogEntries = Get();
-			_lstEntries = new List<string>();
-			return lstLogEntries;
+			List<string> logEntries = Get();
+			entries = new List<string>();
+			return logEntries;
 
 		}
 	}

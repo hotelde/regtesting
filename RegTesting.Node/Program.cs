@@ -12,15 +12,15 @@ namespace RegTesting.Node
 	class Program
 	{
 
-		public static void Main(string[] arrArgs)
+		public static void Main(string[] args)
 		{
-			if (arrArgs.Count()<2)
+			if (args.Count()<2)
 			{
 				Console.Error.WriteLine("Wrong usage (missing arguments). Start with: NODENAME [BROWSER] [BROWSER]...");
 				return;
 			}
-			string strServiceAddress = NodeConfiguration.ServerAddress;
-			string strNodeName = arrArgs[0];
+			string serviceAddress = NodeConfiguration.ServerAddress;
+			string nodeName = args[0];
 
 			Mapper.CreateMap<WorkItemDto, WorkItem>();
 			Mapper.CreateMap<Browser, BrowserDto>().ReverseMap();
@@ -31,11 +31,11 @@ namespace RegTesting.Node
 			Mapper.CreateMap<Testsuite, TestsuiteDto>().ReverseMap();
 
 
-			List<string> lstBrowsers = new List<string>();
+			List<string> browsers = new List<string>();
 
-			for (int intIndex = 1; intIndex < arrArgs.Length; intIndex++)
+			for (int i = 1; i < args.Length; i++)
 			{
-				lstBrowsers.Add(arrArgs[intIndex]);
+				browsers.Add(args[i]);
 			}
 			
 			do
@@ -43,11 +43,11 @@ namespace RegTesting.Node
 				try
 				{
 
-					new NodeLogic(strServiceAddress, strNodeName, lstBrowsers).Run();
+					new NodeLogic(serviceAddress, nodeName, browsers).Run();
 				}
-				catch(Exception objException)
+				catch(Exception exception)
 				{
-					Console.WriteLine(objException.Message);
+					Console.WriteLine(exception.Message);
 					Console.Out.WriteLine("Sleeping 10s.");
 					Thread.Sleep(10000);
 					Console.Out.WriteLine("Restarting...");

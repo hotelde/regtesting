@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting;
 using System.ServiceModel;
 using RegTesting.Contracts;
 using RegTesting.Contracts.Domain;
@@ -18,156 +17,156 @@ namespace RegTesting.Service.Services
 	[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
 	public class TestService : ITestService
 	{
-		private readonly ITestPool _objTestPool;
-		private readonly ITestsuiteRepository _objTestsuiteRepository;
-		private readonly ITestsystemRepository _objTestsystemRepository;
-		private readonly ITesterRepository _objTesterRepository;
-		private readonly IResultRepository _objResultRepository;
+		private readonly ITestPool _testPool;
+		private readonly ITestsuiteRepository _testsuiteRepository;
+		private readonly ITestsystemRepository _testsystemRepository;
+		private readonly ITesterRepository _testerRepository;
+		private readonly IResultRepository _resultRepository;
 
 		/// <summary>
 		/// Creates a new TestManager
 		/// </summary>
-		/// <param name="objTestPool">the testPool</param>
-		/// <param name="objTestsuiteRepository">the testsuiteRepository</param>
-		/// <param name="objTestsystemRepository">the testsystemRepository</param>
-		/// <param name="objTesterRepository">the testerRepository</param>
-		/// <param name="objResultRepository">the resultRepository</param>
-		public TestService(ITestPool objTestPool, ITestsuiteRepository objTestsuiteRepository,
-			ITestsystemRepository objTestsystemRepository, ITesterRepository objTesterRepository,
-			IResultRepository objResultRepository)
+		/// <param name="testPool">the testPool</param>
+		/// <param name="testsuiteRepository">the testsuiteRepository</param>
+		/// <param name="testsystemRepository">the testsystemRepository</param>
+		/// <param name="testerRepository">the testerRepository</param>
+		/// <param name="resultRepository">the resultRepository</param>
+		public TestService(ITestPool testPool, ITestsuiteRepository testsuiteRepository,
+			ITestsystemRepository testsystemRepository, ITesterRepository testerRepository,
+			IResultRepository resultRepository)
 		{
-			if (objTestsuiteRepository == null)
-				throw new ArgumentNullException("objTestsuiteRepository");
-			if (objTestsystemRepository == null)
-				throw new ArgumentNullException("objTestsystemRepository");
-			if (objTesterRepository == null)
-				throw new ArgumentNullException("objTesterRepository");
-			if (objResultRepository == null)
-				throw new ArgumentNullException("objResultRepository");
+			if (testsuiteRepository == null)
+				throw new ArgumentNullException("testsuiteRepository");
+			if (testsystemRepository == null)
+				throw new ArgumentNullException("testsystemRepository");
+			if (testerRepository == null)
+				throw new ArgumentNullException("testerRepository");
+			if (resultRepository == null)
+				throw new ArgumentNullException("resultRepository");
 
-			_objTestPool = objTestPool;
-			_objTestsuiteRepository = objTestsuiteRepository;
-			_objTestsystemRepository = objTestsystemRepository;
-			_objTesterRepository = objTesterRepository;
-			_objResultRepository = objResultRepository;
+			_testPool = testPool;
+			_testsuiteRepository = testsuiteRepository;
+			_testsystemRepository = testsystemRepository;
+			_testerRepository = testerRepository;
+			_resultRepository = resultRepository;
 		}
 
-		void ITestService.TestTestsuite(int intTester, int intTestsystem, int intTestsuite)
+		void ITestService.TestTestsuite(int testerId, int testsystemId, int testsuiteId)
 		{
-			Testsuite objTestsuite  = _objTestsuiteRepository.GetById(intTestsuite);
-			Testsystem objTestsystem = _objTestsystemRepository.GetById(intTestsystem);
-			Tester objTester = _objTesterRepository.GetById(intTester);
+			Testsuite testsuite  = _testsuiteRepository.GetById(testsuiteId);
+			Testsystem testsystem = _testsystemRepository.GetById(testsystemId);
+			Tester tester = _testerRepository.GetById(testerId);
 
-			TestJob objTestjob = CreateTestJob("Testsuite " + objTestsuite.Name, objTestsuite, objTestsystem, objTester);
+			TestJob testJob = CreateTestJob("Testsuite " + testsuite.Name, testsuite, testsystem, tester);
 
-			ITestJobManager objTestJobManager = new TestJobManager(objTestjob);
+			ITestJobManager testJobManager = new TestJobManager(testJob);
 
-			ICollection<WorkItem> lstWorkItems = (from objTestcase in objTestsuite.Testcases
-			                               from objBrowser in objTestsuite.Browsers
-			                               from objLanguage in objTestsuite.Languages
-												  select new WorkItem(objTestJobManager)
+			ICollection<WorkItem> workItems = (from testcase in testsuite.Testcases
+			                               from browser in testsuite.Browsers
+			                               from language in testsuite.Languages
+												  select new WorkItem(testJobManager)
 				                               {
-					                               Testcase = objTestcase,
-												   Browser = objBrowser,
-												   Language = objLanguage,
-												   Testsystem = objTestsystem,
-												   Tester = objTester 
+					                               Testcase = testcase,
+												   Browser = browser,
+												   Language = language,
+												   Testsystem = testsystem,
+												   Tester = tester 
 				                               }).ToList();
 
-			_objTestPool.AddTestJob(objTestJobManager, lstWorkItems);
+			_testPool.AddTestJob(testJobManager, workItems);
 		}
 
-		void ITestService.TestTestcaseOfTestsuite(int intTester, int intTestsystem, int intTestsuite, int intTestcase)
+		void ITestService.TestTestcaseOfTestsuite(int testerId, int testsystemId, int testsuiteId, int testcaseId)
 		{
-			Testsuite objTestsuite = _objTestsuiteRepository.GetById(intTestsuite);
-			Testsystem objTestsystem = _objTestsystemRepository.GetById(intTestsystem);
-			Tester objTester = _objTesterRepository.GetById(intTester);
-			Testcase objTestcase = objTestsuite.Testcases.Single(t => t.ID == intTestcase);
+			Testsuite testsuite = _testsuiteRepository.GetById(testsuiteId);
+			Testsystem testsystem = _testsystemRepository.GetById(testsystemId);
+			Tester tester = _testerRepository.GetById(testerId);
+			Testcase testcase = testsuite.Testcases.Single(t => t.ID == testcaseId);
 
-			TestJob objTestjob = CreateTestJob("Testcase " + objTestcase.Name + "(Testsuite " + objTestsuite.Name + ")", objTestsuite, objTestsystem, objTester);
-			ITestJobManager objTestJobManager = new TestJobManager(objTestjob);
+			TestJob testJob = CreateTestJob("Testcase " + testcase.Name + "(Testsuite " + testsuite.Name + ")", testsuite, testsystem, tester);
+			ITestJobManager testJobManager = new TestJobManager(testJob);
 
-			ICollection<WorkItem> lstWorkItems = (from objBrowser in objTestsuite.Browsers
-										   from objLanguage in objTestsuite.Languages
-												  select new WorkItem(objTestJobManager)
+			ICollection<WorkItem> workItems = (from browser in testsuite.Browsers
+										   from language in testsuite.Languages
+												  select new WorkItem(testJobManager)
 										   {
-											   Testcase = objTestcase,
-											   Browser = objBrowser,
-											   Language = objLanguage,
-											   Testsystem = objTestsystem,
-											   Tester = objTester 
+											   Testcase = testcase,
+											   Browser = browser,
+											   Language = language,
+											   Testsystem = testsystem,
+											   Tester = tester 
 
 										   }).ToList();
 
-			_objTestPool.AddTestJob(objTestJobManager, lstWorkItems);
+			_testPool.AddTestJob(testJobManager, workItems);
 		}
 
 
-		void ITestService.TestFailedTestsOfTestcaseOfTestsuite(int intTester, int intTestsystem, int intTestsuite, int intTestcase)
+		void ITestService.TestFailedTestsOfTestcaseOfTestsuite(int testerId, int testsystemId, int testsuiteId, int testcaseId)
 		{
-			Testsuite objTestsuite = _objTestsuiteRepository.GetById(intTestsuite);
-			Testcase objTestcase = objTestsuite.Testcases.Single(t => t.ID == intTestcase);
+			Testsuite testsuite = _testsuiteRepository.GetById(testsuiteId);
+			Testcase testcase = testsuite.Testcases.Single(t => t.ID == testcaseId);
 
-			IList<Result> lstErrorResults = _objResultRepository.GetErrorResultsOfTestsuite(intTestsystem, objTestsuite.Browsers, new List<Testcase>{ objTestcase}, 
-				objTestsuite.Languages);
-			Testsystem objTestsystem = _objTestsystemRepository.GetById(intTestsystem);
-			Tester objTester = _objTesterRepository.GetById(intTester);
+			IList<Result> errorResults = _resultRepository.GetErrorResultsOfTestsuite(testsystemId, testsuite.Browsers, new List<Testcase>{ testcase}, 
+				testsuite.Languages);
+			Testsystem testsystem = _testsystemRepository.GetById(testsystemId);
+			Tester tester = _testerRepository.GetById(testerId);
 
-			TestJob objTestjob = CreateTestJob("Repeat failed of " + "Testcase " + objTestcase.Name + "(Testsuite " + objTestsuite.Name + ")", objTestsuite, objTestsystem, objTester);
+			TestJob testjob = CreateTestJob("Repeat failed of " + "Testcase " + testcase.Name + "(Testsuite " + testsuite.Name + ")", testsuite, testsystem, tester);
 
-			ITestJobManager objTestJobManager = new TestJobManager(objTestjob);
+			ITestJobManager testjobManager = new TestJobManager(testjob);
 
-			ICollection<WorkItem> lstWorkItems = (from result in lstErrorResults
-												  select new WorkItem(objTestJobManager)
+			ICollection<WorkItem> workItems = (from result in errorResults
+												  select new WorkItem(testjobManager)
 												  {
 													  Testcase = result.Testcase,
 													  Browser = result.Browser,
 													  Language = result.Language,
-													  Testsystem = objTestsystem,
-													  Tester = objTester
+													  Testsystem = testsystem,
+													  Tester = tester
 												  }).ToList();
-			_objTestPool.AddTestJob(objTestJobManager, lstWorkItems);
+			_testPool.AddTestJob(testjobManager, workItems);
 		}
 
 
-		void ITestService.TestFailedTestsOfTestsuite(int intTester, int intTestsystem, int intTestsuite)
+		void ITestService.TestFailedTestsOfTestsuite(int testerId, int testsystemId, int testsuiteId)
 		{
-			Testsuite objTestsuite = _objTestsuiteRepository.GetById(intTestsuite);
-			IList<Result> lstErrorResults = _objResultRepository.GetErrorResultsOfTestsuite(intTestsystem, objTestsuite.Browsers, objTestsuite.Testcases,
-				objTestsuite.Languages);
-			Testsystem objTestsystem = _objTestsystemRepository.GetById(intTestsystem);
-			Tester objTester = _objTesterRepository.GetById(intTester);
+			Testsuite testsuite = _testsuiteRepository.GetById(testsuiteId);
+			IList<Result> errorResults = _resultRepository.GetErrorResultsOfTestsuite(testsystemId, testsuite.Browsers, testsuite.Testcases,
+				testsuite.Languages);
+			Testsystem testsystem = _testsystemRepository.GetById(testsystemId);
+			Tester tester = _testerRepository.GetById(testerId);
 
-			TestJob objTestjob = CreateTestJob("Repeat failed of " + objTestsuite.Name, objTestsuite, objTestsystem, objTester);
+			TestJob testjob = CreateTestJob("Repeat failed of " + testsuite.Name, testsuite, testsystem, tester);
 
-			ITestJobManager objTestJobManager = new TestJobManager(objTestjob);
+			ITestJobManager testjobManager = new TestJobManager(testjob);
 
-			ICollection<WorkItem> lstWorkItems = (from result in lstErrorResults
-												  select new WorkItem(objTestJobManager)
+			ICollection<WorkItem> workItems = (from result in errorResults
+												  select new WorkItem(testjobManager)
 												  {
 													  Testcase = result.Testcase,
 													  Browser = result.Browser,
 													  Language = result.Language,
-													  Testsystem = objTestsystem,
-													  Tester = objTester
+													  Testsystem = testsystem,
+													  Tester = tester
 												  }).ToList();
 
-			_objTestPool.AddTestJob(objTestJobManager, lstWorkItems);
+			_testPool.AddTestJob(testjobManager, workItems);
 		}
 
-		private static TestJob CreateTestJob(string strName, Testsuite objTestsuite, Testsystem objTestsystem, Tester objTester)
+		private static TestJob CreateTestJob(string name, Testsuite testsuite, Testsystem testsystem, Tester tester)
 		{
-			TestJob objTestjob = new TestJob
+			TestJob testjob = new TestJob
 			{
-				Name = strName,
+				Name = name,
 				ResultCode = TestState.Pending,
-				Testsuite = objTestsuite,
-				Testsystem = objTestsystem,
-				Tester = objTester,
+				Testsuite = testsuite,
+				Testsystem = testsystem,
+				Tester = tester,
 				StartedAt = DateTime.Now,
 				JobType = JobType.Testportal
 			};
-			return objTestjob;
+			return testjob;
 		}
 
 

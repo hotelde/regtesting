@@ -15,24 +15,24 @@ namespace RegTesting.Service.Repositories
 		/// <summary>
 		/// Create a TestsuiteRepository
 		/// </summary>
-		/// <param name="objSession">the session</param>
-		public TesterRepository(Func<ISession> objSession)
-			: base(objSession)
+		/// <param name="session">the session</param>
+		public TesterRepository(Func<ISession> session)
+			: base(session)
 		{
 		}
 
-		Tester ITesterRepository.GetByName(string strName)
+		Tester ITesterRepository.GetByName(string testerName)
 		{
-			Tester objTester = Session
+			Tester tester = Session
 					.CreateCriteria(typeof(Tester))
-                    .Add(Restrictions.Eq("Name", strName))
+                    .Add(Restrictions.Eq("Name", testerName))
 					.UniqueResult<Tester>();
-			if (objTester != null)
-				return objTester;
+			if (tester != null)
+				return tester;
 
-			objTester = new Tester { Name = strName, Mail = strName + "@hotel.de"};
-			((IRepository<Tester>)this).Store(objTester);
-			return objTester;
+			tester = new Tester { Name = testerName, Mail = testerName + "@hotel.de"};
+			((IRepository<Tester>)this).Store(tester);
+			return tester;
 		}
 
 

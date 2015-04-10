@@ -13,8 +13,8 @@ namespace RegTesting.Mvc.WcfServices
 	public class SummaryServiceWcfProxy : IDisposable, ISummaryService
 	{
 
-		private readonly ChannelFactory<ISummaryService> _objHttpFactory;
-		private readonly ISummaryService _objChannel;
+		private readonly ChannelFactory<ISummaryService> _httpFactory;
+		private readonly ISummaryService _channel;
 
 
 		/// <summary>
@@ -22,10 +22,10 @@ namespace RegTesting.Mvc.WcfServices
 		/// </summary>
 		public SummaryServiceWcfProxy()
 		{
-			if (_objChannel != null) return;
-			_objHttpFactory =
+			if (_channel != null) return;
+			_httpFactory =
 			  new ChannelFactory<ISummaryService>("SummaryServiceEndpoint");
-			_objChannel = _objHttpFactory.CreateChannel();
+			_channel = _httpFactory.CreateChannel();
 		}
 
 
@@ -34,30 +34,30 @@ namespace RegTesting.Mvc.WcfServices
 		/// </summary>
 		public void Dispose()
 		{
-			if (_objHttpFactory != null)
+			if (_httpFactory != null)
 			{
-				_objHttpFactory.Close();
+				_httpFactory.Close();
 			}
 		}
 
 		IList<TestsystemSummary> ISummaryService.GetTestsystemSummaryForAllThorBranches()
 		{
-			return _objChannel.GetTestsystemSummaryForAllThorBranches();
+			return _channel.GetTestsystemSummaryForAllThorBranches();
 		}
 
 		IList<TestsystemSummary> ISummaryService.GetTestsystemSummaryForAllSodaBranches()
 		{
-			return _objChannel.GetTestsystemSummaryForAllSodaBranches();
+			return _channel.GetTestsystemSummaryForAllSodaBranches();
 		}
 
 		IList<TestsystemSummary> ISummaryService.GetTestsystemSummaryForThorMainBranches()
 		{
-			return _objChannel.GetTestsystemSummaryForThorMainBranches();
+			return _channel.GetTestsystemSummaryForThorMainBranches();
 		}
 
 		IList<TestsystemSummary> ISummaryService.GetTestsystemSummaryForSodaMainBranches()
 		{
-			return _objChannel.GetTestsystemSummaryForSodaMainBranches();
+			return _channel.GetTestsystemSummaryForSodaMainBranches();
 		}
 	}
 }

@@ -15,18 +15,18 @@ namespace RegTesting.Service.Repositories
 		/// <summary>
 		/// Create a TestsuiteRepository
 		/// </summary>
-		/// <param name="objSession">the session</param>
-		public LanguageRepository(Func<ISession> objSession)
-			: base(objSession)
+		/// <param name="session">the session</param>
+		public LanguageRepository(Func<ISession> session)
+			: base(session)
 		{
 		}
 
 
-		Language ILanguageRepository.GetByLanguageCode(string strCode)
+		Language ILanguageRepository.GetByLanguageCode(string languageCode)
 		{
 			return Session
 				.CreateCriteria(typeof(Language))
-				.Add(Restrictions.Eq("Languagecode", strCode))
+				.Add(Restrictions.Eq("Languagecode", languageCode))
 				.UniqueResult<Language>();
 		}
 	}

@@ -11,20 +11,20 @@ namespace RegTesting.Tests.Framework.Elements
 	{
 		private readonly IFillable _fillBehaviour;
 
-		public Input(By objBy, IWebDriver objWebDriver, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours objClickBehaviour = ClickBehaviours.Default, FillBehaviour fillBehaviour = FillBehaviour.Default)
-			: base(objBy, objWebDriver, waitModel, parentPageObject, objClickBehaviour)
+		public Input(By objBy, IWebDriver webDriver, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours clickBehaviour = ClickBehaviours.Default, FillBehaviour fillBehaviour = FillBehaviour.Default)
+			: base(objBy, webDriver, waitModel, parentPageObject, clickBehaviour)
 		{
 			_fillBehaviour = FillbehaviourFactory.Create(fillBehaviour, this);
 		}
 
-		public void Type(string strText)
+		public void Type(string text)
 		{
-			_fillBehaviour.Type(strText);
+			_fillBehaviour.Type(text);
 		}
 
-		public void Type(DateTime datDateTime)
+		public void Type(DateTime dateTime)
 		{
-			_fillBehaviour.Type(datDateTime);
+			_fillBehaviour.Type(dateTime);
 		}
 
 		public void Type(string text, TimeSpan timeToWaitAfterTyping)
@@ -45,10 +45,10 @@ namespace RegTesting.Tests.Framework.Elements
 			return WebDriver.WaitForElement(By).GetAttribute("value");
 		}
 
-		public void WaitForSpecificValue(string strValue)
+		public void WaitForSpecificValue(string value)
 		{
-			TestLog.Add("WaitForSpecificValue: " + By + " should be " + strValue);
-			WebDriver.WaitForElement(By).WaitForSpecificValue(strValue);
+			TestLog.Add("WaitForSpecificValue: " + By + " should be " + value);
+			WebDriver.WaitForElement(By).WaitForSpecificValue(value);
 		}
 	}
 

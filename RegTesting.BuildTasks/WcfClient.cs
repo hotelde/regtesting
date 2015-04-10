@@ -13,8 +13,8 @@ namespace RegTesting.BuildTasks
 	/// </summary>
 	public class WcfClient : IDisposable
 	{
-		private readonly IBuildTaskService _objChannel;
-		private readonly ChannelFactory<IBuildTaskService> _objHttpFactory;
+		private readonly IBuildTaskService _channel;
+		private readonly ChannelFactory<IBuildTaskService> _httpFactory;
 
 
 		/// <summary>
@@ -23,11 +23,11 @@ namespace RegTesting.BuildTasks
 		/// <param name="strEndpointAddress">The endpointAdress to connect to</param>
 		public WcfClient(String strEndpointAddress)
 		{
-			EndpointAddress objEndpointAddress = new EndpointAddress(strEndpointAddress);
-			if (_objChannel != null) 
+			EndpointAddress endpointAddress = new EndpointAddress(strEndpointAddress);
+			if (_channel != null) 
 				return;
 
-			WSHttpBinding objWsHttpBinding = new WSHttpBinding
+			WSHttpBinding wsHttpBinding = new WSHttpBinding
 			{
 				OpenTimeout = new TimeSpan(0, 1, 0),
 				ReceiveTimeout = new TimeSpan(0, 1, 0),
@@ -62,8 +62,8 @@ namespace RegTesting.BuildTasks
 			};
 
 
-			_objHttpFactory = new ChannelFactory<IBuildTaskService>(objWsHttpBinding, objEndpointAddress);
-			_objChannel = _objHttpFactory.CreateChannel();
+			_httpFactory = new ChannelFactory<IBuildTaskService>(wsHttpBinding, endpointAddress);
+			_channel = _httpFactory.CreateChannel();
 
 		}
 
@@ -72,31 +72,31 @@ namespace RegTesting.BuildTasks
 		/// </summary>
 		public void Dispose()
 		{
-			if (_objHttpFactory != null)
+			if (_httpFactory != null)
 			{
-			    _objHttpFactory.Close();
+			    _httpFactory.Close();
 			}
 		}
 
 	    /// <summary>
 	    /// Send a file to testserver
 	    /// </summary>
-	    /// <param name="strFilename">Filename of the testcases dll</param>
-	    /// <param name="strTestsystem">testsystem of the testcases</param>
-	    /// <param name="strReleaseManager">optional emailcontact after test execution</param>
-	    /// <param name="strTestsuite">the testsuite to test</param>
-	    public void SendFile(string strFilename, string strTestsystem, string strReleaseManager = null, string strTestsuite = null)
+	    /// <param name="filename">Filename of the testcases dll</param>
+	    /// <param name="testsystem">testsystem of the testcases</param>
+	    /// <param name="emailReceiver">optional emailcontact after test execution</param>
+	    /// <param name="testsuite">the testsuite to test</param>
+	    public void SendFile(string filename, string testsystem, string emailReceiver = null, string testsuite = null)
 		{
 
-			using (FileStream objFileStream = new FileStream(strFilename, FileMode.Open))
+			using (FileStream fileStream = new FileStream(filename, FileMode.Open))
 			{
-				byte[] arrBuffer = new byte[52428800];
-				int intSize = objFileStream.Read(arrBuffer, 0, 52428800);
-				byte[] arrBufferShort = arrBuffer.Take(intSize).ToArray();
-				_objChannel.SendTestcaseFile(strTestsystem, arrBufferShort);
+				byte[] buffer = new byte[52428800];
+				int intSize = fileStream.Read(buffer, 0, 52428800);
+				byte[] bufferShort = buffer.Take(intSize).ToArray();
+				_channel.SendTestcaseFile(testsystem, bufferShort);
 			}
 
-			_objChannel.AddRegTestTasks(strTestsystem, strReleaseManager, strTestsuite);
+			_channel.AddRegTestTasks(testsystem, emailReceiver, testsuite);
 		}
 
 	}

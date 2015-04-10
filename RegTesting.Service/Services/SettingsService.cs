@@ -13,186 +13,186 @@ namespace RegTesting.Service.Services
 	/// </summary>
 	public class SettingsService : ISettingsService
 	{
-		private readonly IBrowserRepository _objBrowserRepository;
-		private readonly ILanguageRepository _objLanguageRepository;
-		private readonly ITesterRepository _objTesterRepository;
-		private readonly ITestsystemRepository _objTestsystemRepository;
-		private readonly ITestcaseRepository _objTestcaseRepository;
-		private readonly ITestsuiteRepository _objTestsuiteRepository;
+		private readonly IBrowserRepository _browserRepository;
+		private readonly ILanguageRepository _languageRepository;
+		private readonly ITesterRepository _testerRepository;
+		private readonly ITestsystemRepository _testsystemRepository;
+		private readonly ITestcaseRepository _testcaseRepository;
+		private readonly ITestsuiteRepository _testsuiteRepository;
 
 		/// <summary>
 		/// Create a new SettingsService
 		/// </summary>
-		/// <param name="objBrowserRepository">the BrowserRepository</param>
-		/// <param name="objLanguageRepository">the LanguageRepository</param>
-		/// <param name="objTesterRepository">the TesterRepository</param>
-		/// <param name="objTestsystemRepository">the TestsystemRepository</param>
-		/// <param name="objTestcaseRepository">the TestcaseRepository</param>
-		/// <param name="objTestsuiteRepository">the TestsuiteRepository</param>
-		public SettingsService(IBrowserRepository objBrowserRepository, ILanguageRepository objLanguageRepository, 
-			ITesterRepository objTesterRepository, ITestsystemRepository objTestsystemRepository, ITestcaseRepository objTestcaseRepository, ITestsuiteRepository objTestsuiteRepository)
+		/// <param name="browserRepository">the BrowserRepository</param>
+		/// <param name="languageRepository">the LanguageRepository</param>
+		/// <param name="testerRepository">the TesterRepository</param>
+		/// <param name="testsystemRepository">the TestsystemRepository</param>
+		/// <param name="testcaseRepository">the TestcaseRepository</param>
+		/// <param name="testsuiteRepository">the TestsuiteRepository</param>
+		public SettingsService(IBrowserRepository browserRepository, ILanguageRepository languageRepository, 
+			ITesterRepository testerRepository, ITestsystemRepository testsystemRepository, ITestcaseRepository testcaseRepository, ITestsuiteRepository testsuiteRepository)
 		{
-			if (objBrowserRepository == null)
-				throw new ArgumentNullException("objBrowserRepository");
-			if (objLanguageRepository == null)
-				throw new ArgumentNullException("objLanguageRepository");
-			if (objTesterRepository == null)
-				throw new ArgumentNullException("objTesterRepository");
-			if (objTestsystemRepository == null)
-				throw new ArgumentNullException("objTestsystemRepository");
-			if (objTestcaseRepository == null)
-				throw new ArgumentNullException("objTestcaseRepository");
-			if (objTestsuiteRepository == null)
-				throw new ArgumentNullException("objTestsuiteRepository");
+			if (browserRepository == null)
+				throw new ArgumentNullException("browserRepository");
+			if (languageRepository == null)
+				throw new ArgumentNullException("languageRepository");
+			if (testerRepository == null)
+				throw new ArgumentNullException("testerRepository");
+			if (testsystemRepository == null)
+				throw new ArgumentNullException("testsystemRepository");
+			if (testcaseRepository == null)
+				throw new ArgumentNullException("testcaseRepository");
+			if (testsuiteRepository == null)
+				throw new ArgumentNullException("testsuiteRepository");
 
-			_objBrowserRepository = objBrowserRepository;
-			_objLanguageRepository = objLanguageRepository;
-			_objTesterRepository = objTesterRepository;
-			_objTestsystemRepository = objTestsystemRepository;
-			_objTestcaseRepository = objTestcaseRepository;
-			_objTestsuiteRepository = objTestsuiteRepository;
+			_browserRepository = browserRepository;
+			_languageRepository = languageRepository;
+			_testerRepository = testerRepository;
+			_testsystemRepository = testsystemRepository;
+			_testcaseRepository = testcaseRepository;
+			_testsuiteRepository = testsuiteRepository;
 		}
 
 
 		IEnumerable<BrowserDto> ISettingsService.GetBrowsers()
 		{
-			return Mapper.Map<IEnumerable<BrowserDto>>(_objBrowserRepository.GetAll());
+			return Mapper.Map<IEnumerable<BrowserDto>>(_browserRepository.GetAll());
 		}
 
-		BrowserDto ISettingsService.FindBrowserByID(int intID)
+		BrowserDto ISettingsService.FindBrowserByID(int browserId)
 		{
-			return Mapper.Map<BrowserDto>(_objBrowserRepository.GetById(intID));
+			return Mapper.Map<BrowserDto>(_browserRepository.GetById(browserId));
 		}
 
-		void ISettingsService.StoreBrowser(BrowserDto objBrowser)
+		void ISettingsService.StoreBrowser(BrowserDto browser)
 		{
-			_objBrowserRepository.Store(Mapper.Map<Browser>(objBrowser));
+			_browserRepository.Store(Mapper.Map<Browser>(browser));
 		}
 
-		void ISettingsService.DeleteBrowserByID(int intID)
+		void ISettingsService.DeleteBrowserByID(int browserId)
 		{
-			_objBrowserRepository.RemoveById(intID);
+			_browserRepository.RemoveById(browserId);
 		}
 
 
 		IEnumerable<LanguageDto> ISettingsService.GetLanguages()
 		{
-			return Mapper.Map<IEnumerable<LanguageDto>>(_objLanguageRepository.GetAll());
+			return Mapper.Map<IEnumerable<LanguageDto>>(_languageRepository.GetAll());
 		}
 
-		LanguageDto ISettingsService.FindLanguageByID(int intID)
+		LanguageDto ISettingsService.FindLanguageByID(int languageId)
 		{
-			return Mapper.Map<LanguageDto>(_objLanguageRepository.GetById(intID));
+			return Mapper.Map<LanguageDto>(_languageRepository.GetById(languageId));
 		}
 
 
-		void ISettingsService.StoreLanguage(LanguageDto objLanguage)
+		void ISettingsService.StoreLanguage(LanguageDto language)
 		{
-			_objLanguageRepository.Store(Mapper.Map<Language>(objLanguage));
+			_languageRepository.Store(Mapper.Map<Language>(language));
 		}
 
-		void ISettingsService.DeleteLanguageByID(int intID)
+		void ISettingsService.DeleteLanguageByID(int languageId)
 		{
-			_objLanguageRepository.RemoveById(intID);
+			_languageRepository.RemoveById(languageId);
 		}
 
 		IEnumerable<TesterDto> ISettingsService.GetTesters()
 		{
-			return Mapper.Map<IEnumerable<TesterDto>>(_objTesterRepository.GetAll());
+			return Mapper.Map<IEnumerable<TesterDto>>(_testerRepository.GetAll());
 		}
 
-		TesterDto ISettingsService.FindTesterByID(int intID)
+		TesterDto ISettingsService.FindTesterByID(int testerId)
 		{
-			return Mapper.Map<TesterDto>(_objTesterRepository.GetById(intID));
+			return Mapper.Map<TesterDto>(_testerRepository.GetById(testerId));
 		}
 
 
-		void ISettingsService.StoreTester(TesterDto objTester)
+		void ISettingsService.StoreTester(TesterDto tester)
 		{
-			_objTesterRepository.Store(Mapper.Map<Tester>(objTester));
+			_testerRepository.Store(Mapper.Map<Tester>(tester));
 		}
 
-		void ISettingsService.DeleteTesterByID(int intID)
+		void ISettingsService.DeleteTesterByID(int testerId)
 		{
-			_objTesterRepository.RemoveById(intID);
+			_testerRepository.RemoveById(testerId);
 		}
 
 
 		IEnumerable<TestsystemDto> ISettingsService.GetTestsystems()
 		{
-			return Mapper.Map<IEnumerable<TestsystemDto>>(_objTestsystemRepository.GetAll());
+			return Mapper.Map<IEnumerable<TestsystemDto>>(_testsystemRepository.GetAll());
 		}
 
-		TestsystemDto ISettingsService.FindTestsystemByID(int intID)
+		TestsystemDto ISettingsService.FindTestsystemByID(int testsystemId)
 		{
-			return Mapper.Map<TestsystemDto>(_objTestsystemRepository.GetById(intID));
+			return Mapper.Map<TestsystemDto>(_testsystemRepository.GetById(testsystemId));
 		}
 
 
-		void ISettingsService.StoreTestsystem(TestsystemDto objTestsystem)
+		void ISettingsService.StoreTestsystem(TestsystemDto testsystem)
 		{
-			_objTestsystemRepository.Store(Mapper.Map<Testsystem>(objTestsystem));
+			_testsystemRepository.Store(Mapper.Map<Testsystem>(testsystem));
 		}
 
-		void ISettingsService.DeleteTestsystemByID(int intID)
+		void ISettingsService.DeleteTestsystemByID(int testsystemId)
 		{
-			_objTestsystemRepository.RemoveById(intID);
+			_testsystemRepository.RemoveById(testsystemId);
 		}
 
 
 		IEnumerable<TestsuiteDto> ISettingsService.GetTestsuites()
 		{
-			return Mapper.Map<IEnumerable<TestsuiteDto>>(_objTestsuiteRepository.GetAll());
+			return Mapper.Map<IEnumerable<TestsuiteDto>>(_testsuiteRepository.GetAll());
 		}
 
-		TestsuiteDto ISettingsService.FindTestsuiteByID(int intID)
+		TestsuiteDto ISettingsService.FindTestsuiteByID(int testsuiteId)
 		{
-			return Mapper.Map<TestsuiteDto>(_objTestsuiteRepository.GetById(intID));
+			return Mapper.Map<TestsuiteDto>(_testsuiteRepository.GetById(testsuiteId));
 		}
 
-		void ISettingsService.StoreTestsuite(TestsuiteDto objTestsuite)
+		void ISettingsService.StoreTestsuite(TestsuiteDto testsuite)
 		{
-			if (objTestsuite.ID == 0)
+			if (testsuite.ID == 0)
 			{
-				_objTestsuiteRepository.Store(Mapper.Map<Testsuite>(objTestsuite));
+				_testsuiteRepository.Store(Mapper.Map<Testsuite>(testsuite));
 			}
 			else
 			{
-				Testsuite objTestsuiteCurrent = _objTestsuiteRepository.GetById(objTestsuite.ID);
+				Testsuite testsuiteCurrent = _testsuiteRepository.GetById(testsuite.ID);
 
-				objTestsuiteCurrent.Name = objTestsuite.Name;
-				objTestsuiteCurrent.Description = objTestsuite.Description;
+				testsuiteCurrent.Name = testsuite.Name;
+				testsuiteCurrent.Description = testsuite.Description;
 
-				_objTestsuiteRepository.Store(objTestsuiteCurrent);
+				_testsuiteRepository.Store(testsuiteCurrent);
 			}
 	
 		}
 
-		void ISettingsService.DeleteTestsuiteByID(int intID)
+		void ISettingsService.DeleteTestsuiteByID(int testsuiteId)
 		{
-			_objTestsuiteRepository.RemoveById(intID);
+			_testsuiteRepository.RemoveById(testsuiteId);
 		}
 
 
 
 		IEnumerable<TestcaseDto> ISettingsService.GetTestcases()
 		{
-			return Mapper.Map<IEnumerable<TestcaseDto>>(_objTestcaseRepository.GetAll());
+			return Mapper.Map<IEnumerable<TestcaseDto>>(_testcaseRepository.GetAll());
 		}
 
-		TestcaseDto ISettingsService.FindTestcaseByID(int intID)
+		TestcaseDto ISettingsService.FindTestcaseByID(int testcaseId)
 		{
-			return Mapper.Map<TestcaseDto>(_objTestcaseRepository.GetById(intID));
+			return Mapper.Map<TestcaseDto>(_testcaseRepository.GetById(testcaseId));
 		}
 
-		void ISettingsService.EditTestcase(TestcaseDto objTestcase)
+		void ISettingsService.EditTestcase(TestcaseDto testcase)
 		{
-			_objTestcaseRepository.Store(Mapper.Map<Testcase>(objTestcase));
+			_testcaseRepository.Store(Mapper.Map<Testcase>(testcase));
 		}
 
-		void ISettingsService.DeleteTestcaseByID(int intID)
+		void ISettingsService.DeleteTestcaseByID(int testcaseId)
 		{
-			_objTestcaseRepository.RemoveById(intID);
+			_testcaseRepository.RemoveById(testcaseId);
 		}
 
 
@@ -207,21 +207,21 @@ namespace RegTesting.Service.Services
 			throw new NotImplementedException();
 		}
 
-		void ISettingsService.SetTestcasesForTestsuite(int intTestsuite, ICollection<int> colTestcases)
+		void ISettingsService.SetTestcasesForTestsuite(int testsuiteId, ICollection<int> testcases)
 		{
-			_objTestsuiteRepository.SetTestcasesForTestsuite(intTestsuite, colTestcases);
+			_testsuiteRepository.SetTestcasesForTestsuite(testsuiteId, testcases);
 		}
 
 
-		void ISettingsService.SetBrowsersForTestsuite(int intTestsuite, ICollection<int> colBrowsers)
+		void ISettingsService.SetBrowsersForTestsuite(int testsuiteId, ICollection<int> browsers)
 		{
-			_objTestsuiteRepository.SetBrowsersForTestsuite(intTestsuite, colBrowsers);
+			_testsuiteRepository.SetBrowsersForTestsuite(testsuiteId, browsers);
 		}
 
 
-		void ISettingsService.SetLanguagesForTestsuite(int intTestsuite, ICollection<int> colLanguages)
+		void ISettingsService.SetLanguagesForTestsuite(int testsuiteId, ICollection<int> languages)
 		{
-			_objTestsuiteRepository.SetLanguagesForTestsuite(intTestsuite, colLanguages);
+			_testsuiteRepository.SetLanguagesForTestsuite(testsuiteId, languages);
 		}
 	}
 }

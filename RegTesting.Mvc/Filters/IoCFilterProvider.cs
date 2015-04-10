@@ -16,8 +16,8 @@ namespace RegTesting.Mvc.Filters
 	{
 		#region Non Public Members
 
-		private readonly IFilterProvider _objFilterProvider;
-		private readonly IDependencyResolver _objDependencyResolver;
+		private readonly IFilterProvider _filterProvider;
+		private readonly IDependencyResolver _dependencyResolver;
 
 		#endregion
 
@@ -26,34 +26,34 @@ namespace RegTesting.Mvc.Filters
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IoCFilterProvider{T}"/> class.
 		/// </summary>
-		/// <param name="objFilterProvider">The Provider to decorate.</param>
-		/// <param name="objDependencyResolver">The Resolver used to create new instances of Filter.</param>
-		public IoCFilterProvider(IFilterProvider objFilterProvider, IDependencyResolver objDependencyResolver = null)
+		/// <param name="filterProvider">The Provider to decorate.</param>
+		/// <param name="dependencyResolver">The Resolver used to create new instances of Filter.</param>
+		public IoCFilterProvider(IFilterProvider filterProvider, IDependencyResolver dependencyResolver = null)
 		{
-			_objFilterProvider = objFilterProvider;
-			_objDependencyResolver = objDependencyResolver ?? DependencyResolver.Current;
+			_filterProvider = filterProvider;
+			_dependencyResolver = dependencyResolver ?? DependencyResolver.Current;
 		}
 
 		#endregion
 
 		#region Public Methods
 
-		IEnumerable<Filter> IFilterProvider.GetFilters(ControllerContext objControllerContext, ActionDescriptor objActionDescriptor)
+		IEnumerable<Filter> IFilterProvider.GetFilters(ControllerContext controllerContext, ActionDescriptor actionDescriptor)
 		{
-			return _objFilterProvider.GetFilters(objControllerContext, objActionDescriptor).Select(objFilter => (objFilter.Instance is TFilter) ? new Filter(_objDependencyResolver.GetService(objFilter.Instance.GetType()), objFilter.Scope, objFilter.Order) : objFilter);
+			return _filterProvider.GetFilters(controllerContext, actionDescriptor).Select(objFilter => (objFilter.Instance is TFilter) ? new Filter(_dependencyResolver.GetService(objFilter.Instance.GetType()), objFilter.Scope, objFilter.Order) : objFilter);
 		}
 
 		/// <summary>
-		/// Decorates all filter within the <paramref name="lstFilterProviders"/>.
+		/// Decorates all filter within the <paramref name="filterProviders"/>.
 		/// </summary>
-		/// <param name="lstFilterProviders">The list of filter providers. optional. If not set, the default <see cref="FilterProviders.Providers"/> will be used.</param>
-		/// <param name="objDependencyResolver">Optional dependency resolver. IF not set, the default <see cref="DependencyResolver.Current"/> will be used.</param>
-		public static void ApplyToAllFilters(IList<IFilterProvider> lstFilterProviders = null, IDependencyResolver objDependencyResolver = null)
+		/// <param name="filterProviders">The list of filter providers. optional. If not set, the default <see cref="FilterProviders.Providers"/> will be used.</param>
+		/// <param name="dependencyResolver">Optional dependency resolver. IF not set, the default <see cref="DependencyResolver.Current"/> will be used.</param>
+		public static void ApplyToAllFilters(IList<IFilterProvider> filterProviders = null, IDependencyResolver dependencyResolver = null)
 		{
-			lstFilterProviders = lstFilterProviders ?? FilterProviders.Providers;
+			filterProviders = filterProviders ?? FilterProviders.Providers;
 
-			for (int i = 0; i < lstFilterProviders.Count; i++)
-				lstFilterProviders[i] = new IoCFilterProvider<TFilter>(lstFilterProviders[i], objDependencyResolver ?? DependencyResolver.Current);
+			for (int i = 0; i < filterProviders.Count; i++)
+				filterProviders[i] = new IoCFilterProvider<TFilter>(filterProviders[i], dependencyResolver ?? DependencyResolver.Current);
 		}
 
 		#endregion

@@ -8,10 +8,10 @@
 		/// <summary>
 		/// Create a Factory
 		/// </summary>
-		/// <param name="strAssemblyFile">the assemblyFile</param>
-		/// <param name="strTypeName">the type to create</param>
-		/// <param name="objConstructArgs">constructor arguments</param>
+		/// <param name="assemblyFile">the assemblyFile</param>
+		/// <param name="typeName">the type to create</param>
+		/// <param name="constructArgs">constructor arguments</param>
 		/// <returns>A new class of type typeName or null in error case</returns>
-		ITestable Create(string strAssemblyFile, string strTypeName, object[] objConstructArgs);
+		ITestable Create(string assemblyFile, string typeName, object[] constructArgs);
 	}
 }

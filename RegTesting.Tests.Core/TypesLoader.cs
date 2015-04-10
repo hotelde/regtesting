@@ -54,9 +54,9 @@ namespace RegTesting.Tests.Core
 
 
 
-				string strErrorMessage = stringBuilder.ToString();
+				string errorMessage = stringBuilder.ToString();
 				//Display or log the error based on your application.
-				return new [] {"ERROR:" +  strErrorMessage };
+				return new [] {"ERROR:" +  errorMessage };
 			}
 		}
 

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
-using RegTesting.Contracts;
 using RegTesting.LocalTest.Properties;
 using RegTesting.Tests.Core;
 
@@ -11,33 +9,33 @@ namespace RegTesting.LocalTest.Logic
 {
 	class LocalTestLogic
 	{
-		private ITestable _objTestable;
+		private ITestable _testable;
 
-        private TestcaseProvider _objTestcaseProvider = null;
+		private TestcaseProvider _testcaseProvider = null;
 
 		public string TestHeader { get; private set; }
 		public List<string> LogEntries { 
-            get {
-                if(_objTestable != null)
-                    return _objTestable.GetLog();
-                return new List<string>();
-            }
-        }
+			get {
+				if(_testable != null)
+					return _testable.GetLog();
+				return new List<string>();
+			}
+		}
 
-		private bool _bolCanceled;
+		private bool _canceled;
 
 
 
-        internal void LoadTestFile(string filename)
-        {
-            if (_objTestcaseProvider != null)
-            {
-                _objTestcaseProvider.Unload();
-                _objTestcaseProvider = null;
-            }
-            _objTestcaseProvider = new TestcaseProvider(filename);
-            _objTestcaseProvider.CreateAppDomain();
-        }
+		internal void LoadTestFile(string filename)
+		{
+			if (_testcaseProvider != null)
+			{
+				_testcaseProvider.Unload();
+				_testcaseProvider = null;
+			}
+			_testcaseProvider = new TestcaseProvider(filename);
+			_testcaseProvider.CreateAppDomain();
+		}
 
 
 		/// <summary>
@@ -47,82 +45,82 @@ namespace RegTesting.LocalTest.Logic
 		internal List<string> GetTestcases()
 		{
 
-            string[] arrTypes = _objTestcaseProvider != null ? _objTestcaseProvider.LoadTypes() : new string[0];
-			List<string> lstTestcasesTypes = arrTypes.ToList();
-			lstTestcasesTypes.Sort();
-			return lstTestcasesTypes;
+			string[] types = _testcaseProvider != null ? _testcaseProvider.LoadTypes() : new string[0];
+			List<string> testcasesTypes = types.ToList();
+			testcasesTypes.Sort();
+			return testcasesTypes;
 		}
 
 
 		/// <summary>
 		/// Start Tests
 		/// </summary>
-		/// <param name="strTestsystem">string with the testsystem</param>
-		/// <param name="lstBrowsers">the browsers</param>
-		/// <param name="lstTestcases"></param>
-		/// <param name="lstLanguages"></param>
-		internal void TestLocal(string strTestsystem, List<string> lstBrowsers, List<string> lstTestcases, List<string> lstLanguages)
+		/// <param name="testsystem">string with the testsystem</param>
+		/// <param name="browsers">the browsers</param>
+		/// <param name="testcases"></param>
+		/// <param name="languages"></param>
+		internal void TestLocal(string testsystem, List<string> browsers, List<string> testcases, List<string> languages)
 		{
-			_bolCanceled = false;
-			foreach (string strTestcase in lstTestcases)
+			_canceled = false;
+			foreach (string testcase in testcases)
 			{
-				foreach (string strBrowser in lstBrowsers)
+				foreach (string browserName in browsers)
 				{
-					Browser objBrowser = GetBrowser(strBrowser);
-					foreach (string strLanguage in lstLanguages)
+					Browser browser = GetBrowser(browserName);
+					foreach (string language in languages)
 					{
-						if (_bolCanceled) return;
-						InitializeTest(strTestcase, strTestsystem, strLanguage, objBrowser);
+						if (_canceled) return;
+						InitializeTest(testcase, testsystem, language, browser);
 					}
 				}
 			}
 		}
 
-		private Browser GetBrowser(string strBrowser)
+		private Browser GetBrowser(string browserName)
 		{
-			return new Browser { Browserstring = strBrowser };
+			return new Browser { Browserstring = browserName };
 		}
 
 
 		/// <summary>
 		/// Start a Test and throw exception in errorcase
 		/// </summary>
-		/// <param name="strTypeName">typename of testcase to load</param>
-		/// <param name="strTestsystem">string with the testsystem</param>
-		/// <param name="strLanguage">string with the language</param>
-		/// <param name="objBrowser"></param>
-		internal void InitializeTest(string strTypeName, string strTestsystem, string strLanguage, Browser objBrowser)
+		/// <param name="typeName">typename of testcase to load</param>
+		/// <param name="testsystem">string with the testsystem</param>
+		/// <param name="language">string with the language</param>
+		/// <param name="browser"></param>
+		internal void InitializeTest(string typeName, string testsystem, string language, Browser browser)
 		{
-			TestHeader = String.Format("Testcase: {0} ({1}, {2}) on {3}", strTypeName, strLanguage, objBrowser, strTestsystem);
+			TestHeader = String.Format("Testcase: {0} ({1}, {2}) on {3}", typeName, language, browser, testsystem);
 
-			_objTestable = _objTestcaseProvider.GetTestableFromTypeName(strTypeName);
-			_objTestable.GetLogLastTime();
-			_objTestable.SetupTest(WebDriverInitStrategy.SeleniumLocal, objBrowser, strTestsystem, strLanguage);
+			_testable = _testcaseProvider.GetTestableFromTypeName(typeName);
+			_testable.GetLogLastTime();
+			_testable.SetupTest(WebDriverInitStrategy.SeleniumLocal, browser, testsystem, language);
 			try
 			{
-				_objTestable.Test();
+				_testable.Test();
 			}
 			catch (TaskCanceledException)
 			{
 				//Test is canceled. Do normal teardown
 			}
 
-			_objTestable.TeardownTest();
+			_testable.TeardownTest();
 		}
 
 
 		internal void CancelTests()
 		{
-			_bolCanceled = true;
-			_objTestable.CancelTest();
+			_canceled = true;
+			_testable.CancelTest();
 		}
 
-		public string GetAppSetting(string strKey)
+		public string GetAppSetting(string key)
 		{
 			try
 			{
 
-				return (string) Settings.Default[strKey];
+				return (string) Settings.Default[key];
 			}
 			catch
 			{
@@ -132,9 +130,9 @@ namespace RegTesting.LocalTest.Logic
 
 		}
 
-		public void SetAppSetting(string strKey, string strValue)
+		public void SetAppSetting(string key, string value)
 		{
-			Settings.Default[strKey] = strValue;
+			Settings.Default[key] = value;
 			Settings.Default.Save();
 
 		}

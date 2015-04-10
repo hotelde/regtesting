@@ -8,15 +8,15 @@ namespace RegTesting.Service.Mail
 	/// </summary>
 	public class WorkerUnhandledExceptionMail : AbstractMail
 	{
-		private readonly Exception _objException;
+		private readonly Exception _exception;
 
 		/// <summary>
 		/// Create a new WorkerUnhandledExceptionMail
 		/// </summary>
-		/// <param name="objException">The exception</param>
-		public WorkerUnhandledExceptionMail(Exception objException)
+		/// <param name="exception">The exception</param>
+		public WorkerUnhandledExceptionMail(Exception exception)
 		{
-			_objException = objException;
+			_exception = exception;
 		}
 
 		/// <summary>
@@ -24,7 +24,7 @@ namespace RegTesting.Service.Mail
 		/// </summary>
 		public void Send()
 		{
-			SendMail(RegtestingServerConfiguration.Errormailadress, "CRITICAL - Worker died!", "Critical Error: Worker died due of an uncatched error! " + _objException);
+			SendMail(RegtestingServerConfiguration.Errormailadress, "CRITICAL - Worker died!", "Critical Error: Worker died due of an uncatched error! " + _exception);
 		}
 
 	}

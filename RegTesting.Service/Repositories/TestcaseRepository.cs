@@ -15,19 +15,19 @@ namespace RegTesting.Service.Repositories
 		/// <summary>
 		/// Create a TestsuiteRepository
 		/// </summary>
-		/// <param name="objSession">the session</param>
-		public TestcaseRepository(Func<ISession> objSession)
-			: base(objSession)
+		/// <param name="session">the session</param>
+		public TestcaseRepository(Func<ISession> session)
+			: base(session)
 		{
 
 		}
 
 
-		Testcase ITestcaseRepository.GetByType(string strName)
+		Testcase ITestcaseRepository.GetByType(string testcaseName)
 		{
 			return Session
 				.CreateCriteria(typeof(Testcase))
-				.Add(Restrictions.Eq("Type", strName))
+				.Add(Restrictions.Eq("Type", testcaseName))
 				.UniqueResult<Testcase>();
 		}
 	}

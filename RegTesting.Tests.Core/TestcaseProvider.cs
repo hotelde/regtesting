@@ -17,20 +17,20 @@ namespace RegTesting.Tests.Core
 		/// <summary>
 		///  The app-domain for the tests of one stage
 		/// </summary>
-		private AppDomain _objTestsDomain;
+		private AppDomain _testsDomain;
 
 		/// <summary>
 		/// File with our testcases
 		/// </summary>
-		private readonly string _strTestsFile;
+		private readonly string _testsFile;
 	
 		/// <summary>
 		/// Create a new TestcaseProvider
 		/// </summary>
-		/// <param name="strFile">File with our testcases</param>
-		public TestcaseProvider(string strFile)
+		/// <param name="file">File with our testcases</param>
+		public TestcaseProvider(string file)
 		{
-			_strTestsFile = strFile;
+			_testsFile = file;
 			EnsureFilePathExists();
 		}
 
@@ -47,29 +47,29 @@ namespace RegTesting.Tests.Core
 		public string[] LoadTypes()
 		{
 
-			string strEnvironmentPath = Environment.CurrentDirectory;
-			string strCachePath = Path.Combine(strEnvironmentPath,"__cache");
+			string environmentPath = Environment.CurrentDirectory;
+			string cachePath = Path.Combine(environmentPath,"__cache");
 
-			PermissionSet objPermSet = new PermissionSet(PermissionState.Unrestricted);
-			AppDomainSetup objSetup = new AppDomainSetup
+			PermissionSet permissionSet = new PermissionSet(PermissionState.Unrestricted);
+			AppDomainSetup appDomainSetup = new AppDomainSetup
 			                          	{
 											ApplicationBase = AppDomain.CurrentDomain.BaseDirectory,
 			                          		ShadowCopyFiles = "true",
-			                          		CachePath = strCachePath
+			                          		CachePath = cachePath
 			                          	};
-			_objTestsDomain = AppDomain.CreateDomain("TestDomain", null, objSetup, objPermSet);
+			_testsDomain = AppDomain.CreateDomain("TestDomain", null, appDomainSetup, permissionSet);
 
 			try
 			{
-                ITypesLoaderFactory objTypesLoaderFactory = (ITypesLoaderFactory)_objTestsDomain.CreateInstance(Assembly.GetExecutingAssembly().FullName, "RegTesting.Tests.Core.TypesLoaderFactory").Unwrap();
-				object[] objConstructArgs = new object[] {};
-                ITypesLoader objTypesLoader = objTypesLoaderFactory.Create(Assembly.GetExecutingAssembly().FullName, "RegTesting.Tests.Core.TypesLoader", objConstructArgs);
-				Types = objTypesLoader.GetTypes(_strTestsFile);
-				foreach (string strType in Types)
+                ITypesLoaderFactory typesLoaderFactory = (ITypesLoaderFactory)_testsDomain.CreateInstance(Assembly.GetExecutingAssembly().FullName, "RegTesting.Tests.Core.TypesLoaderFactory").Unwrap();
+				object[] constructArgs = new object[] {};
+                ITypesLoader typesLoader = typesLoaderFactory.Create(Assembly.GetExecutingAssembly().FullName, "RegTesting.Tests.Core.TypesLoader", constructArgs);
+				Types = typesLoader.GetTypes(_testsFile);
+				foreach (string type in Types)
 				{
-					if (strType.StartsWith("ERROR:"))
+					if (type.StartsWith("ERROR:"))
 					{
-						Console.WriteLine(strType);
+						Console.WriteLine(type);
 					}
 				}
 				return Types;
@@ -79,31 +79,31 @@ namespace RegTesting.Tests.Core
 				//No types found for this branch
 				return new string[0];
 			}
-			catch (ReflectionTypeLoadException objException)
+			catch (ReflectionTypeLoadException reflectionTypeLoadException)
 			{
-				StringBuilder objStringbuilder = new StringBuilder();
-				foreach (Exception objExSub in objException.LoaderExceptions)
+				StringBuilder stringBuilder = new StringBuilder();
+				foreach (Exception exSub in reflectionTypeLoadException.LoaderExceptions)
 				{
-					objStringbuilder.AppendLine(objExSub.Message);
-					if (objExSub is FileNotFoundException)
+					stringBuilder.AppendLine(exSub.Message);
+					if (exSub is FileNotFoundException)
 					{
-						FileNotFoundException exFileNotFound = objExSub as FileNotFoundException;
-						if (!string.IsNullOrEmpty(exFileNotFound.FusionLog))
+						FileNotFoundException fileNotFoundException = exSub as FileNotFoundException;
+						if (!string.IsNullOrEmpty(fileNotFoundException.FusionLog))
 						{
-							objStringbuilder.AppendLine("Fusion Log:");
-							objStringbuilder.AppendLine(exFileNotFound.FusionLog);
+							stringBuilder.AppendLine("Fusion Log:");
+							stringBuilder.AppendLine(fileNotFoundException.FusionLog);
 						}
 					}
-					objStringbuilder.AppendLine();
+					stringBuilder.AppendLine();
 				}
-				string strErrorMessage = objStringbuilder.ToString();
-				Console.WriteLine(strErrorMessage);
+				string errorMessage = stringBuilder.ToString();
+				Console.WriteLine(errorMessage);
 				//Display or log the error based on your application.
 				return new string[0];
 			}
-			catch (Exception objException)
+			catch (Exception exception)
 			{
-				Console.WriteLine(objException.ToString());
+				Console.WriteLine(exception.ToString());
 				//No types found for this branch
 				return new string[0];
 			}
@@ -113,21 +113,21 @@ namespace RegTesting.Tests.Core
 		/// <summary>
 		/// Returns a new created ITestable for a given type
 		/// </summary>
-		/// <param name="strTypeName">type of testcase</param>
+		/// <param name="typeName">type of testcase</param>
 		/// <returns>a new ITestable or null on error</returns>
-		public ITestable GetTestableFromTypeName(String strTypeName)
+		public ITestable GetTestableFromTypeName(String typeName)
 		{
 			try
 			{
-                ITestableFactory objTestableFactory = (ITestableFactory)_objTestsDomain.CreateInstance(Assembly.GetExecutingAssembly().FullName, "RegTesting.Tests.Core.TestableFactory").Unwrap();
-				object[] objConstructArgs = new object[] { };
-				ITestable objTestable = objTestableFactory.Create(_strTestsFile,
-					strTypeName, objConstructArgs);
-				return objTestable;
+                ITestableFactory testableFactory = (ITestableFactory)_testsDomain.CreateInstance(Assembly.GetExecutingAssembly().FullName, "RegTesting.Tests.Core.TestableFactory").Unwrap();
+				object[] constructArgs = new object[] { };
+				ITestable testable = testableFactory.Create(_testsFile,
+					typeName, constructArgs);
+				return testable;
 			}
-			catch(Exception objEx)
+			catch(Exception exception)
 			{
-				Console.WriteLine(objEx.ToString());
+				Console.WriteLine(exception.ToString());
 				return null;
 			}
 
@@ -143,20 +143,20 @@ namespace RegTesting.Tests.Core
 
 				// release all references to the factory and ILiveInterface
 				// unload the complete secondary app-domain
-				AppDomain.Unload(_objTestsDomain);
+				AppDomain.Unload(_testsDomain);
 			}
-			catch (Exception objEx)
+			catch (Exception exception)
 			{
-				Console.WriteLine("EXCEPTION while unloading: " + objEx);
+				Console.WriteLine("EXCEPTION while unloading: " + exception);
 			}
 		}
 
 
 		private void EnsureFilePathExists()
 		{
-			string strPath = Path.GetDirectoryName(_strTestsFile);
-			if (!String.IsNullOrWhiteSpace(strPath))
-				Directory.CreateDirectory(strPath);
+			string path = Path.GetDirectoryName(_testsFile);
+			if (!String.IsNullOrWhiteSpace(path))
+				Directory.CreateDirectory(path);
 		}
 
 
@@ -167,26 +167,26 @@ namespace RegTesting.Tests.Core
 		public void CreateAppDomain()
 		{
 
-			string strEnvironmentPath = Environment.CurrentDirectory;
-			string strCachePath = Path.Combine(
-				strEnvironmentPath,
+			string currentDirectory = Environment.CurrentDirectory;
+			string cachePath = Path.Combine(
+				currentDirectory,
 				"__cache");
 
-			PermissionSet objPermSet = new PermissionSet(PermissionState.Unrestricted);
-			AppDomainSetup objSetup = new AppDomainSetup
+			PermissionSet permissionSet = new PermissionSet(PermissionState.Unrestricted);
+			AppDomainSetup appDomainSetup = new AppDomainSetup
 			{
 				ApplicationBase = AppDomain.CurrentDomain.BaseDirectory,
 				ShadowCopyFiles = "true",
-				CachePath = strCachePath
+				CachePath = cachePath
 			};
-			_objTestsDomain = AppDomain.CreateDomain("TestDomain", null, objSetup, objPermSet);
+			_testsDomain = AppDomain.CreateDomain("TestDomain", null, appDomainSetup, permissionSet);
 
 			try
 			{
-                ITypesLoaderFactory objTypesLoaderFactory = (ITypesLoaderFactory)_objTestsDomain.CreateInstance(Assembly.GetExecutingAssembly().FullName, " RegTesting.Tests.Core.TypesLoaderFactory").Unwrap();
-				object[] objConstructArgs = new object[] { };
-                ITypesLoader objTypesLoader = objTypesLoaderFactory.Create(Assembly.GetExecutingAssembly().FullName, " RegTesting.Tests.Core.TypesLoader", objConstructArgs);
-				Types = objTypesLoader.GetTypes(_strTestsFile);
+                ITypesLoaderFactory typesLoaderFactory = (ITypesLoaderFactory)_testsDomain.CreateInstance(Assembly.GetExecutingAssembly().FullName, " RegTesting.Tests.Core.TypesLoaderFactory").Unwrap();
+				object[] constructArgs = new object[] { };
+                ITypesLoader typesLoader = typesLoaderFactory.Create(Assembly.GetExecutingAssembly().FullName, " RegTesting.Tests.Core.TypesLoader", constructArgs);
+				Types = typesLoader.GetTypes(_testsFile);
 			}
 			catch (NullReferenceException)
 			{

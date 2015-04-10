@@ -17,20 +17,20 @@ namespace RegTesting.Tests.Framework.Logic.Init
 		/// <summary>
 		/// Get a RemoteWebDriver
 		/// </summary>
-		/// <param name="objBrowser">the Browser to test on</param>
+		/// <param name="browser">the Browser to test on</param>
 		/// <returns>a IWebDriver</returns>
-		IWebDriver IWebDriverFactory.GetWebDriver(Browser objBrowser)
+		IWebDriver IWebDriverFactory.GetWebDriver(Browser browser)
 		{
-			DesiredCapabilities objCapabilities;
+			DesiredCapabilities desiredCapabilities;
 			//What browser to test on?s
 			IWebDriver webDriver;
-			switch (objBrowser.Browserstring.ToLowerInvariant())
+			switch (browser.Browserstring.ToLowerInvariant())
 			{
 				case "firefox":
-					objCapabilities = DesiredCapabilities.Firefox();
-					objCapabilities.SetCapability("singleWindow", true);
-					objCapabilities.SetCapability("handlesAlerts", true);
-					webDriver = new FirefoxDriver(objCapabilities);
+					desiredCapabilities = DesiredCapabilities.Firefox();
+					desiredCapabilities.SetCapability("singleWindow", true);
+					desiredCapabilities.SetCapability("handlesAlerts", true);
+					webDriver = new FirefoxDriver(desiredCapabilities);
 					break;
 				case "chrome":
 					ChromeOptions chromeOptions = new ChromeOptions();

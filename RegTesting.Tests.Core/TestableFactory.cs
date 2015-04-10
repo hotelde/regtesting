@@ -13,22 +13,22 @@ namespace RegTesting.Tests.Core
 		/// <summary>
 		/// Create a Factory
 		/// </summary>
-		/// <param name="strAssemblyFile">Our Assembly</param>
-		/// <param name="strTypeName">the type to create</param>
-		/// <param name="objConstructArgs">constructor arguments</param>
+		/// <param name="assemblyFile">Our Assembly</param>
+		/// <param name="typeName">the type to create</param>
+		/// <param name="constructArgs">constructor arguments</param>
 		/// <returns>A new class of type typeName or null in error case</returns>
-		public ITestable Create(string strAssemblyFile, string strTypeName,
-		                        object[] objConstructArgs)
+		public ITestable Create(string assemblyFile, string typeName,
+		                        object[] constructArgs)
 		{
 			//Ignore all errors and return null in error case.
 			try
 			{
 
-                Assembly assembly = Assembly.LoadFrom(strAssemblyFile);
-				Type objType = assembly.GetType(strTypeName);
-				if (typeof(ITestable).IsAssignableFrom(objType))
+                Assembly assembly = Assembly.LoadFrom(assemblyFile);
+				Type type = assembly.GetType(typeName);
+				if (typeof(ITestable).IsAssignableFrom(type))
 				{
-                    return (ITestable)Activator.CreateInstanceFrom(strAssemblyFile, strTypeName, objConstructArgs).Unwrap();
+                    return (ITestable)Activator.CreateInstanceFrom(assemblyFile, typeName, constructArgs).Unwrap();
 				}
 			}
 			catch (MissingMethodException)

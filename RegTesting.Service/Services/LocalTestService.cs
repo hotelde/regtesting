@@ -22,163 +22,160 @@ namespace RegTesting.Service.Services
 	[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
 	public class LocalTestService : ILocalTestService
 	{
-		private readonly ITestFileLocker _objTestFileLocker;
-		private readonly ITestsystemRepository _objTestsystemRepository;
-		private readonly ILanguageRepository _objLanguageRepository;
-		private readonly IBrowserRepository _objBrowserRepository;
-		private readonly ITesterRepository _objTesterRepository;
-		private readonly ITestsuiteRepository _objTestsuiteRepository;
-		private readonly ITestcaseRepository _objTestcaseRepository;
-		private readonly ITestPool _objTestPool;
+		private readonly ITestFileLocker _testFileLocker;
+		private readonly ITestsystemRepository _testsystemRepository;
+		private readonly ILanguageRepository _languageRepository;
+		private readonly IBrowserRepository _browserRepository;
+		private readonly ITesterRepository _testerRepository;
+		private readonly ITestsuiteRepository _testsuiteRepository;
+		private readonly ITestcaseRepository _testcaseRepository;
+		private readonly ITestPool _testPool;
 
 		/// <summary>
 		/// Local Test Service constructor
 		/// </summary>
-		/// <param name="objTestFileLocker">the testFileLocker</param>
-		/// <param name="objTestsystemRepository">the testSystemRepository</param>
-		/// <param name="objLanguageRepository">the languageRepository</param>
-		/// <param name="objBrowserRepository">the browserRepository</param>
-		/// <param name="objTesterRepository">the testerRepository</param>
-		/// <param name="objTestsuiteRepository">the testsuiteRepository</param>
-		/// <param name="objTestcaseRepository">the testcaseRepository</param>
-		/// <param name="objTestPool">the testPool</param>
-		public LocalTestService(ITestFileLocker objTestFileLocker, ITestsystemRepository objTestsystemRepository,
-			ILanguageRepository objLanguageRepository, IBrowserRepository objBrowserRepository, ITesterRepository objTesterRepository,
-			ITestsuiteRepository objTestsuiteRepository, ITestcaseRepository objTestcaseRepository, ITestPool objTestPool)
+		/// <param name="testFileLocker">the testFileLocker</param>
+		/// <param name="testsystemRepository">the testSystemRepository</param>
+		/// <param name="languageRepository">the languageRepository</param>
+		/// <param name="browserRepository">the browserRepository</param>
+		/// <param name="testerRepository">the testerRepository</param>
+		/// <param name="testsuiteRepository">the testsuiteRepository</param>
+		/// <param name="testcaseRepository">the testcaseRepository</param>
+		/// <param name="testPool">the testPool</param>
+		public LocalTestService(ITestFileLocker testFileLocker, ITestsystemRepository testsystemRepository,
+			ILanguageRepository languageRepository, IBrowserRepository browserRepository, ITesterRepository testerRepository,
+			ITestsuiteRepository testsuiteRepository, ITestcaseRepository testcaseRepository, ITestPool testPool)
 		{
-			if (objTestFileLocker == null)
-				throw new ArgumentNullException("objTestFileLocker");
-			if (objTestsystemRepository == null)
-				throw new ArgumentNullException("objTestsystemRepository");
-			if (objLanguageRepository == null)
-				throw new ArgumentNullException("objLanguageRepository");
-			if (objBrowserRepository == null)
-				throw new ArgumentNullException("objBrowserRepository");
-			if (objTesterRepository == null)
-				throw new ArgumentNullException("objTesterRepository");
-			if (objTestsuiteRepository == null)
-				throw new ArgumentNullException("objTestsuiteRepository");
-			if (objTestcaseRepository == null)
-				throw new ArgumentNullException("objTestcaseRepository");
-			if (objTestPool == null)
-				throw new ArgumentNullException("objTestPool");
+			if (testFileLocker == null)
+				throw new ArgumentNullException("testFileLocker");
+			if (testsystemRepository == null)
+				throw new ArgumentNullException("testsystemRepository");
+			if (languageRepository == null)
+				throw new ArgumentNullException("languageRepository");
+			if (browserRepository == null)
+				throw new ArgumentNullException("browserRepository");
+			if (testerRepository == null)
+				throw new ArgumentNullException("testerRepository");
+			if (testsuiteRepository == null)
+				throw new ArgumentNullException("testsuiteRepository");
+			if (testcaseRepository == null)
+				throw new ArgumentNullException("testcaseRepository");
+			if (testPool == null)
+				throw new ArgumentNullException("testPool");
 
-			_objTestFileLocker = objTestFileLocker;
-			_objTestsystemRepository = objTestsystemRepository;
-			_objLanguageRepository = objLanguageRepository;
-			_objBrowserRepository = objBrowserRepository;
-			_objTesterRepository = objTesterRepository;
-			_objTestsuiteRepository = objTestsuiteRepository;
-			_objTestcaseRepository = objTestcaseRepository;
-			_objTestPool = objTestPool;
+			_testFileLocker = testFileLocker;
+			_testsystemRepository = testsystemRepository;
+			_languageRepository = languageRepository;
+			_browserRepository = browserRepository;
+			_testerRepository = testerRepository;
+			_testsuiteRepository = testsuiteRepository;
+			_testcaseRepository = testcaseRepository;
+			_testPool = testPool;
 		}
 
-		void ILocalTestService.SendTestcaseFile(string strTestsystem, byte[] arrData)
+		void ILocalTestService.SendTestcaseFile(string testsystemName, byte[] data)
 		{
-			object objLock = _objTestFileLocker.GetLock(strTestsystem);
-			lock (objLock)
+			object _lock = _testFileLocker.GetLock(testsystemName);
+			lock (_lock)
 			{
-				Testsystem objTestsystem = _objTestsystemRepository.GetByName(strTestsystem);
-				string strTestFile = RegtestingServerConfiguration.Testsfolder + objTestsystem.Filename;
-				Directory.CreateDirectory(Path.GetDirectoryName(strTestFile));
-				using (FileStream objFileStream = new FileStream(strTestFile, FileMode.Create, FileAccess.Write))
+				Testsystem testsystem = _testsystemRepository.GetByName(testsystemName);
+				string testFile = RegtestingServerConfiguration.Testsfolder + testsystem.Filename;
+				Directory.CreateDirectory(Path.GetDirectoryName(testFile));
+				using (FileStream fileStream = new FileStream(testFile, FileMode.Create, FileAccess.Write))
 				{
-					objFileStream.Write(arrData, 0, arrData.Length);
+					fileStream.Write(data, 0, data.Length);
 				}
 
-				TestcaseProvider objTestcaseProvider = new TestcaseProvider(strTestFile);
-				objTestcaseProvider.CreateAppDomain();
-				foreach (string strTest in objTestcaseProvider.Types)
+				TestcaseProvider testcaseProvider = new TestcaseProvider(testFile);
+				testcaseProvider.CreateAppDomain();
+				foreach (string test in testcaseProvider.Types)
 				{
-					ITestable objTestable = objTestcaseProvider.GetTestableFromTypeName(strTest);
-					if (objTestable == null) continue;
+					ITestable testable = testcaseProvider.GetTestableFromTypeName(test);
+					if (testable == null) continue;
 
-					Testcase objTestcase = _objTestcaseRepository.GetByType(strTest);
-					string strTestableName = objTestable.GetName();
-					if (objTestcase == null)
+					Testcase testcase = _testcaseRepository.GetByType(test);
+					string testableName = testable.GetName();
+					if (testcase == null)
 					{
-						Logger.Log("New test: " + strTestableName);
-						objTestcase = new Testcase { Activated = true, Name = strTestableName, Type = strTest };
-						_objTestcaseRepository.Store(objTestcase);
+						Logger.Log("New test: " + testableName);
+						testcase = new Testcase { Activated = true, Name = testableName, Type = test };
+						_testcaseRepository.Store(testcase);
 					}
-					else if (!objTestcase.Name.Equals(strTestableName))
+					else if (!testcase.Name.Equals(testableName))
 					{
-						Logger.Log("Renamed test: " + objTestcase.Name + " to " + strTestableName);
-						objTestcase.Name = strTestableName;
-						_objTestcaseRepository.Store(objTestcase);
+						Logger.Log("Renamed test: " + testcase.Name + " to " + testableName);
+						testcase.Name = testableName;
+						_testcaseRepository.Store(testcase);
 
 					}
 
 				}
-				objTestcaseProvider.Unload();
+				testcaseProvider.Unload();
 			}
-
-
-
-
+			
 		}
 
 		IEnumerable<LanguageDto> ILocalTestService.GetLanguages()
 		{
-			return Mapper.Map<IEnumerable<LanguageDto>>(_objLanguageRepository.GetAll());
+			return Mapper.Map<IEnumerable<LanguageDto>>(_languageRepository.GetAll());
 
 		}
 
 		IEnumerable<BrowserDto> ILocalTestService.GetBrowsers()
 		{
-			return Mapper.Map<IEnumerable<BrowserDto>>(_objBrowserRepository.GetAll());
+			return Mapper.Map<IEnumerable<BrowserDto>>(_browserRepository.GetAll());
 		}
 
-		void ILocalTestService.AddLocalTestTasks(string strUser, string strTestsystemName, string strTestsystemUrl, List<string> lstBrowser,
-			List<string> lstTestcases, List<string> lstLanguages)
+		void ILocalTestService.AddLocalTestTasks(string userName, string testsystemName, string testsystemUrl, List<string> browsers,
+			List<string> testcases, List<string> languages)
 		{
 			
-			Testsystem objTestsystem = _objTestsystemRepository.GetByName(strTestsystemName);
-			Tester objTester = _objTesterRepository.GetByName(strUser);
+			Testsystem testsystem = _testsystemRepository.GetByName(testsystemName);
+			Tester tester = _testerRepository.GetByName(userName);
 
-			objTestsystem.Url = strTestsystemUrl;
-			_objTestsystemRepository.Store(objTestsystem);
+			testsystem.Url = testsystemUrl;
+			_testsystemRepository.Store(testsystem);
 
-			Testsuite objTestsuite = new Testsuite { Description = "", Name = "Local " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString(), TestsystemFilter = objTestsystem };
-			_objTestsuiteRepository.Store(objTestsuite);
+			Testsuite testsuite = new Testsuite { Description = "", Name = "Local " + DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString(), TestsystemFilter = testsystem };
+			_testsuiteRepository.Store(testsuite);
 
-			int intTestsuite = objTestsuite.ID;
-			List<int> lstTestcaseIds = lstTestcases.Select(t => _objTestcaseRepository.GetByType(t).ID).ToList();
-			List<int> lstBrowserIds = lstBrowser.Select(t => _objBrowserRepository.GetByName(t).ID).ToList();
-			List<int> lstLanguageIds = lstLanguages.Select(t => _objLanguageRepository.GetByLanguageCode(t).ID).ToList();
-
-
-			_objTestsuiteRepository.SetTestcasesForTestsuite(intTestsuite, lstTestcaseIds);
-			_objTestsuiteRepository.SetBrowsersForTestsuite(intTestsuite, lstBrowserIds);
-			_objTestsuiteRepository.SetLanguagesForTestsuite(intTestsuite, lstLanguageIds);
+			int testsuiteId = testsuite.ID;
+			List<int> testcaseIds = testcases.Select(t => _testcaseRepository.GetByType(t).ID).ToList();
+			List<int> browserIds = browsers.Select(t => _browserRepository.GetByName(t).ID).ToList();
+			List<int> languageIds = languages.Select(t => _languageRepository.GetByLanguageCode(t).ID).ToList();
 
 
-			TestJob objTestjob = new TestJob
+			_testsuiteRepository.SetTestcasesForTestsuite(testsuiteId, testcaseIds);
+			_testsuiteRepository.SetBrowsersForTestsuite(testsuiteId, browserIds);
+			_testsuiteRepository.SetLanguagesForTestsuite(testsuiteId, languageIds);
+
+
+			TestJob testjob = new TestJob
 			{
-				Name = "Testsuite " + objTestsuite.Name,
+				Name = "Testsuite " + testsuite.Name,
 				ResultCode = TestState.Pending,
-				Testsuite = objTestsuite,
-				Testsystem = objTestsystem,
-				Tester = objTester,
+				Testsuite = testsuite,
+				Testsystem = testsystem,
+				Tester = tester,
 				StartedAt = DateTime.Now,
 				JobType = JobType.Localtesttool
 			};
 
-			ITestJobManager objTestJobManager = new TestJobManager(objTestjob);
+			ITestJobManager testJobManager = new TestJobManager(testjob);
 
-			ICollection<WorkItem> lstWorkItems = (from objTestcase in objTestsuite.Testcases
-												  from objBrowser in objTestsuite.Browsers
-												  from objLanguage in objTestsuite.Languages
-												  select new WorkItem(objTestJobManager)
+			ICollection<WorkItem> workItems = (from testcase in testsuite.Testcases
+												  from browser in testsuite.Browsers
+												  from language in testsuite.Languages
+												  select new WorkItem(testJobManager)
 												  {
-													  Testcase = objTestcase,
-													  Browser = objBrowser,
-													  Language = objLanguage,
-													  Testsystem = objTestsystem,
-													  Tester = objTester
+													  Testcase = testcase,
+													  Browser = browser,
+													  Language = language,
+													  Testsystem = testsystem,
+													  Tester = tester
 												  }).ToList();
 
-			_objTestPool.AddTestJob(objTestJobManager, lstWorkItems);
+			_testPool.AddTestJob(testJobManager, workItems);
 		}
 	}
 }

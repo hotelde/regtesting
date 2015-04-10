@@ -2,30 +2,30 @@
 @model Dictionary<String, IList<TestsystemSummary>>
 
 @{
-    ViewBag.Title = "Testsystem Übersicht";
+	ViewBag.Title = "Testsystem Übersicht";
 }
 
 
 
 
 
-@foreach (KeyValuePair<string, IList<TestsystemSummary>> keyValuePairSummaries in Model)
+@foreach (KeyValuePair<string, IList<TestsystemSummary>> summaries in Model)
 {
 
 	<div class="page-header">
 		<h1>
-			@keyValuePairSummaries.Key
+			@summaries.Key
 			
-				@if (keyValuePairSummaries.Value.Any())
+				@if (summaries.Value.Any())
 				{
 					<small>
-						@keyValuePairSummaries.Value.First().TestsuiteName
+						@summaries.Value.First().TestsuiteName
 					</small>
 				}
 	</h1>
 	</div>
-	<div id="@(keyValuePairSummaries.Key + "MainBranchSummaryBlock")">
-		@{Html.RenderPartial("MainBranchSummariesPartial", keyValuePairSummaries.Value);}
+	<div id="@(summaries.Key + "MainBranchSummaryBlock")">
+		@{Html.RenderPartial("MainBranchSummariesPartial", summaries.Value);}
 	</div>
 }
 

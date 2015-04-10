@@ -7,50 +7,49 @@ namespace RegTesting.Mvc.Controllers
 	/// <summary>
 	/// A ErrorController
 	/// </summary>
-    public class ErrorController : Controller
-    {
+	public class ErrorController : Controller
+	{
 
 		
-		private readonly ISettingsService _objSettingsService;
+		private readonly ISettingsService _settingsService;
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="objSettingsService">regtesting service</param>
-		public ErrorController(ISettingsService objSettingsService)
+		/// <param name="settingsService">regtesting service</param>
+		public ErrorController(ISettingsService settingsService)
 		{
-			_objSettingsService = objSettingsService;
+			_settingsService = settingsService;
 		}
 
 
 
 
-        //
-        // GET: /Error/
+		//
+		// GET: /Error/
 
 		/// <summary>
 		/// The IndexView of the ErrorController
 		/// </summary>
 		/// <returns>A Index View</returns>
-        public ActionResult Index()
-        {
-            return View();
-        }
-
+		public ActionResult Index()
+		{
+			return View();
+		}
 
 
 		/// <summary>
 		/// Edit an error
 		/// </summary>
-		/// <param name="error">the error to edit</param>
+		/// <param name="errorId"></param>
 		/// <returns>a Edit error view</returns>
-		public ActionResult Edit(int error)
+		public ActionResult Edit(int errorId)
 		{
-			Error objError;
+			Error error;
 
-			objError = _objSettingsService.GetError(error);
+			error = _settingsService.GetError(errorId);
 			
-			return View("Edit", objError);
+			return View("Edit", error);
 		}
 
 
@@ -64,11 +63,11 @@ namespace RegTesting.Mvc.Controllers
 		{
 			if (ModelState.IsValid)
 			{
-				_objSettingsService.EditError(error);
+				_settingsService.EditError(error);
 				return RedirectToAction("Index","Testing");
 			}
 			return View(error);
 		}
 
-    }
+	}
 }

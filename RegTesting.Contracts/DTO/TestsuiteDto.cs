@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using RegTesting.Contracts.Domain;
 
 namespace RegTesting.Contracts.DTO
 {

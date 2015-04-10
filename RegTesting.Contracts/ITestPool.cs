@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using RegTesting.Contracts.DTO;
-using RegTesting.Contracts.Domain;
 
 namespace RegTesting.Contracts
 {
@@ -12,22 +11,22 @@ namespace RegTesting.Contracts
 		/// <summary>
 		/// Add workItems to the testpool
 		/// </summary>
-		/// <param name="objTestJob">the testJob</param>
-		/// <param name="objWorkItems">the workItems</param>
-		void AddTestJob(ITestJobManager objTestJob, ICollection<WorkItem> objWorkItems);
+		/// <param name="testJobManager">the testJob</param>
+		/// <param name="workItems">the workItems</param>
+		void AddTestJob(ITestJobManager testJobManager, ICollection<WorkItem> workItems);
 
 		/// <summary>
 		/// Get a workItem of the testpool
 		/// </summary>
-		/// <param name="objTestWorker">the testWorker which wants a workItem</param>
+		/// <param name="testWorker">the testWorker which wants a workItem</param>
 		/// <returns>a workItem</returns>
-		WorkItem GetWorkItem(ITestWorker objTestWorker);
+		WorkItem GetWorkItem(ITestWorker testWorker);
 
 		/// <summary>
 		/// A workItem is finished
 		/// </summary>
-		/// <param name="objWorkItem">the workItem</param>
-		void WorkItemFinished(WorkItem objWorkItem);
+		/// <param name="workItem">the workItem</param>
+		void WorkItemFinished(WorkItem workItem);
 
 		/// <summary>
 		/// Get the testJobs
@@ -38,14 +37,14 @@ namespace RegTesting.Contracts
 		/// <summary>
 		/// Register a testworker to list
 		/// </summary>
-		/// <param name="objTestWorker">the testWorker</param>
-		void RegisterTestWorker(ITestWorker objTestWorker);
+		/// <param name="testWorker">the testWorker</param>
+		void RegisterTestWorker(ITestWorker testWorker);
 
 		/// <summary>
 		/// Remove a testworker from list
 		/// </summary>
-		/// <param name="objTestWorker">the testWorker</param>
-		void RemoveTestWorker(ITestWorker objTestWorker);
+		/// <param name="testWorker">the testWorker</param>
+		void RemoveTestWorker(ITestWorker testWorker);
 
 		/// <summary>
 		/// Get the testworker list
@@ -56,9 +55,9 @@ namespace RegTesting.Contracts
 		/// <summary>
 		/// Get a testworker by name
 		/// </summary>
-		/// <param name="strNode">the nodeName</param>
+		/// <param name="nodeName">the nodeName</param>
 		/// <returns>a testworker by Name</returns>
-		ITestWorker GetTestWorker(string strNode);
+		ITestWorker GetTestWorker(string nodeName);
 
 		/// <summary>
 		/// priorize a testjob

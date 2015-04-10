@@ -59,8 +59,8 @@ namespace RegTesting.Service
 					//db.AutoCommentSql = true;
 				});
 
-			HbmMapping objHbmMapping = GetMappings();
-			configure.AddDeserializedMapping(objHbmMapping,"NHMapping");
+			HbmMapping hbmMapping = GetMappings();
+			configure.AddDeserializedMapping(hbmMapping,"NHMapping");
 			SchemaMetadataUpdater.QuoteTableAndColumns(configure);
 
 			return configure;
@@ -72,23 +72,23 @@ namespace RegTesting.Service
 		/// <returns>The Mappings</returns>
 		protected static HbmMapping GetMappings()
 		{
-			ModelMapper objModelMapper = new ModelMapper();
+			ModelMapper modelMapper = new ModelMapper();
 
-			objModelMapper.AddMapping<TestsuiteMap>();
-			objModelMapper.AddMapping<TestsystemMap>();
-			objModelMapper.AddMapping<ResultMap>();
-			objModelMapper.AddMapping<BrowserMap>();
-			objModelMapper.AddMapping<LanguageMap>();
-			objModelMapper.AddMapping<TestcaseMap>();
-			objModelMapper.AddMapping<ErrorMap>();
-			objModelMapper.AddMapping<TesterMap>();
-			objModelMapper.AddMapping<HistoryResultMap>();
-			objModelMapper.AddMapping<TestJobMap>();
+			modelMapper.AddMapping<TestsuiteMap>();
+			modelMapper.AddMapping<TestsystemMap>();
+			modelMapper.AddMapping<ResultMap>();
+			modelMapper.AddMapping<BrowserMap>();
+			modelMapper.AddMapping<LanguageMap>();
+			modelMapper.AddMapping<TestcaseMap>();
+			modelMapper.AddMapping<ErrorMap>();
+			modelMapper.AddMapping<TesterMap>();
+			modelMapper.AddMapping<HistoryResultMap>();
+			modelMapper.AddMapping<TestJobMap>();
 
-			HbmMapping objHbmMapping = objModelMapper.CompileMappingFor(new[] { typeof(Testsuite), typeof(Testsystem),
+			HbmMapping hbmMapping = modelMapper.CompileMappingFor(new[] { typeof(Testsuite), typeof(Testsystem),
 				typeof(Result), typeof(Browser), typeof(Language),  typeof(Testcase),  typeof(Error), typeof(Tester),
 				typeof(TestJob),typeof(HistoryResult)});
-			return objHbmMapping;
+			return hbmMapping;
 		}
 
 	}

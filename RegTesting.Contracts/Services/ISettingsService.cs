@@ -17,20 +17,20 @@ namespace RegTesting.Contracts.Services
 		/// <summary>
 		/// find a browser by id
 		/// </summary>
-		/// <param name="intID">the id</param>
+		/// <param name="Id">the id</param>
 		/// <returns>a browserDto</returns>
-		BrowserDto FindBrowserByID(int intID);
+		BrowserDto FindBrowserByID(int Id);
 
 		/// <summary>
 		/// edit a browser
 		/// </summary>
-		/// <param name="objBrowser">a browserDto</param>
-		void StoreBrowser(BrowserDto objBrowser);
+		/// <param name="browser">a browserDto</param>
+		void StoreBrowser(BrowserDto browser);
 		/// <summary>
 		/// delete a browser by id
 		/// </summary>
-		/// <param name="intID">the id</param>
-		void DeleteBrowserByID(int intID);
+		/// <param name="Id">the id</param>
+		void DeleteBrowserByID(int Id);
 
 		/// <summary>
 		/// get all languages
@@ -40,20 +40,20 @@ namespace RegTesting.Contracts.Services
 		/// <summary>
 		/// find a language by id
 		/// </summary>
-		/// <param name="intID">the id</param>
+		/// <param name="Id">the id</param>
 		/// <returns>a languageDto</returns>
-		LanguageDto FindLanguageByID(int intID);
+		LanguageDto FindLanguageByID(int Id);
 
 		/// <summary>
 		/// edit a language
 		/// </summary>
-		/// <param name="objLanguage">the languageDto</param>
-		void StoreLanguage(LanguageDto objLanguage);
+		/// <param name="language">the languageDto</param>
+		void StoreLanguage(LanguageDto language);
 		/// <summary>
 		/// delete a language by id
 		/// </summary>
-		/// <param name="intID">the id</param>
-		void DeleteLanguageByID(int intID);
+		/// <param name="Id">the id</param>
+		void DeleteLanguageByID(int Id);
 
 		/// <summary>
 		/// get all testers
@@ -63,20 +63,20 @@ namespace RegTesting.Contracts.Services
 		/// <summary>
 		/// find a tester by id
 		/// </summary>
-		/// <param name="intID">the id</param>
+		/// <param name="Id">the id</param>
 		/// <returns>a testerDto</returns>
-		TesterDto FindTesterByID(int intID);
+		TesterDto FindTesterByID(int Id);
 
 		/// <summary>
 		/// edit a tester
 		/// </summary>
-		/// <param name="objTester">the testerDto</param>
-		void StoreTester(TesterDto objTester);
+		/// <param name="tester">the testerDto</param>
+		void StoreTester(TesterDto tester);
 		/// <summary>
 		/// delete a tester by id
 		/// </summary>
-		/// <param name="intID">the id</param>
-		void DeleteTesterByID(int intID);
+		/// <param name="Id">the id</param>
+		void DeleteTesterByID(int Id);
 
 		/// <summary>
 		/// get all testsystems
@@ -86,20 +86,20 @@ namespace RegTesting.Contracts.Services
 		/// <summary>
 		/// find a testsystem by id
 		/// </summary>
-		/// <param name="intID">the id</param>
+		/// <param name="Id">the id</param>
 		/// <returns>a testsystemDto</returns>
-		TestsystemDto FindTestsystemByID(int intID);
+		TestsystemDto FindTestsystemByID(int Id);
 
 		/// <summary>
 		/// edit a testsystem
 		/// </summary>
-		/// <param name="objTestsystem">the testsystemDto</param>
-		void StoreTestsystem(TestsystemDto objTestsystem);
+		/// <param name="testsystem">the testsystemDto</param>
+		void StoreTestsystem(TestsystemDto testsystem);
 		/// <summary>
 		/// delete a testsystem by id
 		/// </summary>
-		/// <param name="intID">the id</param>
-		void DeleteTestsystemByID(int intID);
+		/// <param name="Id">the id</param>
+		void DeleteTestsystemByID(int Id);
 
 		/// <summary>
 		/// get all testcases
@@ -109,19 +109,19 @@ namespace RegTesting.Contracts.Services
 		/// <summary>
 		/// find a testcase by id
 		/// </summary>
-		/// <param name="intID">the id</param>
+		/// <param name="Id">the id</param>
 		/// <returns>a testcaseDto</returns>
-		TestcaseDto FindTestcaseByID(int intID);
+		TestcaseDto FindTestcaseByID(int Id);
 		/// <summary>
 		/// edit a testcase
 		/// </summary>
-		/// <param name="objTestcase">the testcaseDto</param>
-		void EditTestcase(TestcaseDto objTestcase);
+		/// <param name="testcase">the testcaseDto</param>
+		void EditTestcase(TestcaseDto testcase);
 		/// <summary>
 		/// delete a testcase by id
 		/// </summary>
-		/// <param name="intID">the id</param>
-		void DeleteTestcaseByID(int intID);
+		/// <param name="Id">the id</param>
+		void DeleteTestcaseByID(int Id);
 
 		/// <summary>
 		/// get all testsuites
@@ -131,20 +131,20 @@ namespace RegTesting.Contracts.Services
 		/// <summary>
 		/// find a testsuite by id
 		/// </summary>
-		/// <param name="intID">the id</param>
+		/// <param name="Id">the id</param>
 		/// <returns>a testsuiteDto</returns>
-		TestsuiteDto FindTestsuiteByID(int intID);
+		TestsuiteDto FindTestsuiteByID(int Id);
 
 		/// <summary>
 		/// edit a testsuite
 		/// </summary>
-		/// <param name="objTestsuite">the testsuiteDto</param>
-		void StoreTestsuite(TestsuiteDto objTestsuite);
+		/// <param name="testsuite">the testsuiteDto</param>
+		void StoreTestsuite(TestsuiteDto testsuite);
 		/// <summary>
 		/// delete a testsuite
 		/// </summary>
-		/// <param name="intID">the id</param>
-		void DeleteTestsuiteByID(int intID);
+		/// <param name="Id">the id</param>
+		void DeleteTestsuiteByID(int Id);
 
 		/// <summary>
 		/// get an error

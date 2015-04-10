@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using RegTesting.Contracts.Domain;
-
-namespace RegTesting.Contracts.DTO
+﻿namespace RegTesting.Contracts.DTO
 {
 	/// <summary>
 	/// the workItemDto

@@ -18,20 +18,20 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 			_timeOut = Properties.Settings.Default.AsyncCallTimeOut;
 			_tabSwitchTimeOut = Properties.Settings.Default.SwitchTabTimeOut;
 		}
-		public Task<ReadOnlyCollection<string>> GetWindowHandlesAsync(IWebDriver driver)
+		public Task<ReadOnlyCollection<string>> GetWindowHandlesAsync(IWebDriver webDriver)
 		{
-			Task<ReadOnlyCollection<string>> task = Task.Factory.StartNew(() => GetWindowHandles(driver));
+			Task<ReadOnlyCollection<string>> task = Task.Factory.StartNew(() => GetWindowHandles(webDriver));
 			return task;
 		}
 
-		private ReadOnlyCollection<string> GetWindowHandles(IWebDriver driver)
+		private ReadOnlyCollection<string> GetWindowHandles(IWebDriver webDriver)
 		{
 			ReadOnlyCollection<string> result;
 			Stopwatch stopwatch = new Stopwatch();
 			stopwatch.Start();
 			do
 			{
-				result = driver.WindowHandles;
+				result = webDriver.WindowHandles;
 				if (stopwatch.ElapsedMilliseconds > _timeOut)
 				{
 					throw new Exception("Could not get WindowHandles from WebDriver.");
@@ -42,12 +42,12 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 			return result;
 		}
 
-		public Task<bool> TabActuallySwitched(IWebDriver driver, string targetUrl, string urlBeforeSwitch)
+		public Task<bool> TabActuallySwitched(IWebDriver webDriver, string targetUrl, string urlBeforeSwitch)
 		{
 			Task<bool> task;
 			try
 			{
-				task = Task.Factory.StartNew(() => EnsureTabSwitchedWithTimeOut(driver, targetUrl, urlBeforeSwitch));
+				task = Task.Factory.StartNew(() => EnsureTabSwitchedWithTimeOut(webDriver, targetUrl, urlBeforeSwitch));
 			}
 			catch (Exception e)
 			{
@@ -57,7 +57,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 			return task;
 		}
 
-		private bool EnsureTabSwitchedWithTimeOut(IWebDriver driver, string targetUrl, string urlBeforeSwitch)
+		private bool EnsureTabSwitchedWithTimeOut(IWebDriver webDriver, string targetUrl, string urlBeforeSwitch)
 		{
 			bool result;
 			string currentUrl;
@@ -67,7 +67,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 			stopwatch.Start();
 			do
 			{
-				string currentUrlWithTimeout = GetCurrentUrlWithTimeout(driver);
+				string currentUrlWithTimeout = GetCurrentUrlWithTimeout(webDriver);
 
 				currentUrl = currentUrlWithTimeout;
 				result = currentUrlWithTimeout.ToLowerInvariant().Contains(targetUrl);
@@ -79,12 +79,12 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 			return result;
 		}
 
-		public Task<string> GetCurrentUrlTask(IWebDriver driver)
+		public Task<string> GetCurrentUrlTask(IWebDriver webDriver)
 		{
 			Task<string> task;
 			try
 			{
-				task = Task.Factory.StartNew(() => GetCurrentUrlWithTimeout(driver));
+				task = Task.Factory.StartNew(() => GetCurrentUrlWithTimeout(webDriver));
 			}
 			catch (Exception e)
 			{
@@ -94,43 +94,43 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 			return task;
 		}
 
-		private string GetCurrentUrlWithTimeout(IWebDriver driver)
+		private string GetCurrentUrlWithTimeout(IWebDriver webDriver)
 		{
 			string currentUrl ;
 			Stopwatch stopwatch = new Stopwatch();
 			stopwatch.Start();
 			do
 			{
-				currentUrl = driver.Url;
+				currentUrl = webDriver.Url;
 			} while (string.IsNullOrWhiteSpace(currentUrl) && stopwatch.ElapsedMilliseconds < _timeOut);
 			TestLog.AddWithoutTime("Waited " + stopwatch.ElapsedMilliseconds + " milliseconds for for current url.");
 			stopwatch.Stop();
 			return currentUrl;
 		}
 
-		public void WaitWindowMaximize(IWebDriver driver)
+		public void WaitWindowMaximize(IWebDriver webDriver)
 		{
-			Task<IWebDriver> task = Task.Factory.StartNew(() => WindowMaximize(driver));
+			Task<IWebDriver> task = Task.Factory.StartNew(() => WindowMaximize(webDriver));
 			task.Wait();
 		}
 
-		private IWebDriver WindowMaximize(IWebDriver driver)
+		private IWebDriver WindowMaximize(IWebDriver webDriver)
 		{
 			int currentHeight;
 			int currentWidth;
 			Stopwatch stopwatch = new Stopwatch();
 			stopwatch.Start();
-			driver.Manage().Window.Maximize();
+			webDriver.Manage().Window.Maximize();
 			Rectangle workingArea = Screen.PrimaryScreen.WorkingArea;
 			do
 			{
-				currentHeight = driver.Manage().Window.Size.Height;
-				currentWidth = driver.Manage().Window.Size.Width;
+				currentHeight = webDriver.Manage().Window.Size.Height;
+				currentWidth = webDriver.Manage().Window.Size.Width;
 			} while ((currentHeight < workingArea.Height || currentWidth < workingArea.Width) && stopwatch.ElapsedMilliseconds < _timeOut);
 			TestLog.AddWithoutTime("Waited " + stopwatch.ElapsedMilliseconds + " milliseconds for window to maximize.");
 			stopwatch.Stop();
 			
-			return driver;
+			return webDriver;
 		}
 	}
 }

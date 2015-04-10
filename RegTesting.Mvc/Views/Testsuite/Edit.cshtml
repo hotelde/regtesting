@@ -41,23 +41,23 @@
 <p>
 	<b>Testcases:</b> @Html.ActionLink("Edit", "EditTestcases", new { id = Model.ID })
 	<ul>
-		@foreach (var objTestcase in Model.Testcases)
+		@foreach (var testcase in Model.Testcases)
 		{
-			<li>@objTestcase.Type (@objTestcase.Name)</li>
+			<li>@testcase.Type (@testcase.Name)</li>
 		}
 	</ul>
 	<b>Browsers:</b> @Html.ActionLink("Edit", "EditBrowsers", new { id = Model.ID })
 	<ul>
-		@foreach (var objBrowser in Model.Browsers)
+		@foreach (var browser in Model.Browsers)
 		{
-			<li>@objBrowser.Name</li>
+			<li>@browser.Name</li>
 		}
 	</ul>
 	<b>Languages:</b> @Html.ActionLink("Edit", "EditLanguages", new { id = Model.ID })
 	<ul>
-		@foreach (var objLanguage in Model.Languages)
+		@foreach (var language in Model.Languages)
 		{
-			<li>@objLanguage.Languagecode</li>
+			<li>@language.Languagecode</li>
 		}
 	</ul>
 </p>

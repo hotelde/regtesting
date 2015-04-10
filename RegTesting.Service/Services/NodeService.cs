@@ -27,196 +27,195 @@ namespace RegTesting.Service.Services
 	public class NodeService : INodeService
 	{
 
-		private readonly ITestPool _objTestPool;
-		private readonly ITestFileLocker _objTestFileLocker;
-		private readonly IResultRepository _objResultRepository;
-		private readonly IHistoryResultRepository _objHistoryResultRepository;
-		private readonly IBrowserRepository _objBrowserRepository;
+		private readonly ITestPool _testPool;
+		private readonly ITestFileLocker _testFileLocker;
+		private readonly IResultRepository _resultRepository;
+		private readonly IHistoryResultRepository _historyResultRepository;
+		private readonly IBrowserRepository _browserRepository;
 
 		/// <summary>
 		/// Create a new nodeService
 		/// </summary>
-		/// <param name="objTestPool">the testPool</param>
-		/// <param name="objTestFileLocker">the testFileLocker</param>
-		/// <param name="objResultRepository">the resultRepository</param>
-		/// <param name="objHistoryResultRepository">the historyResultRepository</param>
-		/// <param name="objBrowserRepository">the browserRepository</param>
-		public NodeService(ITestPool objTestPool, ITestFileLocker objTestFileLocker, IResultRepository objResultRepository, IHistoryResultRepository objHistoryResultRepository, IBrowserRepository objBrowserRepository)
+		/// <param name="testPool">the testPool</param>
+		/// <param name="testFileLocker">the testFileLocker</param>
+		/// <param name="resultRepository">the resultRepository</param>
+		/// <param name="historyResultRepository">the historyResultRepository</param>
+		/// <param name="browserRepository">the browserRepository</param>
+		public NodeService(ITestPool testPool, ITestFileLocker testFileLocker, IResultRepository resultRepository, IHistoryResultRepository historyResultRepository, IBrowserRepository browserRepository)
 		{
-			if (objTestPool == null)
-				throw new ArgumentNullException("objTestPool");
-			if (objTestFileLocker == null)
-				throw new ArgumentNullException("objTestFileLocker");
-			if (objResultRepository == null)
-				throw new ArgumentNullException("objResultRepository");
-			if (objHistoryResultRepository == null)
-				throw new ArgumentNullException("objHistoryResultRepository");
-			if (objBrowserRepository == null)
-				throw new ArgumentNullException("objBrowserRepository");
-			_objTestPool = objTestPool;
-			_objTestFileLocker = objTestFileLocker;
-			_objResultRepository = objResultRepository;
-			_objHistoryResultRepository = objHistoryResultRepository;
-			_objBrowserRepository = objBrowserRepository;
+			if (testPool == null)
+				throw new ArgumentNullException("testPool");
+			if (testFileLocker == null)
+				throw new ArgumentNullException("testFileLocker");
+			if (resultRepository == null)
+				throw new ArgumentNullException("resultRepository");
+			if (historyResultRepository == null)
+				throw new ArgumentNullException("historyResultRepository");
+			if (browserRepository == null)
+				throw new ArgumentNullException("browserRepository");
+			_testPool = testPool;
+			_testFileLocker = testFileLocker;
+			_resultRepository = resultRepository;
+			_historyResultRepository = historyResultRepository;
+			_browserRepository = browserRepository;
 		}
 
-		void INodeService.Register(string strNode, List<string> lstBrowsers)
+		void INodeService.Register(string node, List<string> browsers)
 		{
-			ITestWorker objTestWorker = _objTestPool.GetTestWorker(strNode);
-			if (objTestWorker == null)
+			ITestWorker testWorker = _testPool.GetTestWorker(node);
+			if (testWorker == null)
 			{
-				objTestWorker = new NodeTestWorker(strNode);
-				_objTestPool.RegisterTestWorker(objTestWorker);
+				testWorker = new NodeTestWorker(node);
+				_testPool.RegisterTestWorker(testWorker);
 			}
 			else
 			{
 
-				if (objTestWorker.WorkItem != null)
+				if (testWorker.WorkItem != null)
 				{
-					_objTestPool.ReAddWorkItem(objTestWorker.WorkItem);
-					objTestWorker.WorkItem = null;
+					_testPool.ReAddWorkItem(testWorker.WorkItem);
+					testWorker.WorkItem = null;
 				}
-				objTestWorker.Browsers.Clear();
-				objTestWorker.State = TestWorkerStatus.Ok;
+				testWorker.Browsers.Clear();
+				testWorker.State = TestWorkerStatus.Ok;
 			}
-			foreach (string strBrowser in lstBrowsers)
+			foreach (string browserName in browsers)
 			{
-				Browser objBrowser = _objBrowserRepository.GetByName(strBrowser);
-				if (objBrowser == null)
+				Browser browser = _browserRepository.GetByName(browserName);
+				if (browser == null)
 				{
-					Logger.Log("Node " + strNode + " demands " + strBrowser + ". But browser is not available.");
+					Logger.Log("Node " + node + " demands " + browserName + ". But browser is not available.");
 					continue;
 				}
-				objTestWorker.Browsers.Add(objBrowser);
+				testWorker.Browsers.Add(browser);
 
 			}
 		}
 
-		WorkItemDto INodeService.GetWork(string strNode)
+		WorkItemDto INodeService.GetWork(string nodeName)
 		{
-			ITestWorker objTestWorker = _objTestPool.GetTestWorker(strNode);
-			WorkItem objWorkItem = _objTestPool.GetWorkItem(objTestWorker);
+			ITestWorker testWorker = _testPool.GetTestWorker(nodeName);
+			WorkItem workItem = _testPool.GetWorkItem(testWorker);
 
-			if (objWorkItem != null)
+			if (workItem != null)
 			{
-				objWorkItem.RunCount++;
-				objTestWorker.WorkItem = objWorkItem;
-				objTestWorker.LastStart = DateTime.Now;
+				workItem.RunCount++;
+				testWorker.WorkItem = workItem;
+				testWorker.LastStart = DateTime.Now;
 			}
-			return Mapper.Map<WorkItemDto>(objWorkItem);
+			return Mapper.Map<WorkItemDto>(workItem);
 		}
 
-		void INodeService.FinishedWork(string strNode, TestResult objTestResult)
+		void INodeService.FinishedWork(string nodeName, TestResult testResult)
 		{
-			ITestWorker objTestWorker = _objTestPool.GetTestWorker(strNode);
-			HandleResult(objTestWorker, objTestResult);
+			ITestWorker testWorker = _testPool.GetTestWorker(nodeName);
+			HandleResult(testWorker, testResult);
 		}
 
-		byte[] INodeService.FetchDLL(string strNode, string strBranch)
+		byte[] INodeService.FetchDLL(string nodeName, string branchName)
 		{
 
-			object objBranchSpecificFileLock = _objTestFileLocker.GetLock(strNode);
-			lock (objBranchSpecificFileLock)
+			object branchSpecificFileLock = _testFileLocker.GetLock(nodeName);
+			lock (branchSpecificFileLock)
 			{
-				using (FileStream objFileStream = new FileStream(RegtestingServerConfiguration.Testsfolder + strBranch + ".dll", FileMode.Open))
+				using (FileStream fileStream = new FileStream(RegtestingServerConfiguration.Testsfolder + branchName + ".dll", FileMode.Open))
 				{
-					byte[] arrBuffer = new byte[52428800];
-					int intSize = objFileStream.Read(arrBuffer, 0, 52428800);
-					byte[] arrBufferShort = arrBuffer.Take(intSize).ToArray();
-					return arrBufferShort;
+					byte[] buffer = new byte[52428800];
+					int size = fileStream.Read(buffer, 0, 52428800);
+					byte[] bufferShort = buffer.Take(size).ToArray();
+					return bufferShort;
 				}
 			}
 		}
 
-		private void HandleResult(ITestWorker objTestWorker, TestResult objTestResult)
+		private void HandleResult(ITestWorker testWorker, TestResult testResult)
 		{
-			if (objTestWorker.WorkItem != null &&
-			    (objTestResult.TestState == TestState.Error || objTestResult.TestState == TestState.ErrorRepeat) &&
-			    objTestWorker.WorkItem.RunCount < RegtestingServerConfiguration.MaxRunCount)
+			if (testWorker.WorkItem != null &&
+			    (testResult.TestState == TestState.Error || testResult.TestState == TestState.ErrorRepeat) &&
+			    testWorker.WorkItem.RunCount < RegtestingServerConfiguration.MaxRunCount)
 			{
-				_objTestPool.ReAddWorkItem(objTestWorker.WorkItem);
-				objTestWorker.WorkItem = null;
+				_testPool.ReAddWorkItem(testWorker.WorkItem);
+				testWorker.WorkItem = null;
 				return;
 			}
 			
-			WorkItem objWorkItem = objTestWorker.WorkItem;
-			objWorkItem.TestState = objTestResult.TestState;
+			WorkItem workItem = testWorker.WorkItem;
+			workItem.TestState = testResult.TestState;
 
-			string strImagefile = null;
-			if (!String.IsNullOrEmpty(objTestResult.Screenshot))
+			string imagefile = null;
+			if (!String.IsNullOrEmpty(testResult.Screenshot))
 			{
-				string strFolder = RegtestingServerConfiguration.Screenshotsfolder;
-				string strSubFolder = DateTime.Now.Year + "-" + DateTime.Now.Month + "\\";
-				string strFileName = "screen" + Helper.GetScreenshotString() + ".png";
-				Directory.CreateDirectory(strFolder + strSubFolder);
-				strImagefile = strSubFolder + strFileName;
-				Screenshot objScreenshot = new Screenshot(objTestResult.Screenshot);
-				objScreenshot.SaveAsFile(strFolder + strImagefile, ImageFormat.Png);
+				string folder = RegtestingServerConfiguration.Screenshotsfolder;
+				string subFolder = DateTime.Now.Year + "-" + DateTime.Now.Month + "\\";
+				string fileName = "screen" + Helper.GetScreenshotString() + ".png";
+				Directory.CreateDirectory(folder + subFolder);
+				imagefile = subFolder + fileName;
+				Screenshot screenshot = new Screenshot(testResult.Screenshot);
+				screenshot.SaveAsFile(folder + imagefile, ImageFormat.Png);
 			}
 
-			Result objResult = _objResultRepository.Get(objWorkItem.Testsystem, objWorkItem.Testcase, objWorkItem.Browser,
-				objWorkItem.Language);
-			objResult.ResultCode = objTestResult.TestState;
-			objResult.DetailLog = CreateLog(objTestResult.Log);
-			objResult.Error = objTestResult.Error;
-			objResult.Testtime = DateTime.Now;
-			objResult.ScreenshotFile = strImagefile;
-			if (objResult.ResultCode == TestState.Error || objResult.ResultCode == TestState.ErrorRepeat ||
-			    objResult.ResultCode == TestState.KnownError)
+			Result result = _resultRepository.Get(workItem.Testsystem, workItem.Testcase, workItem.Browser,
+				workItem.Language);
+			result.ResultCode = testResult.TestState;
+			result.DetailLog = CreateLog(testResult.Log);
+			result.Error = testResult.Error;
+			result.Testtime = DateTime.Now;
+			result.ScreenshotFile = imagefile;
+			if (result.ResultCode == TestState.Error || result.ResultCode == TestState.ErrorRepeat ||
+			    result.ResultCode == TestState.KnownError)
 			{
-				if (objResult.ErrorCount == null)
+				if (result.ErrorCount == null)
 				{
-					objResult.ErrorCount = 1;
-					objResult.ErrorSince = objResult.Testtime;
+					result.ErrorCount = 1;
+					result.ErrorSince = result.Testtime;
 				}
 				else
 				{
-					objResult.ErrorCount = objResult.ErrorCount + 1;
+					result.ErrorCount = result.ErrorCount + 1;
 				}
 			}
 			else
 			{
-				objResult.ErrorSince = null;
-				objResult.ErrorCount = null;
+				result.ErrorSince = null;
+				result.ErrorCount = null;
 			}
-			_objResultRepository.Store(objResult);
-			objWorkItem.Result = objResult;
+			_resultRepository.Store(result);
+			workItem.Result = result;
 
 
-			foreach (ITestJobManager objtestJobManager in objWorkItem.TestJobManagers)
+			foreach (ITestJobManager testJobManager in workItem.TestJobManagers)
 			{
-				HistoryResult objHistoryResult = Mapper.Map<HistoryResult>(objWorkItem);
-				objHistoryResult.DetailLog = CreateLog(objTestResult.Log);
-				objHistoryResult.ResultCode = objTestResult.TestState;
-				objHistoryResult.Error = objTestResult.Error;
-				objHistoryResult.Testtime = DateTime.Now;
-				objHistoryResult.TestJob = objtestJobManager.TestJob;
-				objHistoryResult.ScreenshotFile = strImagefile;
-				_objHistoryResultRepository.Store(objHistoryResult);
+				HistoryResult historyResult = Mapper.Map<HistoryResult>(workItem);
+				historyResult.DetailLog = CreateLog(testResult.Log);
+				historyResult.ResultCode = testResult.TestState;
+				historyResult.Error = testResult.Error;
+				historyResult.Testtime = DateTime.Now;
+				historyResult.TestJob = testJobManager.TestJob;
+				historyResult.ScreenshotFile = imagefile;
+				_historyResultRepository.Store(historyResult);
 			}
-			lock (TestsystemSummariesCache.ThorCache.GetLock(objWorkItem.Testsystem.ID))
+			lock (TestsystemSummariesCache.ThorCache.GetLock(workItem.Testsystem.ID))
 			{
-				TestsystemSummariesCache.ThorCache.Set(objWorkItem.Testsystem.ID, null);
+				TestsystemSummariesCache.ThorCache.Set(workItem.Testsystem.ID, null);
 			}
-			lock (TestsystemSummariesCache.SodaCache.GetLock(objWorkItem.Testsystem.ID))
+			lock (TestsystemSummariesCache.SodaCache.GetLock(workItem.Testsystem.ID))
 			{
-				TestsystemSummariesCache.SodaCache.Set(objWorkItem.Testsystem.ID, null);
+				TestsystemSummariesCache.SodaCache.Set(workItem.Testsystem.ID, null);
 			}
-			objTestWorker.WorkItem = null;
+			testWorker.WorkItem = null;
 
-			_objTestPool.WorkItemFinished(objWorkItem);
+			_testPool.WorkItemFinished(workItem);
 
 		}
-
-
-		private string CreateLog(IEnumerable<string> lstLogEntries)
+		
+		private string CreateLog(IEnumerable<string> logEntries)
 		{
 			string log = "";
 
-			if (lstLogEntries == null)
+			if (logEntries == null)
 				return null;
 
-			lstLogEntries.ForEach(t => log += t + "<br>");
+			logEntries.ForEach(t => log += t + "<br>");
 			return log;
 		}
 	}

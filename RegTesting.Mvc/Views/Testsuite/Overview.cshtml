@@ -3,9 +3,9 @@
 
 @{
 	ViewBag.Title = "Testsuiten - RegTesting";
-	IList<TestcaseModel> lstTestcases = ((IList<TestcaseModel>)ViewBag.LstTestcases);
-	IList<BrowserModel> lstBrowsers= ((IList<BrowserModel>)ViewBag.LstBrowsers);
-	IList<LanguageModel> lstLanguages = ((IList<LanguageModel>)ViewBag.LstLanguages);
+	IList<TestcaseModel> testcases = ((IList<TestcaseModel>)ViewBag.LstTestcases);
+	IList<BrowserModel> browsers= ((IList<BrowserModel>)ViewBag.LstBrowsers);
+	IList<LanguageModel> languages = ((IList<LanguageModel>)ViewBag.LstLanguages);
 }
 
 <h2>Testsuites Overview</h2>
@@ -18,7 +18,7 @@
 			<th>@testsuite.Name</th>
 		}
 	</tr>
-	@foreach (var testcase in lstTestcases)
+	@foreach (var testcase in testcases)
 	{
 		<tr>
 			<td>@testcase.Name</td>
@@ -42,7 +42,7 @@
 			<th>@testsuite.Name</th>
 		}
 	</tr>
-	@foreach (var browser in lstBrowsers)
+	@foreach (var browser in browsers)
 	{
 		<tr>
 			<td>@browser.Name</td>
@@ -66,7 +66,7 @@
 			<th>@testsuite.Name</th>
 		}
 	</tr>
-	@foreach (var language in lstLanguages)
+	@foreach (var language in languages)
 	{
 		<tr>
 			<td>@language.Languagecode</td>

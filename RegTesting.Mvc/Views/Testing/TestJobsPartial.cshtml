@@ -13,22 +13,22 @@
 		</tr>
 		@foreach (TestJobModel testJobModel in Model)
 		{
-			int intCount = testJobModel.Count;
-			int intPercentPassed = (intCount == 0 ? 0 : (testJobModel.Passed * 100 / testJobModel.Count));
-			int intPercentFailured = (intCount == 0 ? 0 : (testJobModel.Failured * 100 / testJobModel.Count));
-			int intPercentFinished = (intCount == 0 ? 0 : (testJobModel.Finished*100/testJobModel.Count));
+			int count = testJobModel.Count;
+			int percentPassed = (count == 0 ? 0 : (testJobModel.Passed * 100 / testJobModel.Count));
+			int percentFailured = (count == 0 ? 0 : (testJobModel.Failured * 100 / testJobModel.Count));
+			int percentFinished = (count == 0 ? 0 : (testJobModel.Finished*100/testJobModel.Count));
 			<tr>
 				<td>@testJobModel.TestJobStartedAt.ToString()</td> 
 				<td>@testJobModel.TestJobTesterName (@testJobModel.TestJobJobType)</td>
 				<td>@testJobModel.TestJobName</td>   
 				<td>
 					<div class="progress">
-						<div class="progress-bar progress-bar-success" style="width: @(intPercentPassed + "%");"></div>
-						<div class="progress-bar progress-bar-danger" style="width: @(intPercentFailured + "%");"></div>
+						<div class="progress-bar progress-bar-success" style="width: @(percentPassed + "%");"></div>
+						<div class="progress-bar progress-bar-danger" style="width: @(percentFailured + "%");"></div>
 					</div>
 				</td>
 				<td>
-					@testJobModel.Finished /  @testJobModel.Count (@intPercentFinished%)
+					@testJobModel.Finished /  @testJobModel.Count (@percentFinished%)
 				</td>
 			</tr>
 		}

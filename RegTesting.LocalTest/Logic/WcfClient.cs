@@ -13,8 +13,8 @@ namespace RegTesting.LocalTest.Logic
 	/// </summary>
 	public class WcfClient : IDisposable
 	{
-		private readonly ILocalTestService _objChannel;
-		private readonly ChannelFactory<ILocalTestService> _objHttpFactory;
+		private readonly ILocalTestService _channel;
+		private readonly ChannelFactory<ILocalTestService> _httpFactory;
 
 
 		/// <summary>
@@ -22,8 +22,8 @@ namespace RegTesting.LocalTest.Logic
 		/// </summary>
 		public WcfClient()
 		{
-			_objHttpFactory = new ChannelFactory<ILocalTestService>("LocalTestServiceEndpoint");
-			_objChannel = _objHttpFactory.CreateChannel();
+			_httpFactory = new ChannelFactory<ILocalTestService>("LocalTestServiceEndpoint");
+			_channel = _httpFactory.CreateChannel();
 		}
 
 
@@ -32,33 +32,33 @@ namespace RegTesting.LocalTest.Logic
 		/// </summary>
 		public void Dispose()
 		{
-			if (_objHttpFactory != null)
+			if (_httpFactory != null)
 			{
-			    _objHttpFactory.Close();
+			    _httpFactory.Close();
 			}
 		}
 
 	    /// <summary>
 	    /// Send a file to testserver
 	    /// </summary>
-	    /// <param name="strFilename">Filename of the testcases dll</param>
-	    /// <param name="strTestsystem">testsystem of the testcases</param>
-		private void SendFile(string strFilename, string strTestsystem)
+	    /// <param name="filename">Filename of the testcases dll</param>
+	    /// <param name="testsystem">testsystem of the testcases</param>
+		private void SendFile(string filename, string testsystem)
 	    {
-			using (FileStream objFileStream = new FileStream(strFilename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+			using (FileStream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 			{
-				byte[] arrBuffer = new byte[52428800];
-				int intSize = objFileStream.Read(arrBuffer, 0, 52428800);
-				byte[] arrBufferShort = arrBuffer.Take(intSize).ToArray();
-				_objChannel.SendTestcaseFile(strTestsystem, arrBufferShort);
+				byte[] buffer = new byte[52428800];
+				int size = fileStream.Read(buffer, 0, 52428800);
+				byte[] bufferShort = buffer.Take(size).ToArray();
+				_channel.SendTestcaseFile(testsystem, bufferShort);
 			}
 		}
 
 		private static string GetUser()
 		{
-			string strUser = WindowsIdentity.GetCurrent().Name;
-			int intEndOfDomainPart = strUser.IndexOf("\\");
-			return (intEndOfDomainPart > -1) ? strUser.Substring(intEndOfDomainPart + 1, strUser.Length - intEndOfDomainPart - 1) : null;
+			string userName = WindowsIdentity.GetCurrent().Name;
+			int endOfDomainPart = userName.IndexOf("\\");
+			return (endOfDomainPart > -1) ? userName.Substring(endOfDomainPart + 1, userName.Length - endOfDomainPart - 1) : null;
 		}
 
 		/// <summary>
@@ -67,9 +67,9 @@ namespace RegTesting.LocalTest.Logic
 		/// <returns>A list of strings with all languages </returns>
 		public List<string> GetLanguages()
 		{
-			List<string> lstLanguages = _objChannel.GetLanguages().Select(t => t.Languagecode).ToList();
-			lstLanguages.Sort();
-			return lstLanguages;
+			List<string> languages = _channel.GetLanguages().Select(t => t.Languagecode).ToList();
+			languages.Sort();
+			return languages;
 		}
 
 		/// <summary>
@@ -78,32 +78,32 @@ namespace RegTesting.LocalTest.Logic
 		/// <returns>A list of string with all browsers</returns>
 		public List<string> GetBrowsers()
 		{
-			List<string> lstBrowsers = _objChannel.GetBrowsers().Select(t=> t.Name).ToList();
-			lstBrowsers.Sort();
-			return lstBrowsers;
+			List<string> browsers = _channel.GetBrowsers().Select(t=> t.Name).ToList();
+			browsers.Sort();
+			return browsers;
 
 		}
 
 		/// <summary>
 		/// Start Tests at the Remote Server
 		/// </summary>
-		/// <param name="strTestsystemUrl">the testsystem url</param>
-		/// <param name="lstBrowser">the browsers</param>
-		/// <param name="lstTestcases">the testcases</param>
-		/// <param name="lstLanguages">the languages</param>
-		public void TestRemote(string strTestsystemUrl, List<string> lstBrowser, List<string> lstTestcases, List<string> lstLanguages)
+		/// <param name="testsystemUrl">the testsystem url</param>
+		/// <param name="browsers">the browsers</param>
+		/// <param name="testcases">the testcases</param>
+		/// <param name="languages">the languages</param>
+		public void TestRemote(string testsystemUrl, List<string> browsers, List<string> testcases, List<string> languages)
 		{
-			strTestsystemUrl = strTestsystemUrl.ToLower().Replace("https://", "").Replace("http://", "");
+			testsystemUrl = testsystemUrl.ToLower().Replace("https://", "").Replace("http://", "");
 
 			const string fileName = "RegTesting.Tests.dll";
-			string strUser = GetUser();
-			string strTestsystemName = "local/" + strTestsystemUrl + "-" + strUser;
+			string username = GetUser();
+			string testsystemName = "local/" + testsystemUrl + "-" + username;
 		
 
-			SendFile(fileName, strTestsystemName);
-			_objChannel.AddLocalTestTasks(strUser, strTestsystemName, strTestsystemUrl, lstBrowser, lstTestcases, lstLanguages);
-			int intTestsCount = lstBrowser.Count*lstTestcases.Count*lstLanguages.Count;
-			System.Windows.MessageBox.Show(String.Format("Requested {0} tests on {1}. You'll receive a mail when your results are ready!" , intTestsCount, strTestsystemUrl));
+			SendFile(fileName, testsystemName);
+			_channel.AddLocalTestTasks(username, testsystemName, testsystemUrl, browsers, testcases, languages);
+			int testsCount = browsers.Count*testcases.Count*languages.Count;
+			System.Windows.MessageBox.Show(String.Format("Requested {0} tests on {1}. You'll receive a mail when your results are ready!" , testsCount, testsystemUrl));
 		}
 	}
 }

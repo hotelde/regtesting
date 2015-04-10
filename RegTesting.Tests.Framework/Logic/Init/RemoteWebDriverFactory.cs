@@ -13,71 +13,71 @@ namespace RegTesting.Tests.Framework.Logic.Init
 		/// <summary>
 		/// Get a RemoteWebDriver
 		/// </summary>
-		/// <param name="objBrowser">the Browser to test on</param>
+		/// <param name="browser">the Browser to test on</param>
 		/// <returns>a IWebDriver</returns>
-		IWebDriver IWebDriverFactory.GetWebDriver(Browser objBrowser)
+		IWebDriver IWebDriverFactory.GetWebDriver(Browser browser)
 		{
-			DesiredCapabilities objCapabilities;
+			DesiredCapabilities desiredCapabilities;
 
 			//What browser to test on?
-			switch (objBrowser.Browserstring.ToLowerInvariant())
+			switch (browser.Browserstring.ToLowerInvariant())
 			{
 				case "firefox":
-					objCapabilities = DesiredCapabilities.Firefox();
-					objCapabilities.SetCapability("singleWindow", true);
-					objCapabilities.SetCapability("handlesAlerts", true);
+					desiredCapabilities = DesiredCapabilities.Firefox();
+					desiredCapabilities.SetCapability("singleWindow", true);
+					desiredCapabilities.SetCapability("handlesAlerts", true);
 					break;
 				case "chrome":
-					objCapabilities = DesiredCapabilities.Chrome();
-					objCapabilities.SetCapability("singleWindow", true);
-					objCapabilities.SetCapability("handlesAlerts", true);
-					objCapabilities.SetCapability("--disable-hang-monitor", true);
+					desiredCapabilities = DesiredCapabilities.Chrome();
+					desiredCapabilities.SetCapability("singleWindow", true);
+					desiredCapabilities.SetCapability("handlesAlerts", true);
+					desiredCapabilities.SetCapability("--disable-hang-monitor", true);
 					break;
 				case "internet explorer":
-					objCapabilities = DesiredCapabilities.InternetExplorer();
-					objCapabilities.SetCapability("singleWindow", true);
-					objCapabilities.SetCapability("ie.ensureCleanSession", true);
-					objCapabilities.SetCapability("enableElementCacheCleanup", false);
-					objCapabilities.SetCapability("ignoreProtectedModeSettings", true);
-					objCapabilities.SetCapability("enablePersistentHover", false);
+					desiredCapabilities = DesiredCapabilities.InternetExplorer();
+					desiredCapabilities.SetCapability("singleWindow", true);
+					desiredCapabilities.SetCapability("ie.ensureCleanSession", true);
+					desiredCapabilities.SetCapability("enableElementCacheCleanup", false);
+					desiredCapabilities.SetCapability("ignoreProtectedModeSettings", true);
+					desiredCapabilities.SetCapability("enablePersistentHover", false);
 					break;
 				case "safari":
-					objCapabilities = DesiredCapabilities.Safari();
-					objCapabilities.SetCapability("singleWindow", true);
-					objCapabilities.SetCapability("handlesAlerts", true);
+					desiredCapabilities = DesiredCapabilities.Safari();
+					desiredCapabilities.SetCapability("singleWindow", true);
+					desiredCapabilities.SetCapability("handlesAlerts", true);
 					break;
 				case "android":
-					objCapabilities = DesiredCapabilities.Android();
+					desiredCapabilities = DesiredCapabilities.Android();
 					break;
 				case "ipad":
-					objCapabilities = DesiredCapabilities.IPad();
+					desiredCapabilities = DesiredCapabilities.IPad();
 					break;
 				case "iphone":
-					objCapabilities = DesiredCapabilities.IPhone();
+					desiredCapabilities = DesiredCapabilities.IPhone();
 					break;
 				case "opera":
-					objCapabilities = DesiredCapabilities.Opera();
+					desiredCapabilities = DesiredCapabilities.Opera();
 					break;
 				case "htmlunit":
-					objCapabilities = DesiredCapabilities.HtmlUnit();
+					desiredCapabilities = DesiredCapabilities.HtmlUnit();
 					break;
 				case "htmlunitjs":
-					objCapabilities = DesiredCapabilities.HtmlUnitWithJavaScript();
+					desiredCapabilities = DesiredCapabilities.HtmlUnitWithJavaScript();
 					break;
 				case "phantomjs":
-					objCapabilities = DesiredCapabilities.PhantomJS();
+					desiredCapabilities = DesiredCapabilities.PhantomJS();
 					break;
 				default:
-					objCapabilities = new DesiredCapabilities();
-					objCapabilities.SetCapability(CapabilityType.BrowserName, objBrowser.Browserstring);
+					desiredCapabilities = new DesiredCapabilities();
+					desiredCapabilities.SetCapability(CapabilityType.BrowserName, browser.Browserstring);
 					break;
 			}
 
 			//If version is set, use this version.
-			if (!String.IsNullOrEmpty(objBrowser.Versionsstring))
-				objCapabilities.SetCapability(CapabilityType.Version, objBrowser.Versionsstring);
+			if (!String.IsNullOrEmpty(browser.Versionsstring))
+				desiredCapabilities.SetCapability(CapabilityType.Version, browser.Versionsstring);
 			
-			return new RemoteWebDriver(new Uri("http://SELENIUMHUBADDRESS:4444/wd/hub"),objCapabilities, new TimeSpan(0,0,10));
+			return new RemoteWebDriver(new Uri("http://SELENIUMHUBADDRESS:4444/wd/hub"),desiredCapabilities, new TimeSpan(0,0,10));
 
 		}
 	}

@@ -14,79 +14,79 @@ namespace RegTesting.Service.TestLogic
 		/// <summary>
 		/// Get the GetErrorOccurrenceGroups for a testsystem
 		/// </summary>
-		/// <param name="lstErrorResults">the error results</param>
+		/// <param name="errorResults">the error results</param>
 		/// <returns>A List of ErrorOccurrenceGroups</returns>
-		public static List<ErrorOccurrenceGroup> GetErrorOccurrenceGroups(IList<Result> lstErrorResults)
+		public static List<ErrorOccurrenceGroup> GetErrorOccurrenceGroups(IList<Result> errorResults)
 		{
-			List<ErrorOccurrenceGroup> lstErrorOccurrenceGroup = new List<ErrorOccurrenceGroup>();
+			List<ErrorOccurrenceGroup> errorOccurrenceGroup = new List<ErrorOccurrenceGroup>();
 
-			foreach (Result objResult in lstErrorResults)
+			foreach (Result result in errorResults)
 			{
-				ErrorOccurrenceGroup objErrorOccurrenceGroup = lstErrorOccurrenceGroup.Find(objErrorOccurrenceGroupOther => objErrorOccurrenceGroupOther.Testcase.ID == objResult.Testcase.ID);
-				if (objErrorOccurrenceGroup == null)
+				ErrorOccurrenceGroup occurrenceGroup = errorOccurrenceGroup.Find(objErrorOccurrenceGroupOther => objErrorOccurrenceGroupOther.Testcase.ID == result.Testcase.ID);
+				if (occurrenceGroup == null)
 				{
-					objErrorOccurrenceGroup = new ErrorOccurrenceGroup { Testcase = objResult.Testcase };
-					lstErrorOccurrenceGroup.Add(objErrorOccurrenceGroup);
+					occurrenceGroup = new ErrorOccurrenceGroup { Testcase = result.Testcase };
+					errorOccurrenceGroup.Add(occurrenceGroup);
 				}
-				ErrorOccurrence objErrorOccurrence = objErrorOccurrenceGroup.LstErrorOccurence.Find(objErrorOccurrenceOther => objResult.Error != null && objErrorOccurrenceOther.Error.ID == objResult.Error.ID);
-				if (objErrorOccurrence == null)
+				ErrorOccurrence errorOccurrence = occurrenceGroup.LstErrorOccurence.Find(objErrorOccurrenceOther => result.Error != null && objErrorOccurrenceOther.Error.ID == result.Error.ID);
+				if (errorOccurrence == null)
 				{
-					Debug.Assert(objResult.Error != null, "objResult.Error != null");
-					objErrorOccurrence = new ErrorOccurrence { Error = objResult.Error };
-					objErrorOccurrenceGroup.LstErrorOccurence.Add(objErrorOccurrence);
+					Debug.Assert(result.Error != null, "result.Error != null");
+					errorOccurrence = new ErrorOccurrence { Error = result.Error };
+					occurrenceGroup.LstErrorOccurence.Add(errorOccurrence);
 				}
-				OccurrenceElement objOccurrenceElement = new OccurrenceElement
+				OccurrenceElement occurrenceElement = new OccurrenceElement
 				{
-					Browser = objResult.Browser,
-					DateTime = objResult.Testtime,
-					Language = objResult.Language,
-					ScreenshotFile = objResult.ScreenshotFile,
-					DetailLog = objResult.DetailLog,
-					ErrorSince = objResult.ErrorSince,
-					ErrorCount = objResult.ErrorCount
+					Browser = result.Browser,
+					DateTime = result.Testtime,
+					Language = result.Language,
+					ScreenshotFile = result.ScreenshotFile,
+					DetailLog = result.DetailLog,
+					ErrorSince = result.ErrorSince,
+					ErrorCount = result.ErrorCount
 
 
 				};
-				objErrorOccurrence.LstOccurence.Add(objOccurrenceElement);
+				errorOccurrence.LstOccurence.Add(occurrenceElement);
 			}
-			return lstErrorOccurrenceGroup;
+			return errorOccurrenceGroup;
 		}
 	
 		/// <summary>
 		/// Get the GetHistoryErrorOccurrenceGroups for a testsystem
 		/// </summary>
-		/// <param name="lstErrorResults">the list of error results</param>
+		/// <param name="errorResults">the list of error results</param>
 		/// <returns>A List of ErrorOccurrenceGroups</returns>
-		public static List<ErrorOccurrenceGroup> GetHistoryErrorOccurrenceGroups(IList<HistoryResult> lstErrorResults)
+		public static List<ErrorOccurrenceGroup> GetHistoryErrorOccurrenceGroups(IList<HistoryResult> errorResults)
 		{
-			List<ErrorOccurrenceGroup> lstErrorOccurrenceGroup = new List<ErrorOccurrenceGroup>();
+			List<ErrorOccurrenceGroup> occurrenceGroups = new List<ErrorOccurrenceGroup>();
 
-			foreach (HistoryResult objResult in lstErrorResults)
+			foreach (HistoryResult result in errorResults)
 			{
-				ErrorOccurrenceGroup objErrorOccurrenceGroup = lstErrorOccurrenceGroup.Find(objErrorOccurrenceGroupOther => objErrorOccurrenceGroupOther.Testcase.ID == objResult.Testcase.ID);
-				if (objErrorOccurrenceGroup == null)
+				ErrorOccurrenceGroup errorOccurrenceGroup = occurrenceGroups.Find(objErrorOccurrenceGroupOther => objErrorOccurrenceGroupOther.Testcase.ID == result.Testcase.ID);
+				if (errorOccurrenceGroup == null)
 				{
-					objErrorOccurrenceGroup = new ErrorOccurrenceGroup { Testcase = objResult.Testcase };
-					lstErrorOccurrenceGroup.Add(objErrorOccurrenceGroup);
+					errorOccurrenceGroup = new ErrorOccurrenceGroup { Testcase = result.Testcase };
+					occurrenceGroups.Add(errorOccurrenceGroup);
 				}
-				ErrorOccurrence objErrorOccurrence = objErrorOccurrenceGroup.LstErrorOccurence.Find(objErrorOccurrenceOther => objResult.Error != null && objErrorOccurrenceOther.Error.ID == objResult.Error.ID);
-				if (objErrorOccurrence == null)
+				ErrorOccurrence errorOccurrence = errorOccurrenceGroup.LstErrorOccurence.Find(errorOccurrenceOther => result.Error != null && errorOccurrenceOther.Error.ID == result.Error.ID);
+				if (errorOccurrence == null)
 				{
-					Debug.Assert(objResult.Error != null, "objResult.Error != null");
-					objErrorOccurrence = new ErrorOccurrence { Error = objResult.Error };
-					objErrorOccurrenceGroup.LstErrorOccurence.Add(objErrorOccurrence);
+					Debug.Assert(result.Error != null, "result.Error != null");
+					errorOccurrence = new ErrorOccurrence { Error = result.Error };
+					errorOccurrenceGroup.LstErrorOccurence.Add(errorOccurrence);
 				}
-				OccurrenceElement objOccurrenceElement = new OccurrenceElement
+				OccurrenceElement occurrenceElement = new OccurrenceElement
 				{
-					Browser = objResult.Browser,
-					DateTime = objResult.Testtime,
-					Language = objResult.Language,
-					ScreenshotFile = objResult.ScreenshotFile,
-					DetailLog = objResult.DetailLog
+					Browser = result.Browser,
+					DateTime = result.Testtime,
+					Language = result.Language,
+					ScreenshotFile = result.ScreenshotFile,
+					DetailLog = result.DetailLog
 				};
-				objErrorOccurrence.LstOccurence.Add(objOccurrenceElement);
+				errorOccurrence.LstOccurence.Add(occurrenceElement);
 			}
-			return lstErrorOccurrenceGroup;
+			return occurrenceGroups;
 		}
 	}
 }

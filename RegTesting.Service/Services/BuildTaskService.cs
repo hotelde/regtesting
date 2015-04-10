@@ -19,121 +19,121 @@ namespace RegTesting.Service.Services
 	[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
 	public class BuildTaskService : IBuildTaskService
 	{
-		private readonly ITestFileLocker _objTestFileLocker;
-		private readonly ITestsystemRepository _objTestsystemRepository;
-		private readonly ITesterRepository _objTesterRepository;
-		private readonly ITestsuiteRepository _objTestsuiteRepository;
-		private readonly ITestcaseRepository _objTestcaseRepository;
-		private readonly ITestPool _objTestPool;
+		private readonly ITestFileLocker _testFileLocker;
+		private readonly ITestsystemRepository _testsystemRepository;
+		private readonly ITesterRepository _testerRepository;
+		private readonly ITestsuiteRepository _testsuiteRepository;
+		private readonly ITestcaseRepository _testcaseRepository;
+		private readonly ITestPool _testPool;
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		/// <param name="objTestFileLocker">the testFileLocker</param>
-		/// <param name="objTestsystemRepository">the testsystemRepository</param>
-		/// <param name="objTesterRepository">the testerRepository</param>
-		/// <param name="objTestsuiteRepository">the testsuiteRepository</param>
-		/// <param name="objTestcaseRepository">the testcaseRepository</param>
-		/// <param name="objTestPool">the testPool</param>
-		public BuildTaskService(ITestFileLocker objTestFileLocker, ITestsystemRepository objTestsystemRepository,
-			ITesterRepository objTesterRepository, ITestsuiteRepository objTestsuiteRepository, ITestcaseRepository objTestcaseRepository, ITestPool objTestPool)
+		/// <param name="testFileLocker">the testFileLocker</param>
+		/// <param name="testsystemRepository">the testsystemRepository</param>
+		/// <param name="testerRepository">the testerRepository</param>
+		/// <param name="testsuiteRepository">the testsuiteRepository</param>
+		/// <param name="testcaseRepository">the testcaseRepository</param>
+		/// <param name="testPool">the testPool</param>
+		public BuildTaskService(ITestFileLocker testFileLocker, ITestsystemRepository testsystemRepository,
+			ITesterRepository testerRepository, ITestsuiteRepository testsuiteRepository, ITestcaseRepository testcaseRepository, ITestPool testPool)
 		{
-			if (objTestFileLocker == null)
-				throw new ArgumentNullException("objTestFileLocker");
-			if (objTestsystemRepository == null)
-				throw new ArgumentNullException("objTestsystemRepository");
-			if (objTesterRepository == null)
-				throw new ArgumentNullException("objTesterRepository");
-			if (objTestsuiteRepository == null)
-				throw new ArgumentNullException("objTestsuiteRepository");
-			if (objTestcaseRepository == null)
-				throw new ArgumentNullException("objTestcaseRepository");
-			if (objTestPool == null)
-				throw new ArgumentNullException("objTestPool");
-			_objTestFileLocker = objTestFileLocker;
-			_objTestsystemRepository = objTestsystemRepository;
-			_objTesterRepository = objTesterRepository;
-			_objTestsuiteRepository = objTestsuiteRepository;
-			_objTestcaseRepository = objTestcaseRepository;
-			_objTestPool = objTestPool;
+			if (testFileLocker == null)
+				throw new ArgumentNullException("testFileLocker");
+			if (testsystemRepository == null)
+				throw new ArgumentNullException("testsystemRepository");
+			if (testerRepository == null)
+				throw new ArgumentNullException("testerRepository");
+			if (testsuiteRepository == null)
+				throw new ArgumentNullException("testsuiteRepository");
+			if (testcaseRepository == null)
+				throw new ArgumentNullException("testcaseRepository");
+			if (testPool == null)
+				throw new ArgumentNullException("testPool");
+			_testFileLocker = testFileLocker;
+			_testsystemRepository = testsystemRepository;
+			_testerRepository = testerRepository;
+			_testsuiteRepository = testsuiteRepository;
+			_testcaseRepository = testcaseRepository;
+			_testPool = testPool;
 		}
 
-		void IBuildTaskService.SendTestcaseFile(string strTestsystem, byte[] arrData)
+		void IBuildTaskService.SendTestcaseFile(string testsystemName, byte[] data)
 		{
-			object objLock = _objTestFileLocker.GetLock(strTestsystem);
-			lock(objLock)
+			object _lock = _testFileLocker.GetLock(testsystemName);
+			lock(_lock)
 			{
-				Testsystem objTestsystem = _objTestsystemRepository.GetByName(strTestsystem);
-				objTestsystem.LastUpdated = DateTime.Now;
-				_objTestsystemRepository.Store(objTestsystem);
-				string strTestFile = RegtestingServerConfiguration.Testsfolder + objTestsystem.Filename;
-				Directory.CreateDirectory(Path.GetDirectoryName(strTestFile));
-				using (FileStream objFileStream = new FileStream(strTestFile, FileMode.Create, FileAccess.Write))
+				Testsystem testsystem = _testsystemRepository.GetByName(testsystemName);
+				testsystem.LastUpdated = DateTime.Now;
+				_testsystemRepository.Store(testsystem);
+				string testFile = RegtestingServerConfiguration.Testsfolder + testsystem.Filename;
+				Directory.CreateDirectory(Path.GetDirectoryName(testFile));
+				using (FileStream fileStream = new FileStream(testFile, FileMode.Create, FileAccess.Write))
 				{
-					objFileStream.Write(arrData, 0, arrData.Length);
+					fileStream.Write(data, 0, data.Length);
 				}
-				Logger.Log("UPDATE branch: " + strTestsystem);
-				TestcaseProvider objTestcaseProvider = new TestcaseProvider(strTestFile);
-				objTestcaseProvider.CreateAppDomain();
-				foreach (string strTest in objTestcaseProvider.Types)
+				Logger.Log("UPDATE branch: " + testsystemName);
+				TestcaseProvider testcaseProvider = new TestcaseProvider(testFile);
+				testcaseProvider.CreateAppDomain();
+				foreach (string testcaseType in testcaseProvider.Types)
 				{
-					ITestable objTestable = objTestcaseProvider.GetTestableFromTypeName(strTest);
-					if(objTestable==null) continue;
+					ITestable testable = testcaseProvider.GetTestableFromTypeName(testcaseType);
+					if(testable==null) continue;
 					
-					Testcase objTestcase = _objTestcaseRepository.GetByType(strTest);
-					string strTestableName = objTestable.GetName();
-					if (objTestcase == null)
+					Testcase testcase = _testcaseRepository.GetByType(testcaseType);
+					string testableName = testable.GetName();
+					if (testcase == null)
 					{
-						Logger.Log("New test: " + strTestableName);
-						objTestcase = new Testcase { Activated = true, Name = strTestableName, Type = strTest };
-						_objTestcaseRepository.Store(objTestcase);
+						Logger.Log("New test: " + testableName);
+						testcase = new Testcase { Activated = true, Name = testableName, Type = testcaseType };
+						_testcaseRepository.Store(testcase);
 					}
-					else if (!objTestcase.Name.Equals(strTestableName))
+					else if (!testcase.Name.Equals(testableName))
 					{
-						Logger.Log("Renamed test: " + objTestcase.Name + " to " + strTestableName);
-						objTestcase.Name = strTestableName;
-						_objTestcaseRepository.Store(objTestcase);
+						Logger.Log("Renamed test: " + testcase.Name + " to " + testableName);
+						testcase.Name = testableName;
+						_testcaseRepository.Store(testcase);
 						
 					}
 					
 				}
-				objTestcaseProvider.Unload();
+				testcaseProvider.Unload();
 			}
 
 		}
 		
-		void IBuildTaskService.AddRegTestTasks(string strTestsystem, string strReleaseManager, string strTestsuite)
+		void IBuildTaskService.AddRegTestTasks(string testsystemName, string emailReceiver, string testsuiteName)
 		{
-			Testsuite objTestsuite = _objTestsuiteRepository.GetByName(strTestsuite);
-			Testsystem objTestsystem = _objTestsystemRepository.GetByName(strTestsystem);
-			Tester objTester = _objTesterRepository.GetByName(strReleaseManager);
+			Testsuite testsuite = _testsuiteRepository.GetByName(testsuiteName);
+			Testsystem testsystem = _testsystemRepository.GetByName(testsystemName);
+			Tester tester = _testerRepository.GetByName(emailReceiver);
 
-			TestJob objTestjob = new TestJob
+			TestJob testjob = new TestJob
 			{
-				Name = "Testsuite " + objTestsuite.Name,
+				Name = "Testsuite " + testsuite.Name,
 				ResultCode = TestState.Pending,
-				Testsuite = objTestsuite,
-				Testsystem = objTestsystem,
-				Tester = objTester,
+				Testsuite = testsuite,
+				Testsystem = testsystem,
+				Tester = tester,
 				StartedAt = DateTime.Now,
 				JobType = JobType.Buildtask
 			};
 
-			ITestJobManager objTestJobManager = new TestJobManager(objTestjob);
+			ITestJobManager testJobManager = new TestJobManager(testjob);
 
-			ICollection<WorkItem> lstWorkItems = (from objTestcase in objTestsuite.Testcases
-												  from objBrowser in objTestsuite.Browsers
-												  from objLanguage in objTestsuite.Languages
-												  select new WorkItem(objTestJobManager)
+			ICollection<WorkItem> workItems = (from testcase in testsuite.Testcases
+												  from browser in testsuite.Browsers
+												  from language in testsuite.Languages
+												  select new WorkItem(testJobManager)
 												  {
-													  Testcase = objTestcase,
-													  Browser = objBrowser,
-													  Language = objLanguage,
-													  Testsystem = objTestsystem,
-													  Tester = objTester
+													  Testcase = testcase,
+													  Browser = browser,
+													  Language = language,
+													  Testsystem = testsystem,
+													  Tester = tester
 												  }).ToList();
 
-			_objTestPool.AddTestJob(objTestJobManager, lstWorkItems);
+			_testPool.AddTestJob(testJobManager, workItems);
 		}
 	}
 }
