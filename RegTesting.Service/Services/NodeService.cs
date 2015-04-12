@@ -194,13 +194,9 @@ namespace RegTesting.Service.Services
 				historyResult.ScreenshotFile = imagefile;
 				_historyResultRepository.Store(historyResult);
 			}
-			lock (TestsystemSummariesCache.ThorCache.GetLock(workItem.Testsystem.ID))
+			lock (TestsystemSummariesCache.Cache.GetLock(workItem.Testsystem.ID))
 			{
-				TestsystemSummariesCache.ThorCache.Set(workItem.Testsystem.ID, null);
-			}
-			lock (TestsystemSummariesCache.SodaCache.GetLock(workItem.Testsystem.ID))
-			{
-				TestsystemSummariesCache.SodaCache.Set(workItem.Testsystem.ID, null);
+				TestsystemSummariesCache.Cache.Set(workItem.Testsystem.ID, null);
 			}
 			testWorker.WorkItem = null;
 
