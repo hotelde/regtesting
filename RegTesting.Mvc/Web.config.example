@@ -10,9 +10,9 @@
     <add key="UnobtrusiveJavaScriptEnabled" value="true" />
     <add key="autoFormsAuthentication" value="false" />
     <add key="enableSimpleMembership" value="false" />
-    <!-- The names of the default testsuites. -->
-    <add key="ThorDefaulttestsuite" value="Minimal" />
-    <add key="SodaDefaulttestsuite" value="SODA" />
+    <!-- The names of the default testsuite. -->
+    <add key="Defaulttestsuite" value="Minimal" />
+	<add key="PinnedBranches" value="" />
     <!-- The ConnectionString -->
     <add key="DefaultConnectionString" value="RegTestingDbContext" />
     <!-- the testmanager -->

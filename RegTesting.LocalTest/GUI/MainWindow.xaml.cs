@@ -338,22 +338,22 @@ namespace RegTesting.LocalTest.GUI
 			_localTestLogic.SetAppSetting("Testcase", string.Join("|", lstViewTestcases.SelectedItems.Cast<string>()));
 
 			string testsystem = txtTestsystem.Text;
-
+			string fileName = txtFile.Text;
 
 			if(selectedBrowsersLocal.Any())
 				TestLocal(testsystem,selectedBrowsersLocal,selectedTestcases,selectedLanguages);
 
 			if (selectedBrowsersRemote.Any())
-				TestRemote(testsystem, selectedBrowsersRemote, selectedTestcases, selectedLanguages);
+				TestRemote(fileName,testsystem, selectedBrowsersRemote, selectedTestcases, selectedLanguages);
 
 
 		}
 
-		private void TestRemote(string testsystem, List<string> lstBrowsers, List<string> testcases, List<string> languages)
+		private void TestRemote(string fileName, string testsystem, List<string> lstBrowsers, List<string> testcases, List<string> languages)
 		{
 			using (WcfClient wcfClient = new WcfClient())
 			{
-				wcfClient.TestRemote(testsystem, lstBrowsers, testcases, languages);
+				wcfClient.TestRemote(fileName, testsystem, lstBrowsers, testcases, languages);
 			}
 		}
 

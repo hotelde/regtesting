@@ -43,50 +43,26 @@ namespace RegTesting.Service.Services
 
 
 
-		IList<TestsystemSummary> ISummaryService.GetTestsystemSummaryForAllThorBranches()
+        IList<TestsystemSummary> ISummaryService.GetLastTestsystemSummaries()
 		{
-			Testsuite testsuite = _testsuiteRepository.GetByName(RegtestingServerConfiguration.ThorDefaulttestsuite);
+			Testsuite testsuite = _testsuiteRepository.GetByName(RegtestingServerConfiguration.Defaulttestsuite);
 			return _testsystemRepository.GetAll()
-				.Select(objTestsystem => CreateTestsystemSummary(objTestsystem, testsuite, TestsystemSummariesCache.ThorCache))
+				.Select(objTestsystem => CreateTestsystemSummary(objTestsystem, testsuite, TestsystemSummariesCache.Cache))
 				.OrderByDescending(objSummary => objSummary.LastChangeDate).Where(objSummary => DateTime.Now - objSummary.LastChangeDate < TimeSpan.FromDays(7)).ToList();
 		}
 
-		IList<TestsystemSummary> ISummaryService.GetTestsystemSummaryForAllSodaBranches()
+        IList<TestsystemSummary> ISummaryService.GetPinnedTestsystemSummaries()
 		{
-			Testsuite testsuite = _testsuiteRepository.GetByName(RegtestingServerConfiguration.SodaDefaulttestsuite);
-			return _testsystemRepository.GetAll()
-				.Select(objTestsystem => CreateTestsystemSummary(objTestsystem, testsuite, TestsystemSummariesCache.SodaCache))
-				.OrderByDescending(objSummary => objSummary.LastChangeDate).Where(objSummary => DateTime.Now - objSummary.LastChangeDate < TimeSpan.FromDays(7)).ToList();
-		}
-
-
-		IList<TestsystemSummary> ISummaryService.GetTestsystemSummaryForThorMainBranches()
-		{
-			Testsuite testsuite = _testsuiteRepository.GetByName(RegtestingServerConfiguration.ThorDefaulttestsuite);
-			IList<Testsystem> mainTestsystems = new List<Testsystem>
-				{
-					_testsystemRepository.GetByName("dev")
-				};
-
-			return mainTestsystems
-				.Select(objTestsystem => CreateTestsystemSummary(objTestsystem, testsuite, TestsystemSummariesCache.ThorCache))
-				.ToList();
-		}
-
-
-		IList<TestsystemSummary> ISummaryService.GetTestsystemSummaryForSodaMainBranches()
-		{
-			Testsuite testsuite = _testsuiteRepository.GetByName(RegtestingServerConfiguration.SodaDefaulttestsuite);
+			Testsuite testsuite = _testsuiteRepository.GetByName(RegtestingServerConfiguration.Defaulttestsuite);
+	        IList<Testsystem> mainTestsystems =
+		        RegtestingServerConfiguration.PinnedBranches.Select(t => _testsystemRepository.GetByName(t)).ToList();
 		
-			IList<Testsystem> mainTestsystems = new List<Testsystem>
-				{
-					_testsystemRepository.GetByName("devsoda-uit")
-				};
 
 			return mainTestsystems
-				.Select(objTestsystem => CreateTestsystemSummary(objTestsystem, testsuite, TestsystemSummariesCache.SodaCache))
+				.Select(objTestsystem => CreateTestsystemSummary(objTestsystem, testsuite, TestsystemSummariesCache.Cache))
 				.ToList();
 		}
+
 
 		private TestsystemSummary CreateTestsystemSummary(Testsystem testsystem, Testsuite testsuite, TestsystemSummariesCache cache)
 		{
@@ -125,5 +101,7 @@ namespace RegTesting.Service.Services
 				return testsystemSummary;
 			}
 		}
-	}
+
+       
+    }
 }
