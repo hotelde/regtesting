@@ -170,5 +170,16 @@ namespace RegTesting.Service
 			}
 		}
 
+		/// <summary>
+		/// an array with all PinnedBranches
+		/// </summary>
+		public static string[] PinnedBranches
+		{
+			get
+			{
+				return ConfigurationManager.AppSettings["PinnedBranches"].Split(',');
+			}
+		}
+
 	}
 }

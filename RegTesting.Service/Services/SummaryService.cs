@@ -54,10 +54,9 @@ namespace RegTesting.Service.Services
         IList<TestsystemSummary> ISummaryService.GetPinnedTestsystemSummaries()
 		{
 			Testsuite testsuite = _testsuiteRepository.GetByName(RegtestingServerConfiguration.Defaulttestsuite);
-			IList<Testsystem> mainTestsystems = new List<Testsystem>
-				{
-					_testsystemRepository.GetByName("dev")
-				};
+	        IList<Testsystem> mainTestsystems =
+		        RegtestingServerConfiguration.PinnedBranches.Select(t => _testsystemRepository.GetByName(t)).ToList();
+		
 
 			return mainTestsystems
 				.Select(objTestsystem => CreateTestsystemSummary(objTestsystem, testsuite, TestsystemSummariesCache.Cache))

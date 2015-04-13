@@ -44,7 +44,7 @@ namespace RegTesting.Mvc
 		}
 
 		/// <summary>
-		/// an array with all Testmanager
+		/// an array with all PinnedBranches
 		/// </summary>
 		public static string[] PinnedBranches
 		{
