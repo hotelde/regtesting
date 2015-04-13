@@ -87,15 +87,15 @@ namespace RegTesting.LocalTest.Logic
 		/// <summary>
 		/// Start Tests at the Remote Server
 		/// </summary>
+		/// <param name="fileName">the filename of the testfile</param>
 		/// <param name="testsystemUrl">the testsystem url</param>
 		/// <param name="browsers">the browsers</param>
 		/// <param name="testcases">the testcases</param>
 		/// <param name="languages">the languages</param>
-		public void TestRemote(string testsystemUrl, List<string> browsers, List<string> testcases, List<string> languages)
+		public void TestRemote(string fileName, string testsystemUrl, List<string> browsers, List<string> testcases, List<string> languages)
 		{
 			testsystemUrl = testsystemUrl.ToLower().Replace("https://", "").Replace("http://", "");
 
-			const string fileName = "RegTesting.Tests.dll";
 			string username = GetUser();
 			string testsystemName = "local/" + testsystemUrl + "-" + username;
 		
