@@ -50,7 +50,7 @@ namespace RegTesting.Mvc
 		{
 			get
 			{
-				return ConfigurationManager.AppSettings["PinnedBranches"].Split(',');
+				return ConfigurationManager.AppSettings["PinnedBranches"].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 			}
 		}
 

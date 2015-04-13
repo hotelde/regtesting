@@ -177,7 +177,7 @@ namespace RegTesting.Service
 		{
 			get
 			{
-				return ConfigurationManager.AppSettings["PinnedBranches"].Split(',');
+				return ConfigurationManager.AppSettings["PinnedBranches"].Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 			}
 		}
 
