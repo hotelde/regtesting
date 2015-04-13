@@ -65,7 +65,7 @@ namespace RegTesting.Mvc.Controllers
 			ViewBag.LstTestsuites = testsuites;
 			if ((testsuite == 0 || testsuites.All(t => t.ID != testsuite)) && testsuites.Count > 0)
 			{
-				TestsuiteModel objMain = testsuites.FirstOrDefault(t => t.Name == RegtestingMvcConfiguration.ThorDefaulttestsuite);
+				TestsuiteModel objMain = testsuites.FirstOrDefault(t => t.Name == RegtestingMvcConfiguration.Defaulttestsuite);
 				testsuite =objMain !=null ? objMain.ID : testsuites[0].ID;
 			}
 

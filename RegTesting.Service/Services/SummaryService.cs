@@ -45,7 +45,7 @@ namespace RegTesting.Service.Services
 
         IList<TestsystemSummary> ISummaryService.GetLastTestsystemSummaries()
 		{
-			Testsuite testsuite = _testsuiteRepository.GetByName(RegtestingServerConfiguration.ThorDefaulttestsuite);
+			Testsuite testsuite = _testsuiteRepository.GetByName(RegtestingServerConfiguration.Defaulttestsuite);
 			return _testsystemRepository.GetAll()
 				.Select(objTestsystem => CreateTestsystemSummary(objTestsystem, testsuite, TestsystemSummariesCache.Cache))
 				.OrderByDescending(objSummary => objSummary.LastChangeDate).Where(objSummary => DateTime.Now - objSummary.LastChangeDate < TimeSpan.FromDays(7)).ToList();
@@ -53,7 +53,7 @@ namespace RegTesting.Service.Services
 
         IList<TestsystemSummary> ISummaryService.GetPinnedTestsystemSummaries()
 		{
-			Testsuite testsuite = _testsuiteRepository.GetByName(RegtestingServerConfiguration.ThorDefaulttestsuite);
+			Testsuite testsuite = _testsuiteRepository.GetByName(RegtestingServerConfiguration.Defaulttestsuite);
 			IList<Testsystem> mainTestsystems = new List<Testsystem>
 				{
 					_testsystemRepository.GetByName("dev")

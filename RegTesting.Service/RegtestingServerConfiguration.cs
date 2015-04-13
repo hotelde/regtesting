@@ -34,22 +34,11 @@ namespace RegTesting.Service
 		/// <summary>
 		/// The default testsuite
 		/// </summary>
-		public static string ThorDefaulttestsuite
+		public static string Defaulttestsuite
 		{
 			get
 			{
-				return ConfigurationManager.AppSettings["ThorDefaulttestsuite"];
-			}
-		}
-
-		/// <summary>
-		/// The default testsuite
-		/// </summary>
-		public static string SodaDefaulttestsuite
-		{
-			get
-			{
-				return ConfigurationManager.AppSettings["SodaDefaulttestsuite"];
+				return ConfigurationManager.AppSettings["Defaulttestsuite"];
 			}
 		}
 
