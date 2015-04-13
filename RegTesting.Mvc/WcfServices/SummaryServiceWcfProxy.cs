@@ -40,24 +40,17 @@ namespace RegTesting.Mvc.WcfServices
 			}
 		}
 
-		IList<TestsystemSummary> ISummaryService.GetTestsystemSummaryForAllThorBranches()
+		IList<TestsystemSummary> ISummaryService.GetLastTestsystemSummaries()
 		{
-			return _channel.GetTestsystemSummaryForAllThorBranches();
+			return _channel.GetLastTestsystemSummaries();
 		}
 
-		IList<TestsystemSummary> ISummaryService.GetTestsystemSummaryForAllSodaBranches()
+		
+
+		IList<TestsystemSummary> ISummaryService.GetPinnedTestsystemSummaries()
 		{
-			return _channel.GetTestsystemSummaryForAllSodaBranches();
+			return  _channel.GetPinnedTestsystemSummaries();
 		}
 
-		IList<TestsystemSummary> ISummaryService.GetTestsystemSummaryForThorMainBranches()
-		{
-			return _channel.GetTestsystemSummaryForThorMainBranches();
-		}
-
-		IList<TestsystemSummary> ISummaryService.GetTestsystemSummaryForSodaMainBranches()
-		{
-			return _channel.GetTestsystemSummaryForSodaMainBranches();
-		}
 	}
 }

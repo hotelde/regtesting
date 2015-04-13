@@ -1,93 +1,47 @@
 ﻿@using RegTesting.Contracts
-@model Dictionary<String, IList<TestsystemSummary>>
+@model IList<TestsystemSummary>
 
 @{
-	ViewBag.Title = "Testsystem Übersicht";
+	ViewBag.Title = "Testsystem Summary";
 }
-
-
-
-
-
-@foreach (KeyValuePair<string, IList<TestsystemSummary>> summaries in Model)
-{
-
-	<div class="page-header">
-		<h1>
-			@summaries.Key
-			
-				@if (summaries.Value.Any())
-				{
-					<small>
-						@summaries.Value.First().TestsuiteName
-					</small>
-				}
-	</h1>
-	</div>
-	<div id="@(summaries.Key + "MainBranchSummaryBlock")">
-		@{Html.RenderPartial("MainBranchSummariesPartial", summaries.Value);}
-	</div>
-}
-
-
-<div class="col-md-6">
-	<h3>Last tested THOR branches</h3>
-	<div id="thorBranchSummaryBlock">
-		<div class="alert alert-warning"><h4>Loading ...</h4></div>
-	</div>
-</div>
 	
-<div class="col-md-6">
-	<h3>Last tested SODA branches </h3>
-	<div id="sodaBranchSummaryBlock">
-		<div class="alert alert-warning"><h4>Loading ...</h4></div>
+@if (Model.Count > 0)
+{
+	<h2>
+		Pinned branches
+	</h2>
+	<div id="pinnedBranchSummariesBlock">
+		@{Html.RenderPartial("MainBranchSummariesPartial", Model);}
 	</div>
-</div>
+}
 
-			
+<h2>Last tested branches</h2>
+<div id="lastBranchSummariesBlock">
+	<div class="alert alert-warning"><h4>Loading ...</h4></div>
+</div>
 
 
 <script type="text/javascript">
 $(function () {
-	updateThorBranchSummariesTable();
-	updateSodaBranchSummariesTable();
-	updateSodaMainBranchSummariesTable();
-	updateThorMainBranchSummariesTable();
+	updateLastBranchSummariesTable();
+	updatePinnedBranchSummariesTable();
 
-
-	function updateThorBranchSummariesTable() {
-		$.get('@Url.Action("GetThorBranchSummariesTable")', {},
+	function updateLastBranchSummariesTable() {
+		$.get('@Url.Action("GetlastBranchSummariesTable")', {},
 			function (view) {
-				$("div#thorBranchSummaryBlock").html(view);
+			    $("div#lastBranchSummariesBlock").html(view);
 				setTimeout(function () {
-					updateThorBranchSummariesTable();
+				    updateLastBranchSummariesTable();
 				}, 60000);
 			});
 	}
-	function updateSodaBranchSummariesTable() {
-		$.get('@Url.Action("GetSodaBranchSummariesTable")', {},
+
+    function updatePinnedBranchSummariesTable() {
+		$.get('@Url.Action("GetPinnedBranchSummaries")', {},
 			function (view) {
-				$("div#sodaBranchSummaryBlock").html(view);
+			    $("div#pinnedBranchSummariesBlock").html(view);
 				setTimeout(function () {
-					updateSodaBranchSummariesTable();
-				}, 60000);
-			});
-	}
-	function updateThorMainBranchSummariesTable() {
-		$.get('@Url.Action("GetThorMainBranchSummaries")', {},
-			function (view) {
-				$("div#THORMainBranchSummaryBlock").html(view);
-				setTimeout(function () {
-					updateThorMainBranchSummariesTable();
-				}, 30000);
-			});
-	}
-	function updateSodaMainBranchSummariesTable() {
-		$.get('@Url.Action("GetSodaMainBranchSummaries")', {},
-			function (view) {
-				$("div#SODAMainBranchSummaryBlock").html(view);
-			setTimeout(function () {
-					updateSodaMainBranchSummariesTable();
+				    updatePinnedBranchSummariesTable();
 				}, 30000);
 			});
 	}

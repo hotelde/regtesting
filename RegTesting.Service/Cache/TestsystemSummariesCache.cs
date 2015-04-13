@@ -5,11 +5,9 @@ namespace RegTesting.Service.Cache
 {
 	class TestsystemSummariesCache
 	{
-		public static TestsystemSummariesCache ThorCache = new TestsystemSummariesCache();
-		public static TestsystemSummariesCache SodaCache = new TestsystemSummariesCache();
+		public static TestsystemSummariesCache Cache = new TestsystemSummariesCache();
 
 		private readonly Dictionary<int, TestsystemSummary> testSystemSummaries = new Dictionary<int, TestsystemSummary>();
-
 		private readonly Dictionary<int, object> testsystemLocks = new Dictionary<int, object>();
 		private readonly object _lock = new object();
 

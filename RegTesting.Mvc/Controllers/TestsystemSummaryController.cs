@@ -32,13 +32,7 @@ namespace RegTesting.Mvc.Controllers
 		/// <returns>View</returns>
 		public ActionResult Index()
 		{
-			
-			Dictionary<string, IList<TestsystemSummary>> summaries = new Dictionary<string, IList<TestsystemSummary>>();
-			
-			summaries.Add("THOR", _summaryService.GetTestsystemSummaryForThorMainBranches());
-			summaries.Add("SODA", _summaryService.GetTestsystemSummaryForSodaMainBranches());
-
-			return View(summaries);
+			return View(_summaryService.GetPinnedTestsystemSummaries());
 		}
 
 		/// <summary>
@@ -46,39 +40,20 @@ namespace RegTesting.Mvc.Controllers
 		/// </summary>
 		/// <returns>a partial view with the summary table</returns>
 		[AcceptVerbs(HttpVerbs.Get)]
-		public ActionResult GetThorBranchSummariesTable()
+		public ActionResult GetLastBranchSummariesTable()
 		{
-			return PartialView("BranchSummariesTablePartial", _summaryService.GetTestsystemSummaryForAllThorBranches().Where(t=>!t.TestsystemName.StartsWith("local",StringComparison.InvariantCultureIgnoreCase)).ToList());
+			return PartialView("BranchSummariesTablePartial", _summaryService.GetLastTestsystemSummaries().Where(t=>!t.TestsystemName.StartsWith("local",StringComparison.InvariantCultureIgnoreCase)).ToList());
 		}
 
 		/// <summary>
-		/// Get the branchSummariesTable
+		/// Get the pinned branch summaries
 		/// </summary>
-		/// <returns>a partial view with the summary table</returns>
+		/// <returns>a partial view with the summaries of the pinned branches</returns>
 		[AcceptVerbs(HttpVerbs.Get)]
-		public ActionResult GetSodaBranchSummariesTable()
+		public ActionResult GetPinnedBranchSummaries()
 		{
-			return PartialView("BranchSummariesTablePartial", _summaryService.GetTestsystemSummaryForAllSodaBranches().Where(t => !t.TestsystemName.StartsWith("local", StringComparison.InvariantCultureIgnoreCase)).ToList());
+            return PartialView("MainBranchSummariesPartial", _summaryService.GetPinnedTestsystemSummaries());
 		}
 
-		/// <summary>
-		/// Get the thor main branch summaries
-		/// </summary>
-		/// <returns>a partial view with the summaries of the main branches</returns>
-		[AcceptVerbs(HttpVerbs.Get)]
-		public ActionResult GetThorMainBranchSummaries()
-		{
-			return PartialView("MainBranchSummariesPartial", _summaryService.GetTestsystemSummaryForThorMainBranches());
-		}
-
-		/// <summary>
-		/// Get the thor main branch summaries
-		/// </summary>
-		/// <returns>a partial view with the summaries of the main branches</returns>
-		[AcceptVerbs(HttpVerbs.Get)]
-		public ActionResult GetSodaMainBranchSummaries()
-		{
-			return PartialView("MainBranchSummariesPartial", _summaryService.GetTestsystemSummaryForSodaMainBranches());
-		}
 	}
 }

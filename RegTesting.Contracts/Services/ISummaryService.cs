@@ -10,35 +10,18 @@ namespace RegTesting.Contracts.Services
 	public interface ISummaryService
 	{
 		/// <summary>
-		/// Get the testsystemsummarys for thor branches
+		/// Get the testsystemsummaries for all branches
 		/// </summary>
-		/// <returns>a list of testsystemsummarys</returns>
+		/// <returns>a list of testsystemsummaries</returns>
 		[OperationContract]
-		IList<TestsystemSummary> GetTestsystemSummaryForAllThorBranches();
+        IList<TestsystemSummary> GetLastTestsystemSummaries();
 
 		/// <summary>
-		/// Get the testsystemsummarys for soda branches
+		/// Get the testsystemsummaries for the pinned branches
 		/// </summary>
-		/// <returns>a list of testsystemsummarys</returns>
+		/// <returns>a list of testsystemsummaries</returns>
 		[OperationContract]
-		IList<TestsystemSummary> GetTestsystemSummaryForAllSodaBranches();
-
-		/// <summary>
-		/// Get the testsystemsummarys for the THOR main branches
-		/// </summary>
-		/// <returns>a list of testsystemsummarys</returns>
-		[OperationContract]
-		IList<TestsystemSummary> GetTestsystemSummaryForThorMainBranches();
-
-
-		/// <summary>
-		/// Get the testsystemsummarys for the SODA main branches
-		/// </summary>
-		/// <returns>a list of testsystemsummarys</returns>
-		[OperationContract]
-		IList<TestsystemSummary> GetTestsystemSummaryForSodaMainBranches();
-
-
+        IList<TestsystemSummary> GetPinnedTestsystemSummaries();
 
 	}
 }

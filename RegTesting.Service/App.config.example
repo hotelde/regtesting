@@ -18,9 +18,8 @@
 		<!-- Where to put the screenshots? -->
 		<add key="Screenshotsfolder" value="\\SOMESHARE\SOMEFOLDER\" />
 
-		<!-- The names of the default testsuites. -->
-		<add key="ThorDefaulttestsuite" value="Minimal" />
-		<add key="SodaDefaulttestsuite" value="SODA" />
+		<!-- The names of the default testsuite. -->
+		<add key="Defaulttestsuite" value="Minimal" />
 
 		<!-- The mailadress for server error -->
 		<add key="Errormailadress" value="USER1@MYDOMAIN" />
