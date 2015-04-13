@@ -14,7 +14,6 @@ namespace RegTesting.Contracts.Domain
 		public TestcaseMap()
 		{
 			Id(x => x.ID, map => map.Generator(Generators.Identity));
-			Property(x => x.Activated);
 			Property(x => x.Name);
 			Property(x => x.Type);
 			Property(x => x.Description, x => x.NotNullable(false));

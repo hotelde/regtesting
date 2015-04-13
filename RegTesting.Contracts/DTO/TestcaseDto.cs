@@ -14,12 +14,7 @@ namespace RegTesting.Contracts.DTO
 		/// The Name
 		/// </summary>
 		public virtual string Name { get; set; }
-
-		/// <summary>
-		/// If the test is activated
-		/// </summary>
-		public virtual bool Activated { get;set; }
-
+		
 		/// <summary>
 		/// The Type
 		/// </summary>

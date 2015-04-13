@@ -85,7 +85,7 @@ namespace RegTesting.Service.Services
 					if (testcase == null)
 					{
 						Logger.Log("New test: " + testableName);
-						testcase = new Testcase { Activated = true, Name = testableName, Type = testcaseType };
+						testcase = new Testcase { Name = testableName, Type = testcaseType };
 						_testcaseRepository.Store(testcase);
 					}
 					else if (!testcase.Name.Equals(testableName))
