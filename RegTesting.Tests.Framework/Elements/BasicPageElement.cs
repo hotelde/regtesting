@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using RegTesting.Tests.Framework.Enums;
 using RegTesting.Tests.Framework.Logic;
 using RegTesting.Tests.Framework.Logic.Extensions;
@@ -164,6 +166,45 @@ namespace RegTesting.Tests.Framework.Elements
 		public bool HasClasses(params string[] classnames)
 		{
 			return classnames.All(HasClass);
+		}
+
+		/// <summary>
+		/// Wait for an animation of these element to finish
+		/// </summary>
+		/// <param name="maximumWaitInSeconds">Maximum of seconds to wait for animation</param>
+		public void WaitForAnimationComplete(int maximumWaitInSeconds = 10)
+		{
+				
+				WebDriverWait wait = new WebDriverWait(WebDriver, new TimeSpan(0,0,maximumWaitInSeconds));
+
+				try
+				{
+					wait.Timeout = new TimeSpan(0, 0, maximumWaitInSeconds);
+					wait.Until(driver => !IsAnimationOngoing());
+				}
+				catch (WebDriverTimeoutException e)
+				{
+					throw new TimeoutException("Waited " + maximumWaitInSeconds + " seconds for animation of " + By +  "to complete, but animation is still ongoing");
+				}
+		}
+
+		private bool IsAnimationOngoing() 
+		{
+			IWebElement element = WebDriver.FindElement(By);
+			int x = element.Location.X;
+			int y = element.Location.Y;
+			int height = element.Size.Height;
+			int width = element.Size.Width;
+			Thread.Sleep(100);
+			if (x != element.Location.X)
+				return true;
+			if (y != element.Location.Y)
+				return true;
+			if (height != element.Size.Height)
+				return true;
+			if (width != element.Size.Width)
+				return true;
+			return false;
 		}
 	}
 }
