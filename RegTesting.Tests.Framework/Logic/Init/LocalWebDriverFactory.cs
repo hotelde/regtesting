@@ -29,16 +29,15 @@ namespace RegTesting.Tests.Framework.Logic.Init
 				case "firefox":
 					desiredCapabilities = DesiredCapabilities.Firefox();
 					desiredCapabilities.SetCapability("singleWindow", true);
-					desiredCapabilities.SetCapability("handlesAlerts", true);
 					webDriver = new FirefoxDriver(desiredCapabilities);
 					break;
 				case "chrome":
 					ChromeOptions chromeOptions = new ChromeOptions();
-					chromeOptions.AddArguments("-unexpectedAlertBehaviour=accept", "--test-type", "--disable-hang-monitor", "--new-window", "--no-sandbox");
+					chromeOptions.AddArguments("--test-type", "--disable-hang-monitor", "--new-window", "--no-sandbox");
 					webDriver = new ChromeDriver(chromeOptions);
 					break;
 				case "internet explorer":
-					webDriver = new InternetExplorerDriver(new InternetExplorerOptions { BrowserCommandLineArguments = "singleWindow=true", IntroduceInstabilityByIgnoringProtectedModeSettings = true, EnsureCleanSession = true, EnablePersistentHover = false, UnexpectedAlertBehavior = InternetExplorerUnexpectedAlertBehavior.Accept });
+					webDriver = new InternetExplorerDriver(new InternetExplorerOptions { BrowserCommandLineArguments = "singleWindow=true", IntroduceInstabilityByIgnoringProtectedModeSettings = true, EnsureCleanSession = true, EnablePersistentHover = false });
 					break;
 				case "phantomjs":
 					webDriver = new PhantomJSDriver(new PhantomJSOptions() {});
