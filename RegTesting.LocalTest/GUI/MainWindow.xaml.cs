@@ -340,6 +340,8 @@ namespace RegTesting.LocalTest.GUI
 			string testsystem = txtTestsystem.Text;
 			string fileName = txtFile.Text;
 
+			LoadTestcaseFile(txtFile.Text);
+
 			if(selectedBrowsersLocal.Any())
 				TestLocal(testsystem,selectedBrowsersLocal,selectedTestcases,selectedLanguages);
 
