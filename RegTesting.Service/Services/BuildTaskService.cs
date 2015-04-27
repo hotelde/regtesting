@@ -107,10 +107,20 @@ namespace RegTesting.Service.Services
 			Testsuite testsuite = _testsuiteRepository.GetByName(testsuiteName);
 			Testsystem testsystem = _testsystemRepository.GetByName(testsystemName);
 			Tester tester = _testerRepository.GetByName(emailReceiver);
+			string testjobname;
+			if (!String.IsNullOrEmpty(commitId) && !String.IsNullOrEmpty(branch))
+			{
+				testjobname = "Commit " + commitId + " on " + branch;
+			}
+			else
+			{
+				testjobname = "Testsuite " + testsuiteName;
+
+			}
 
 			TestJob testjob = new TestJob
 			{
-				Name = "Commit " + commitId  + " on " + branch,
+				Name = testjobname,
 				//Description = strCommitMessage,   TODO: Add description to testjob
 				ResultCode = TestState.Pending,
 				Testsuite = testsuite,
