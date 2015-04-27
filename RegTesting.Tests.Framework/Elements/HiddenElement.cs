@@ -9,7 +9,7 @@ namespace RegTesting.Tests.Framework.Elements
 	/// <summary>
 	/// Represents an Hidden Element for example a Hidden Input
 	/// </summary>
-	class HiddenElement : BasicPageElement
+	public class HiddenElement : BasicPageElement
 	{
 
 
