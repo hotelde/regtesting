@@ -25,7 +25,7 @@ namespace RegTesting.BuildTasks
 				Log.LogMessage(MessageImportance.Normal, "Updating Testcases: " + stage + ".dll -> " + EndpointAdress);
 				using (WcfClient wcfClient = new WcfClient(EndpointAdress))
 				{
-					wcfClient.SendFile(File, stage, ReleaseManager, Testsuite);
+					wcfClient.SendFile(File, stage, ReleaseManager, Testsuite, Branch, CommitId, CommitMessage);
 					Log.LogMessage(MessageImportance.Normal, "Updating Testcases: SUCCESS.");
 					Log.LogMessage(MessageImportance.Normal, "Testresults will be sent to " + ReleaseManager );
 				}
@@ -86,6 +86,36 @@ namespace RegTesting.BuildTasks
 		/// The Testsuite to test
 		/// </summary>
 		public String Testsuite
+		{
+			get;
+			set;
+		}
+
+
+		/// <summary>
+		/// The branch of the commit
+		/// </summary>
+		public String Branch
+		{
+			get;
+			set;
+		}
+
+
+		/// <summary>
+		/// The commit id
+		/// </summary>
+		public String CommitId
+		{
+			get;
+			set;
+		}
+
+
+		/// <summary>
+		/// The commit message
+		/// </summary>
+		public String CommitMessage
 		{
 			get;
 			set;
