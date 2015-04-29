@@ -5,18 +5,15 @@ using System.Threading;
 using OpenQA.Selenium;
 using RegTesting.Tests.Framework.Elements;
 using RegTesting.Tests.Framework.Enums;
-using RegTesting.Tests.Framework.Logic.PageSettings;
 using RegTesting.Tests.Framework.Properties;
 
 namespace RegTesting.Tests.Framework.Logic
 {
 	public class PageObjectFactory
 	{
-		private static readonly IPageSettingsFactory PageSettingsFactory;
 
 		static PageObjectFactory()
 		{
-			PageSettingsFactory = new PageSettingsFactory();
 		}
 
 		/// <summary>
@@ -25,105 +22,44 @@ namespace RegTesting.Tests.Framework.Logic
 		/// <typeparam name="T"></typeparam>
 		/// <param name="webDriver">The web driver.</param>
 		/// <param name="baseUrl">The base URL.</param>
-		/// <param name="suppressLanguageParameter">Supresses the language parameter</param>
-		/// <param name="hashTagParams">hash tag parameters</param>
-		/// <param name="furtherUrlParameters">
-		/// The further URL param after the lng param. 
-		/// The example input value "cpn=2553 would navigate us to: www.hotel.de?lng=de&cpn=2553
-		/// </param>
+		/// <param name="pageSettings">The page settings</param>
+		/// <param name="furtherUrlParameters"></param>
 		/// <returns>A PageObject, navigated to the PageUrl.</returns>
-		public static T CreateAndNavigateTo<T>(IWebDriver webDriver, string baseUrl, bool suppressLanguageParameter = false, string[] hashTagParams = null, params string[] furtherUrlParameters) where T : BasePageObject
+		public static T CreateAndNavigateTo<T>(IWebDriver webDriver, string baseUrl, IDictionary<string, object> pageSettings = null, params string[] furtherUrlParameters) where T : BasePageObject
 		{
-			T pageObject = CreatePageObject<T>(webDriver);
-			Type type = typeof(T);
-			PagePropsAttribute pageAttribute = (PagePropsAttribute)type.GetCustomAttribute(typeof(PagePropsAttribute), true);
-			string pageUrl = baseUrl;
-			if (!pageUrl.EndsWith("/"))
-				pageUrl = pageUrl + "/";
-
-			if (pageObject.PageSettings.IsSeoRoute)
-			{
-				pageUrl = CreateSeoRoute(pageUrl, pageAttribute, furtherUrlParameters);
-			}
-			else
-			{
-				pageUrl = CreateRoute(pageUrl, pageAttribute, suppressLanguageParameter, furtherUrlParameters);
-			}
-
-			if (hashTagParams != null)
-				pageUrl = string.Concat(pageUrl, "#?", string.Join("&", hashTagParams));
-
-			TestLog.AddWithoutTime("<br><b>>>>" + type.Name + "</b>");
-			TestLog.Add("CreateAndNavigate: " + type.Name + " -> " + pageUrl);
+			T pageObject = CreatePageObject<T>(webDriver, pageSettings);
+			String pageUrl = pageObject.CreatePageUrl(furtherUrlParameters);
+			TestLog.AddWithoutTime("<br><b>>>>" + typeof(T).Name + "</b>");
+			TestLog.Add("CreateAndNavigate: " + typeof(T).Name + " -> " + pageUrl);
 			webDriver.Navigate().GoToUrl(pageUrl);
+			ApplyPageSettings(pageObject, pageSettings);
 			return pageObject;
 		}
 
 
 		public static T CreateAndNavigateTo<T>(IWebDriver webDriver, string baseUrl, params string[] furtherUrlParameters) where T : BasePageObject
 		{
-			return CreateAndNavigateTo<T>(webDriver, baseUrl, false, null, furtherUrlParameters);
+			return CreateAndNavigateTo<T>(webDriver,baseUrl,null,furtherUrlParameters);
 		}
-
-		private static string CreateSeoRoute(string pageUrl, PagePropsAttribute pageAttribute, params string[] furtherUrlParameters)
-		{
-			string seoRoute = pageAttribute != null && pageAttribute.PageUrl != null ? pageAttribute.PageUrl.ToLower() : string.Empty;
-
-			List<string> remainingParams = new List<string>();
-			foreach (string param in furtherUrlParameters)
-			{
-				string key = param.Split('=')[0].ToLower();
-				string value = param.Split('=')[1];
-
-				if (seoRoute.Contains("{" + key + "}"))
-				{
-					seoRoute = seoRoute.Replace("{" + key + "}", value);
-				}
-				else
-				{
-					remainingParams.Add(param);
-				}
-			}
-			return string.Concat(pageUrl, Thread.CurrentThread.CurrentUICulture.Name, "/", seoRoute, GetUrlParams(remainingParams.ToArray()));
-
-		}
-
-		private static string CreateRoute(string pageUrl, PagePropsAttribute pageAttribute, bool suppressLanguageParameter = false, params string[] furtherUrlParameters)
-		{
-			string returnUrl = string.Concat(pageUrl, pageAttribute != null && pageAttribute.PageUrl != null ? pageAttribute.PageUrl : string.Empty);
-			returnUrl = string.Concat(returnUrl, GetUrlParams(furtherUrlParameters));
-			if (!suppressLanguageParameter)
-				returnUrl = string.Concat(returnUrl, string.Format("&lng={0}", Thread.CurrentThread.CurrentUICulture.Name));
-			return returnUrl;
-		}
-
-		private static string GetUrlParams(string[] urlParameters)
-		{
-			string parameters = string.Join("&", urlParameters);
-			if (!string.IsNullOrEmpty(parameters))
-				return string.Concat("?", parameters);
-			return String.Empty;
-		}
-
 		
-		public static T GetPageObjectByType<T>(IWebDriver webDriver) where T : BasePageObject
+		public static T GetPageObjectByType<T>(IWebDriver webDriver, IDictionary<string, object> pageSettings = null) where T : BasePageObject
 		{
 			TestLog.AddWithoutTime("<br><b>>>>" + typeof(T).Name + "</b>");
 			TestLog.Add("GetPageObjectByType: " + typeof(T).Name);
-			return CreatePageObject<T>(webDriver);
+			T pageObject = CreatePageObject<T>(webDriver, pageSettings);
+			TestLog.Add("Applying Page settings for '" + pageObject.GetType().Name + "'");
+			ApplyPageSettings(pageObject, pageSettings);
+			return pageObject;
 		}
 
-		private static T CreatePageObject<T>(IWebDriver webDriver) where T : BasePageObject
+		private static T CreatePageObject<T>(IWebDriver webDriver, IDictionary<string, object> pageSettings) where T : BasePageObject
 		{
 			try
 			{
-				T pageObject = (T)Activator.CreateInstance(typeof(T), webDriver, PageSettingsFactory);
+				T pageObject = (T)Activator.CreateInstance(typeof(T), webDriver, pageSettings);
 
 				InitElements(webDriver, pageObject);
-				
-				TestLog.Add("Applying Page settings for '" + pageObject.GetType().Name + "'");
-				pageObject.PageSettings.ApplySettings();
-				
+			
 				return pageObject;
 			}
 			catch (TargetInvocationException exception)
@@ -131,6 +67,20 @@ namespace RegTesting.Tests.Framework.Logic
 				if (exception.InnerException != null) throw exception.InnerException;
 				throw;
 			}
+		}
+
+		private static void ApplyPageSettings(BasePageObject pageObject, IDictionary<string, object> pageSettings)
+		{
+			IDictionary<string, object> combinedDefaultAndSpecificPageSettings = pageObject.PageSettings ?? new Dictionary<string, object>();
+
+			foreach (KeyValuePair<string, object> pageSetting in pageSettings)
+			{
+				combinedDefaultAndSpecificPageSettings[pageSetting.Key] = pageSetting.Value;
+			}
+
+			pageObject.PageSettings = combinedDefaultAndSpecificPageSettings;
+
+			pageObject.ApplySettings();;
 		}
 
 		private static void InitElements(IWebDriver driver, BasePageObject pageObject)

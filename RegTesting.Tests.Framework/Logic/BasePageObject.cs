@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
@@ -6,7 +7,6 @@ using OpenQA.Selenium.Interactions;
 using RegTesting.Tests.Framework.Elements;
 using RegTesting.Tests.Framework.Enums;
 using RegTesting.Tests.Framework.Logic.Extensions;
-using RegTesting.Tests.Framework.Logic.PageSettings;
 
 namespace RegTesting.Tests.Framework.Logic
 {
@@ -15,9 +15,7 @@ namespace RegTesting.Tests.Framework.Logic
 		private readonly object _lock = new object();
 		protected readonly IWebDriver _driver;
 		private readonly AsyncWebDriverCalls _asyncCalls;
-		private AbstractPageSettings _pageSettings;
-
-		private readonly IPageSettingsFactory _pageSettingsFactory;
+		public IDictionary<string, object> PageSettings { get; set; }
 
 		protected Actions Actions
 		{
@@ -27,31 +25,27 @@ namespace RegTesting.Tests.Framework.Logic
 			}
 		}
 
-		public BasePageObject(IWebDriver driver, IPageSettingsFactory pageSettingsFactory)
+		public BasePageObject(IWebDriver driver)
 		{
 			_driver = driver;
-			_pageSettingsFactory = pageSettingsFactory;
 			_asyncCalls = new AsyncWebDriverCalls();
 		}
 
-		public AbstractPageSettings PageSettings // Locking just for safety because of multi threaded javascript execution! Theoratically possible side effects.
+
+
+
+		public virtual void ApplySettings()
 		{
-			get
-			{
-				if (_pageSettings == null)
-				{
-					lock (_lock)
-					{
-						if (_pageSettings == null)
-						{
-							_pageSettings = _pageSettingsFactory.GetPageSettings(this);
-						}
-						
-					}
-				}
-				return _pageSettings;
-			}
+
 		}
+
+		public virtual string CreatePageUrl(params string[] urlParameters)
+		{
+			//Override this method when the pageObject is not available at the root of your BaseUrl.
+			return String.Empty;
+		}
+
+
 
 		public void HandleAlert(bool accept)
 		{
@@ -143,13 +137,12 @@ namespace RegTesting.Tests.Framework.Logic
 		/// </summary>
 		public void SwitchToTab()
 		{
-			PagePropsAttribute[] pageAttributes = (PagePropsAttribute[])GetType().GetCustomAttributes(typeof(PagePropsAttribute), true);
 
-			string pageObjectUrl = pageAttributes.Length > 0 ? pageAttributes[0].PageUrl : string.Empty;
+			string pageObjectUrl = CreatePageUrl();
 
 			if(string.IsNullOrWhiteSpace(pageObjectUrl))
-				throw new ArgumentException("You´re trying to switch the WebDriverActions to a tab with a PageObject that doesn´t have defined a PagePropsAttribute 'PageUrl'. " +
-				                            "To fix this you must assign the PageProp: 'PageUrl' to the PageObject class. The value of the property is equal to the relative pageurl.");
+				throw new ArgumentException("You´re trying to switch the WebDriverActions to a tab with a PageObject that doesn´t have a non empty result for CreatePageUrl. " +
+				                            "To fix this you must override the CreatePageUrl method in the PageObject class. Called without parameters, it should return the relative pageurl.");
 
 			_driver.SwitchToTab(pageObjectUrl);
 		}

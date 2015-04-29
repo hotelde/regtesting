@@ -88,12 +88,6 @@
     <Compile Include="Logic\Init\RemoteWebDriverFactory.cs" />
     <Compile Include="Logic\LocateAttribute.cs" />
     <Compile Include="Logic\PageObjectFactory.cs" />
-    <Compile Include="Logic\PagePropsAttribute.cs" />
-    <Compile Include="Logic\PageSettings\AbstractPageSettings.cs" />
-    <Compile Include="Logic\PageSettings\DefaultSettings.cs" />
-    <Compile Include="Logic\PageSettings\IPageSettings.cs" />
-    <Compile Include="Logic\PageSettings\IPageSettingsFactory.cs" />
-    <Compile Include="Logic\PageSettings\PageSettingsFactory.cs" />
     <Compile Include="Logic\PartialPageObjectAttribute.cs" />
     <Compile Include="Logic\SupportedResolutions.cs" />
     <Compile Include="Logic\Testlog.cs" />

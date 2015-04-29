@@ -9,7 +9,6 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using RegTesting.Tests.Framework.Elements;
 using RegTesting.Tests.Framework.Enums;
-using RegTesting.Tests.Framework.Logic.PageSettings;
 using RegTesting.Tests.Framework.Properties;
 
 namespace RegTesting.Tests.Framework.Logic.Extensions
@@ -27,7 +26,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 		public static void ClickElement(this IWebDriver webDriver, BasicPageElement pageElement)
 		{
 			Stopwatch startNew = Stopwatch.StartNew();
-			Click(FindAndScrollToElement(pageElement.By, Visibility.Visible, pageElement.ParentPageObject.PageSettings), pageElement);
+			Click(FindAndScrollToElement(pageElement.By, Visibility.Visible), pageElement);
 			startNew.Stop();
 			TestLog.Add("Waited " + startNew.ElapsedMilliseconds + " milliseconds to scroll and click element '" + pageElement.By + "'.");
 		}
@@ -51,25 +50,8 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 			TimeSpan timeout = new TimeSpan(0, 0, Settings.Default.TestTimeout);
 			WebDriverWait wait = new WebDriverWait(pageElement.WebDriver, timeout);
 			
-			if (pageElement.ParentPageObject.PageSettings.PageUsesJquery && !pageElement.ParentPageObject.PageSettings.HasEndlessJQueryAnimation)
-			{
-				string errorMessage = null;
-				try
-				{
-					Stopwatch stopwatch = Stopwatch.StartNew();
-					wait.Timeout = new TimeSpan(0, 0, 0, 0, Settings.Default.WatiForAnimationsToComplete);
-					wait.Until(driver => AllAnimationsFinished(driver, pageElement.ParentPageObject.PageSettings, out errorMessage));
-					TestLog.Add("Waited " + stopwatch.ElapsedMilliseconds + " milliseconds for all anmiations to complete.");
-				}
-				catch (WebDriverTimeoutException e)
-				{
-					throw new TimeoutException(errorMessage + "  Waited " + Settings.Default.WatiForAnimationsToComplete + " milliseconds to complete animations. Inner-exception: ", e);
-				}
-			}
-			
 			try
 			{
-				wait.Timeout = timeout;
 				element = wait.Until(findFunction);
 			}
 			catch (WebDriverTimeoutException e)
@@ -79,30 +61,6 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 			}
 			
 			element.Click();
-		}
-
-		private static string GetAnimatedObjectMessage(IEnumerable<object> animatedObjects)
-		{
-			if (animatedObjects == null)
-				return String.Empty;
-
-			StringBuilder stringBuilder = new StringBuilder();
-			
-			foreach (IWebElement animatedObject in animatedObjects)
-			{
-				string id = animatedObject.GetAttribute("id");
-				if (!string.IsNullOrEmpty(id))
-				{
-					stringBuilder.Append("Element with id: " + id);
-				}
-				else
-				{
-					stringBuilder.Append("A element with TagName: " + animatedObject.TagName);
-				}
-				stringBuilder.Append(", ");
-			}
-			
-			return stringBuilder.ToString();
 		}
 
 		private static Func<IWebDriver, IWebElement> Find(By locator, Visibility visibilityFilter)
@@ -135,7 +93,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 				return null;
 			};
 		} 
-		private static Func<IWebDriver, IWebElement> FindAndScrollToElement(By locator, Visibility visibilityFilter, AbstractPageSettings pageSettings)
+		private static Func<IWebDriver, IWebElement> FindAndScrollToElement(By locator, Visibility visibilityFilter)
 		{
 			if (TestStatusManager.IsCanceled) 
 				throw new TaskCanceledException("Canceled test.");
@@ -145,7 +103,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 				IWebElement webElement = Find(locator, visibilityFilter).Invoke(driver);
 				if (webElement != null)
 				{
-					ScrollIntoView(driver, webElement, pageSettings);
+					ScrollIntoView(driver, webElement);
 					TimeSpan timeout = new TimeSpan(0, 0, 3);
 					WebDriverWait wait = new WebDriverWait(driver, timeout)
 					{
@@ -222,14 +180,14 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 			return messageBuilt;
 		}
 
-		private static void ScrollIntoView(IWebDriver webDriver, IWebElement webElement, AbstractPageSettings pageSettings)
+		private static void ScrollIntoView(IWebDriver webDriver, IWebElement webElement)
 		{
 			if (webElement == null || !webElement.Displayed) 
 				return;
 
 			try
 			{
-				webDriver.ExecuteScript(pageSettings, "arguments[0].scrollIntoView(true);", webElement);
+				webDriver.ExecuteScript("arguments[0].scrollIntoView(true);", webElement);
 			}
 			catch (StaleElementReferenceException)
 			{
@@ -503,17 +461,13 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 			return true;
 		}
 
-
-
-		public static TResult ExecuteJavaScriptAsync<TResult>(this IWebDriver webDriver, AbstractPageSettings pageSettings, string script, params object[] args) 
+		public static TResult ExecuteJavaScriptAsync<TResult>(this IWebDriver webDriver, string script, params object[] args) 
 		{
-			WaitForJQueryIsLoaded(webDriver, pageSettings);
 			return (TResult)GetJavaScriptExecutor(webDriver).ExecuteAsyncScript(script, args);
 		}
 
-		public static TResult ExecuteScript<TResult>(this IWebDriver webDriver, AbstractPageSettings pageSettings, string script, params object[] args)
+		public static TResult ExecuteScript<TResult>(this IWebDriver webDriver, string script, params object[] args)
 		{
-			WaitForJQueryIsLoaded(webDriver, pageSettings);
 			dynamic objectToCast = GetJavaScriptExecutor(webDriver).ExecuteScript(script, args);
 
 			if (objectToCast != null)
@@ -535,10 +489,9 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 			return (TResult)objectToCast;
 		}
 
-		public static void ExecuteScript(this IWebDriver webDriver, AbstractPageSettings pageSettings, string script, params object[] args)
+		public static void ExecuteScript(this IWebDriver webDriver, string script, params object[] args)
 		{
-			WaitForJQueryIsLoaded(webDriver, pageSettings);
-			ExecuteScript<object>(webDriver, pageSettings, script, args);
+			ExecuteScript<object>(webDriver, script, args);
 		}
 		
 		private static IJavaScriptExecutor GetJavaScriptExecutor(this IWebDriver driver)
@@ -546,58 +499,5 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 			return driver as IJavaScriptExecutor;
 		}
 
-		/// <summary>
-		/// Wait for all animations to be finished.
-		/// </summary>
-		private static bool AllAnimationsFinished(IWebDriver driver, AbstractPageSettings pageSettings, out string errorMessage)
-		{
-			if (pageSettings.PageUsesJquery && pageSettings.HasEndlessJQueryAnimation)
-			{
-				errorMessage = "Page has a endless animation. Cannot wait for animations finished.";
-				return true;
-			}
-
-			bool jqueryIsLoaded;
-			if (pageSettings.PageUsesJquery)
-			{
-				jqueryIsLoaded = JQueryIsLoaded(driver);
-			}
-			else
-			{
-				errorMessage = "Cannot wait for animations, page uses no JQuery. ";
-				return true;
-			}
-			if (jqueryIsLoaded)
-			{
-				TestLog.Add("Get all running JQuery animations...");
-				ReadOnlyCollection<IWebElement>  animatedObjects = driver.ExecuteScript<ReadOnlyCollection<IWebElement>>(pageSettings, "return $(':animated').toArray();");
-				if (animatedObjects.Count != 0)
-				{
-					errorMessage = "Tried to click but there were still running JQuery animations on the webpage which are not excluded from waiting for them to finish."
-					               + " || Objects still animated: " + GetAnimatedObjectMessage(animatedObjects) + " ||.";
-					return false;
-				}
-				errorMessage = string.Empty;
-				return true;
-			}
-
-			errorMessage = "JQuery was not loaded. Cannot wait for Animations";
-			return false;
-		}
-
-		private static void WaitForJQueryIsLoaded(this IWebDriver webDriver, AbstractPageSettings pageSettings)
-		{
-			if (!pageSettings.PageUsesJquery)
-				return;
-			
-			TimeSpan timeout = new TimeSpan(0, 0, 5);
-			WebDriverWait wait = new WebDriverWait(webDriver, timeout) { Message = "JQuery was not loaded after " + timeout.Seconds + " seconds." };
-			wait.Until(JQueryIsLoaded);
-		}
-
-		private static bool JQueryIsLoaded(IWebDriver webDriver)
-		{
-			return (bool)webDriver.GetJavaScriptExecutor().ExecuteScript("return typeof($)==='function'");
-		}
 	}
 }
