@@ -27,7 +27,7 @@ namespace RegTesting.Tests.Framework.Logic
 		/// <returns>A PageObject, navigated to the PageUrl.</returns>
 		public static T CreateAndNavigateTo<T>(IWebDriver webDriver, string baseUrl, IDictionary<string, object> pageSettings = null, params string[] furtherUrlParameters) where T : BasePageObject
 		{
-			T pageObject = CreatePageObject<T>(webDriver, pageSettings);
+			T pageObject = CreatePageObject<T>(webDriver);
 			String pageUrl = pageObject.CreatePageUrl(furtherUrlParameters);
 			TestLog.AddWithoutTime("<br><b>>>>" + typeof(T).Name + "</b>");
 			TestLog.Add("CreateAndNavigate: " + typeof(T).Name + " -> " + pageUrl);
@@ -46,17 +46,17 @@ namespace RegTesting.Tests.Framework.Logic
 		{
 			TestLog.AddWithoutTime("<br><b>>>>" + typeof(T).Name + "</b>");
 			TestLog.Add("GetPageObjectByType: " + typeof(T).Name);
-			T pageObject = CreatePageObject<T>(webDriver, pageSettings);
+			T pageObject = CreatePageObject<T>(webDriver);
 			TestLog.Add("Applying Page settings for '" + pageObject.GetType().Name + "'");
 			ApplyPageSettings(pageObject, pageSettings);
 			return pageObject;
 		}
 
-		private static T CreatePageObject<T>(IWebDriver webDriver, IDictionary<string, object> pageSettings) where T : BasePageObject
+		private static T CreatePageObject<T>(IWebDriver webDriver) where T : BasePageObject
 		{
 			try
 			{
-				T pageObject = (T)Activator.CreateInstance(typeof(T), webDriver, pageSettings);
+				T pageObject = (T)Activator.CreateInstance(typeof(T), webDriver);
 
 				InitElements(webDriver, pageObject);
 			
