@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
-using System.Threading;
 using OpenQA.Selenium;
 using RegTesting.Tests.Framework.Elements;
 using RegTesting.Tests.Framework.Enums;
@@ -195,19 +195,31 @@ namespace RegTesting.Tests.Framework.Logic
 				(typeof(CheckBox).IsAssignableFrom(fieldType)) ||
 				(typeof(HiddenElement).IsAssignableFrom(fieldType)))
 			{
-				return (BasicPageElement) Activator.CreateInstance(fieldType, @by, webDriver, waitModel, parentPageObject, clickBehaviours);
+				return (BasicPageElement)Activator.CreateInstance(fieldType,
+					BindingFlags.CreateInstance |
+					BindingFlags.Public |
+					BindingFlags.Instance |
+					BindingFlags.OptionalParamBinding, null, new object[] { @by, webDriver, waitModel, parentPageObject, clickBehaviours }, CultureInfo.CurrentCulture);
 			}
 
 			if ((typeof(Input).IsAssignableFrom(fieldType)))
 			{
-				return (BasicPageElement)Activator.CreateInstance(fieldType, @by, webDriver, waitModel, parentPageObject, clickBehaviours, fillBehaviour);
+				return (BasicPageElement)Activator.CreateInstance(fieldType,
+					BindingFlags.CreateInstance |
+					BindingFlags.Public |
+					BindingFlags.Instance |
+					BindingFlags.OptionalParamBinding, null, new object[] { @by, webDriver, waitModel, parentPageObject, clickBehaviours, fillBehaviour }, CultureInfo.CurrentCulture);
 			}
 
 
 			if ((typeof(BasicPageElement).IsAssignableFrom(fieldType)) ||
 				(typeof(SelectBox).IsAssignableFrom(fieldType)))
 			{
-				return (BasicPageElement)Activator.CreateInstance(fieldType, @by, webDriver, waitModel, parentPageObject);
+				return (BasicPageElement) Activator.CreateInstance(fieldType,
+					BindingFlags.CreateInstance |
+					BindingFlags.Public |
+					BindingFlags.Instance |
+					BindingFlags.OptionalParamBinding, null, new object[] { @by, webDriver, waitModel, parentPageObject }, CultureInfo.CurrentCulture);
 			}
 
 	
