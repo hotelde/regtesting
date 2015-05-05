@@ -183,38 +183,27 @@ namespace RegTesting.Tests.Framework.Logic
 
 		internal static BasicPageElement CreateElementObject(Type fieldType, IWebDriver webDriver, By @by, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours clickBehaviours = ClickBehaviours.Default, FillBehaviour fillBehaviour = FillBehaviour.Default)
 		{
-			if (fieldType == typeof (Button))
+
+			if ((typeof(Button).IsAssignableFrom(fieldType)) ||
+				(typeof(Link).IsAssignableFrom(fieldType)) ||
+				(typeof(Image).IsAssignableFrom(fieldType)) ||
+				(typeof(CheckBox).IsAssignableFrom(fieldType)) ||
+				(typeof(HiddenElement).IsAssignableFrom(fieldType)))
 			{
-				return new Button(@by, webDriver, waitModel, parentPageObject, clickBehaviours);
+				return (BasicPageElement) Activator.CreateInstance(fieldType, @by, webDriver, waitModel, parentPageObject, clickBehaviours);
 			}
-			if (fieldType == typeof (Link))
+
+			if ((typeof(BasicPageElement).IsAssignableFrom(fieldType)) ||
+				(typeof(SelectBox).IsAssignableFrom(fieldType)))
 			{
-				return new Link(@by, webDriver, waitModel, parentPageObject, clickBehaviours);
+				return (BasicPageElement)Activator.CreateInstance(fieldType, @by, webDriver, waitModel, parentPageObject);
 			}
-			if (fieldType == typeof(Image))
+
+			if ((typeof(Input).IsAssignableFrom(fieldType)))
 			{
-				return new Image(@by, webDriver, waitModel, parentPageObject, clickBehaviours);
+				return (BasicPageElement)Activator.CreateInstance(fieldType, @by, webDriver, waitModel, parentPageObject, clickBehaviours, fillBehaviour);
 			}
-			if (fieldType == typeof(BasicPageElement))
-			{
-				return new BasicPageElement(@by, webDriver, waitModel, parentPageObject);
-			}
-			if (fieldType == typeof(SelectBox))
-			{
-				return new SelectBox(@by, webDriver, waitModel, parentPageObject);
-			}
-			if (fieldType == typeof(CheckBox))
-			{
-				return new CheckBox(@by, webDriver, waitModel, parentPageObject, clickBehaviours);
-			}
-			if (fieldType == typeof(Input))
-			{
-				return new Input(@by, webDriver, waitModel, parentPageObject, clickBehaviours, fillBehaviour);
-			}
-			if (fieldType == typeof(HiddenElement))
-			{
-				return new HiddenElement(@by, webDriver, waitModel, parentPageObject, clickBehaviours);
-			}
+
 			return null;
 		}
 
