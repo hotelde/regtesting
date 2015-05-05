@@ -15,7 +15,9 @@ namespace RegTesting.Tests.Framework.Logic
 		private readonly object _lock = new object();
 		protected readonly IWebDriver _driver;
 		private readonly AsyncWebDriverCalls _asyncCalls;
-		public IDictionary<string, object> PageSettings { get; set; }
+
+		public abstract IDictionary<string, object> DefaultPageSettings { get; }
+		public IDictionary<string, object> CurrentPageSettings { get; set; }
 
 		protected Actions Actions
 		{

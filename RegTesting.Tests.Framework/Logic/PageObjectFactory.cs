@@ -32,7 +32,7 @@ namespace RegTesting.Tests.Framework.Logic
 			TestLog.AddWithoutTime("<br><b>>>>" + typeof(T).Name + "</b>");
 			TestLog.Add("CreateAndNavigate: " + typeof(T).Name + " -> " + pageUrl);
 			webDriver.Navigate().GoToUrl(pageUrl);
-			ApplyPageSettings(pageObject, pageSettings);
+			ApplyPageSettings(pageObject, pageSettings ?? new Dictionary<string, object>());
 			return pageObject;
 		}
 
@@ -48,7 +48,7 @@ namespace RegTesting.Tests.Framework.Logic
 			TestLog.Add("GetPageObjectByType: " + typeof(T).Name);
 			T pageObject = CreatePageObject<T>(webDriver);
 			TestLog.Add("Applying Page settings for '" + pageObject.GetType().Name + "'");
-			ApplyPageSettings(pageObject, pageSettings);
+			ApplyPageSettings(pageObject, pageSettings ?? new Dictionary<string, object>());
 			return pageObject;
 		}
 
@@ -71,14 +71,14 @@ namespace RegTesting.Tests.Framework.Logic
 
 		private static void ApplyPageSettings(BasePageObject pageObject, IDictionary<string, object> pageSettings)
 		{
-			IDictionary<string, object> combinedDefaultAndSpecificPageSettings = pageObject.PageSettings ?? new Dictionary<string, object>();
+			IDictionary<string, object> combinedDefaultAndSpecificPageSettings = pageObject.DefaultPageSettings ?? new Dictionary<string, object>();
 
 			foreach (KeyValuePair<string, object> pageSetting in pageSettings)
 			{
 				combinedDefaultAndSpecificPageSettings[pageSetting.Key] = pageSetting.Value;
 			}
 
-			pageObject.PageSettings = combinedDefaultAndSpecificPageSettings;
+			pageObject.CurrentPageSettings = combinedDefaultAndSpecificPageSettings;
 
 			pageObject.ApplySettings();;
 		}
