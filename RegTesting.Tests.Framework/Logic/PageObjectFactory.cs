@@ -28,7 +28,12 @@ namespace RegTesting.Tests.Framework.Logic
 		public static T CreateAndNavigateTo<T>(IWebDriver webDriver, string baseUrl, IDictionary<string, object> pageSettings = null, params string[] furtherUrlParameters) where T : BasePageObject
 		{
 			T pageObject = CreatePageObject<T>(webDriver);
-			String pageUrl = pageObject.CreatePageUrl(furtherUrlParameters);
+
+			String pageUrl = baseUrl;
+			if (!pageUrl.EndsWith("/"))
+				pageUrl = pageUrl + "/";
+				
+			pageUrl = pageUrl +	pageObject.CreatePageUrl(furtherUrlParameters);
 			TestLog.AddWithoutTime("<br><b>>>>" + typeof(T).Name + "</b>");
 			TestLog.Add("CreateAndNavigate: " + typeof(T).Name + " -> " + pageUrl);
 			webDriver.Navigate().GoToUrl(pageUrl);
