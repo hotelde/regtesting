@@ -198,17 +198,19 @@ namespace RegTesting.Tests.Framework.Logic
 				return (BasicPageElement) Activator.CreateInstance(fieldType, @by, webDriver, waitModel, parentPageObject, clickBehaviours);
 			}
 
+			if ((typeof(Input).IsAssignableFrom(fieldType)))
+			{
+				return (BasicPageElement)Activator.CreateInstance(fieldType, @by, webDriver, waitModel, parentPageObject, clickBehaviours, fillBehaviour);
+			}
+
+
 			if ((typeof(BasicPageElement).IsAssignableFrom(fieldType)) ||
 				(typeof(SelectBox).IsAssignableFrom(fieldType)))
 			{
 				return (BasicPageElement)Activator.CreateInstance(fieldType, @by, webDriver, waitModel, parentPageObject);
 			}
 
-			if ((typeof(Input).IsAssignableFrom(fieldType)))
-			{
-				return (BasicPageElement)Activator.CreateInstance(fieldType, @by, webDriver, waitModel, parentPageObject, clickBehaviours, fillBehaviour);
-			}
-
+	
 			return null;
 		}
 
