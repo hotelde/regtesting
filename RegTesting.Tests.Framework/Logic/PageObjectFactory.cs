@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
-using System.Threading;
 using OpenQA.Selenium;
 using RegTesting.Tests.Framework.Elements;
 using RegTesting.Tests.Framework.Enums;
@@ -28,7 +28,12 @@ namespace RegTesting.Tests.Framework.Logic
 		public static T CreateAndNavigateTo<T>(IWebDriver webDriver, string baseUrl, IDictionary<string, object> pageSettings = null, params string[] furtherUrlParameters) where T : BasePageObject
 		{
 			T pageObject = CreatePageObject<T>(webDriver);
-			String pageUrl = pageObject.CreatePageUrl(furtherUrlParameters);
+
+			String pageUrl = baseUrl;
+			if (!pageUrl.EndsWith("/"))
+				pageUrl = pageUrl + "/";
+				
+			pageUrl = pageUrl +	pageObject.CreatePageUrl(furtherUrlParameters);
 			TestLog.AddWithoutTime("<br><b>>>>" + typeof(T).Name + "</b>");
 			TestLog.Add("CreateAndNavigate: " + typeof(T).Name + " -> " + pageUrl);
 			webDriver.Navigate().GoToUrl(pageUrl);
@@ -183,38 +188,41 @@ namespace RegTesting.Tests.Framework.Logic
 
 		internal static BasicPageElement CreateElementObject(Type fieldType, IWebDriver webDriver, By @by, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours clickBehaviours = ClickBehaviours.Default, FillBehaviour fillBehaviour = FillBehaviour.Default)
 		{
-			if (fieldType == typeof (Button))
+
+			if ((typeof(Button).IsAssignableFrom(fieldType)) ||
+				(typeof(Link).IsAssignableFrom(fieldType)) ||
+				(typeof(Image).IsAssignableFrom(fieldType)) ||
+				(typeof(CheckBox).IsAssignableFrom(fieldType)) ||
+				(typeof(HiddenElement).IsAssignableFrom(fieldType)))
 			{
-				return new Button(@by, webDriver, waitModel, parentPageObject, clickBehaviours);
+				return (BasicPageElement)Activator.CreateInstance(fieldType,
+					BindingFlags.CreateInstance |
+					BindingFlags.Public |
+					BindingFlags.Instance |
+					BindingFlags.OptionalParamBinding, null, new object[] { @by, webDriver, waitModel, parentPageObject, clickBehaviours }, CultureInfo.CurrentCulture);
 			}
-			if (fieldType == typeof (Link))
+
+			if ((typeof(Input).IsAssignableFrom(fieldType)))
 			{
-				return new Link(@by, webDriver, waitModel, parentPageObject, clickBehaviours);
+				return (BasicPageElement)Activator.CreateInstance(fieldType,
+					BindingFlags.CreateInstance |
+					BindingFlags.Public |
+					BindingFlags.Instance |
+					BindingFlags.OptionalParamBinding, null, new object[] { @by, webDriver, waitModel, parentPageObject, clickBehaviours, fillBehaviour }, CultureInfo.CurrentCulture);
 			}
-			if (fieldType == typeof(Image))
+
+
+			if ((typeof(BasicPageElement).IsAssignableFrom(fieldType)) ||
+				(typeof(SelectBox).IsAssignableFrom(fieldType)))
 			{
-				return new Image(@by, webDriver, waitModel, parentPageObject, clickBehaviours);
+				return (BasicPageElement) Activator.CreateInstance(fieldType,
+					BindingFlags.CreateInstance |
+					BindingFlags.Public |
+					BindingFlags.Instance |
+					BindingFlags.OptionalParamBinding, null, new object[] { @by, webDriver, waitModel, parentPageObject }, CultureInfo.CurrentCulture);
 			}
-			if (fieldType == typeof(BasicPageElement))
-			{
-				return new BasicPageElement(@by, webDriver, waitModel, parentPageObject);
-			}
-			if (fieldType == typeof(SelectBox))
-			{
-				return new SelectBox(@by, webDriver, waitModel, parentPageObject);
-			}
-			if (fieldType == typeof(CheckBox))
-			{
-				return new CheckBox(@by, webDriver, waitModel, parentPageObject, clickBehaviours);
-			}
-			if (fieldType == typeof(Input))
-			{
-				return new Input(@by, webDriver, waitModel, parentPageObject, clickBehaviours, fillBehaviour);
-			}
-			if (fieldType == typeof(HiddenElement))
-			{
-				return new HiddenElement(@by, webDriver, waitModel, parentPageObject, clickBehaviours);
-			}
+
+	
 			return null;
 		}
 

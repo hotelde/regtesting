@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("RegTesting.Tests.Framework")]
+[assembly: AssemblyTitle("RegTesting.Tests.Framework.UnitTests")]
 [assembly: AssemblyDescription("A test framework for tests with selenium.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("HOTELDE AG")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a7e6a771-5f9d-425a-a401-3a5f4c71b270")]
+[assembly: Guid("da28c545-1f8d-47f0-964e-69dc4417bc67")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -28,9 +28,9 @@ using System.Runtime.InteropServices;
 //      Minor Version 
 //      Build Number
 //      Revision
-[assembly: AssemblyFileVersion("1.2.2.3")]
-[assembly: AssemblyInformationalVersion("1.2.2.3")]
-
-// Change AssemblyVersion for breaking api changes
-// http://stackoverflow.com/questions/64602/what-are-differences-between-assemblyversion-assemblyfileversion-and-assemblyin
-[assembly: AssemblyVersion("1.2.0.0")]
+//
+// You can specify all the values or you can default the Build and Revision Numbers 
+// by using the '*' as shown below:
+// [assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

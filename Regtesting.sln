@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegTesting.LocalTest", "Reg
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegTesting.Tests.Core", "RegTesting.Tests.Core\RegTesting.Tests.Core.csproj", "{6EAFA536-480C-46E2-8D5D-8DD58646DA2C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegTesting.Tests.Framework.UnitTests", "RegTesting.Tests.Framework.UnitTests\RegTesting.Tests.Framework.UnitTests.csproj", "{68B685DA-BC65-43E9-8E59-3C7F2FA0511E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,16 @@ Global
 		{6EAFA536-480C-46E2-8D5D-8DD58646DA2C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{6EAFA536-480C-46E2-8D5D-8DD58646DA2C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6EAFA536-480C-46E2-8D5D-8DD58646DA2C}.Release|x86.ActiveCfg = Release|Any CPU
+		{68B685DA-BC65-43E9-8E59-3C7F2FA0511E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68B685DA-BC65-43E9-8E59-3C7F2FA0511E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68B685DA-BC65-43E9-8E59-3C7F2FA0511E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{68B685DA-BC65-43E9-8E59-3C7F2FA0511E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{68B685DA-BC65-43E9-8E59-3C7F2FA0511E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{68B685DA-BC65-43E9-8E59-3C7F2FA0511E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68B685DA-BC65-43E9-8E59-3C7F2FA0511E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68B685DA-BC65-43E9-8E59-3C7F2FA0511E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{68B685DA-BC65-43E9-8E59-3C7F2FA0511E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{68B685DA-BC65-43E9-8E59-3C7F2FA0511E}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

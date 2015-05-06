@@ -10,10 +10,10 @@ namespace RegTesting.Tests.Framework.Elements
 	{
 		private readonly ISelectable _selectBehaviour;
 
-		public SelectBox(By objBy, IWebDriver webDriver, WaitModel waitModel, BasePageObject parentPageObject, ISelectable clickBehaviour = null)
+		public SelectBox(By objBy, IWebDriver webDriver, WaitModel waitModel, BasePageObject parentPageObject, ISelectable selectBehaviour = null)
 			: base(objBy, webDriver, waitModel, parentPageObject, ClickBehaviours.Default)
 		{
-			_selectBehaviour = clickBehaviour ?? new DefaultSelectBehaviour(this);
+			_selectBehaviour = selectBehaviour ?? new DefaultSelectBehaviour(this);
 		}
 
 
