@@ -136,7 +136,11 @@ namespace RegTesting.Tests.Framework.Elements
 			return ClickBehaviour.ClickToPageObject<T>(_waitBeforeClick);
 		}
 
-
+		public T ClickToPageObject<T>(IDictionary<string, object> pageSettings) where T : BasePageObject
+		{
+			return ClickBehaviour.ClickToPageObject<T>(_waitBeforeClick, pageSettings);
+		}
+		
 		/// <summary>
 		/// Checks if the element has a specific class
 		/// </summary>

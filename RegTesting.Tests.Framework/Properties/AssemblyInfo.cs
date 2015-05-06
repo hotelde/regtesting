@@ -28,8 +28,8 @@ using System.Runtime.InteropServices;
 //      Minor Version 
 //      Build Number
 //      Revision
-[assembly: AssemblyFileVersion("1.2.2.3")]
-[assembly: AssemblyInformationalVersion("1.2.2.3")]
+[assembly: AssemblyFileVersion("1.3.1.0")]
+[assembly: AssemblyInformationalVersion("1.3.1.0")]
 
 // Change AssemblyVersion for breaking api changes
 // http://stackoverflow.com/questions/64602/what-are-differences-between-assemblyversion-assemblyfileversion-and-assemblyin
