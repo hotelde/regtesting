@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using RegTesting.Tests.Framework.Logic;
 using RegTesting.Tests.Framework.Logic.Extensions;
@@ -32,8 +33,13 @@ namespace RegTesting.Tests.Framework.Elements
 
 		public T ClickToPageObject<T>(TimeSpan waitBeforeClick) where T : BasePageObject
 		{
+			return ClickToPageObject<T>(waitBeforeClick, null);
+		}
+
+		public T ClickToPageObject<T>(TimeSpan waitBeforeClick, IDictionary<string, object> pageSettings) where T : BasePageObject
+		{
 			Click(waitBeforeClick, TimeSpan.Zero);
-			return PageObjectFactory.GetPageObjectByType<T>(_pageElement.WebDriver);
+			return PageObjectFactory.GetPageObjectByType<T>(_pageElement.WebDriver, pageSettings);
 		}
 	}
 }
