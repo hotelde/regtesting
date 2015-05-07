@@ -234,16 +234,17 @@ namespace RegTesting.LocalTest.GUI
 
 		private void GetRemoteCapability()
 		{
+			try
+			{
+				List<string> remoteBrowsers;
+				List<string> remoteLanguages;
+				List<string> remoteTestsuites;
 
-			List<string> remoteLanguages;
-			List<string> remoteBrowsers;
-
-
-			try {
 				using (WcfClient wcfClient = new WcfClient())
 				{
 					remoteLanguages = wcfClient.GetLanguages();
 					remoteBrowsers = wcfClient.GetBrowsers();
+					remoteTestsuites = wcfClient.GetTestsuites();
 
 				}
 				Dispatcher.Invoke((() =>
@@ -262,18 +263,19 @@ namespace RegTesting.LocalTest.GUI
 
 						lstBrowser.Items.Add(checkBoxRow);
 					}
-				
+
 					lstBrowser.Items.Refresh();
 					languages.Items.Refresh();
+					Testsuites.Items.Clear();
+					remoteTestsuites.ForEach(t => Testsuites.Items.Add(t));
 					remoteAvailable = true;
 
 				}));
-			} catch {
+			}
+			catch
+			{
 				remoteAvailable = false;
 			}
-	
-
-
 		}
 
 		void browserCheckBoxRow_Click(object sender, RoutedEventArgs e)
@@ -466,6 +468,24 @@ namespace RegTesting.LocalTest.GUI
 					MessageBoxButtons.OK,
 					MessageBoxIcon.Exclamation,
 					MessageBoxDefaultButton.Button1);
+		}
+
+		private void BtnStartTestsuiteClick(object sender, RoutedEventArgs e)
+		{
+			if (Testsuites.SelectedItems.Count != 1)
+			{
+				ShowErrorMessage("You must select one testsuite first.", "Missing arguments!");
+				return;
+			}
+
+			string testsuite = Testsuites.SelectedItem.ToString();
+			string testsystem = txtTestsystem.Text;
+			string fileName = txtFile.Text;
+
+			using (WcfClient wcfClient = new WcfClient())
+			{
+				wcfClient.TestRemote(fileName, testsystem, testsuite);
+			}
 		}
 	}
 

@@ -126,6 +126,12 @@ namespace RegTesting.Service.Services
 			return Mapper.Map<IEnumerable<BrowserDto>>(_browserRepository.GetAll());
 		}
 
+		IEnumerable<TestsuiteDto> ILocalTestService.GetTestsuites()
+		{
+			return Mapper.Map<IEnumerable<TestsuiteDto>>(_testsuiteRepository.GetAll());
+
+		}
+
 		void ILocalTestService.AddLocalTestTasks(string userName, string testsystemName, string testsystemUrl, List<string> browsers,
 			List<string> testcases, List<string> languages)
 		{
@@ -174,6 +180,44 @@ namespace RegTesting.Service.Services
 													  Testsystem = testsystem,
 													  Tester = tester
 												  }).ToList();
+
+			_testPool.AddTestJob(testJobManager, workItems);
+		}
+
+		void ILocalTestService.AddTestsuiteTask(string userName, string testsystemName, string testsystemUrl, string testsuiteName)
+		{
+			Testsuite testsuite = _testsuiteRepository.GetByName(testsuiteName);
+			Testsystem testsystem = _testsystemRepository.GetByName(testsystemName);
+			testsystem.Url = testsystemUrl;
+			_testsystemRepository.Store(testsystem);
+
+			Tester tester = _testerRepository.GetByName(userName);
+			string testjobname = "Testsuite " + testsuiteName;
+
+			TestJob testjob = new TestJob
+			{
+				Name = testjobname,
+				ResultCode = TestState.Pending,
+				Testsuite = testsuite,
+				Testsystem = testsystem,
+				Tester = tester,
+				StartedAt = DateTime.Now,
+				JobType = JobType.Localtesttool
+			};
+
+			ITestJobManager testJobManager = new TestJobManager(testjob);
+
+			ICollection<WorkItem> workItems = (from testcase in testsuite.Testcases
+											   from browser in testsuite.Browsers
+											   from language in testsuite.Languages
+											   select new WorkItem(testJobManager)
+											   {
+												   Testcase = testcase,
+												   Browser = browser,
+												   Language = language,
+												   Testsystem = testsystem,
+												   Tester = tester
+											   }).ToList();
 
 			_testPool.AddTestJob(testJobManager, workItems);
 		}
