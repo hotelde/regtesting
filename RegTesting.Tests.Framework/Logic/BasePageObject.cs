@@ -19,6 +19,8 @@ namespace RegTesting.Tests.Framework.Logic
 		public abstract IDictionary<string, object> DefaultPageSettings { get; }
 		public IDictionary<string, object> CurrentPageSettings { get; set; }
 
+		public abstract string PageUrl { get; }
+
 		protected Actions Actions
 		{
 			get
@@ -41,13 +43,7 @@ namespace RegTesting.Tests.Framework.Logic
 
 		}
 
-		public virtual string CreatePageUrl(params string[] urlParameters)
-		{
-			//Override this method when the pageObject is not available at the root of your BaseUrl.
-			return String.Empty;
-		}
-
-
+		public abstract string CreatePageUrlWithParameters(IEnumerable<string> urlParams);
 
 		public void HandleAlert(bool accept)
 		{
@@ -139,8 +135,7 @@ namespace RegTesting.Tests.Framework.Logic
 		/// </summary>
 		public void SwitchToTab()
 		{
-
-			string pageObjectUrl = CreatePageUrl();
+			string pageObjectUrl = PageUrl;
 
 			if(string.IsNullOrWhiteSpace(pageObjectUrl))
 				throw new ArgumentException("You´re trying to switch the WebDriverActions to a tab with a PageObject that doesn´t have a non empty result for CreatePageUrl. " +
