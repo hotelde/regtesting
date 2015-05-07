@@ -12,14 +12,13 @@ namespace RegTesting.Tests.Framework.Logic
 {
 	abstract public class BasePageObject
 	{
-		private readonly object _lock = new object();
 		protected readonly IWebDriver _driver;
 		private readonly AsyncWebDriverCalls _asyncCalls;
 
 		public abstract IDictionary<string, object> DefaultPageSettings { get; }
 		public IDictionary<string, object> CurrentPageSettings { get; set; }
 
-		public virtual string PageUrl { get { return null; } }
+		public virtual string PageUrl { get { return string.Empty; } }
 
 		protected Actions Actions
 		{
@@ -45,7 +44,7 @@ namespace RegTesting.Tests.Framework.Logic
 
 		public virtual string CreatePageUrlWithParameters(IEnumerable<string> urlParams)
 		{
-			return null;
+			return string.Empty;
 		}
 
 		public void HandleAlert(bool accept)
