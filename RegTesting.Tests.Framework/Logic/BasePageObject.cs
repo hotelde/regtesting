@@ -19,7 +19,7 @@ namespace RegTesting.Tests.Framework.Logic
 		public abstract IDictionary<string, object> DefaultPageSettings { get; }
 		public IDictionary<string, object> CurrentPageSettings { get; set; }
 
-		public abstract string PageUrl { get; }
+		public virtual string PageUrl { get { return null; } }
 
 		protected Actions Actions
 		{
@@ -43,7 +43,10 @@ namespace RegTesting.Tests.Framework.Logic
 
 		}
 
-		public abstract string CreatePageUrlWithParameters(IEnumerable<string> urlParams);
+		public virtual string CreatePageUrlWithParameters(IEnumerable<string> urlParams)
+		{
+			return null;
+		}
 
 		public void HandleAlert(bool accept)
 		{
