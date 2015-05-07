@@ -9,7 +9,7 @@ using RegTesting.Tests.Framework.Properties;
 
 namespace RegTesting.Tests.Framework.Logic
 {
-	public class PageObjectFactory
+	public static class PageObjectFactory
 	{
 
 		static PageObjectFactory()
@@ -33,7 +33,7 @@ namespace RegTesting.Tests.Framework.Logic
 			if (!pageUrl.EndsWith("/"))
 				pageUrl = pageUrl + "/";
 				
-			pageUrl = pageUrl +	pageObject.CreatePageUrl(furtherUrlParameters);
+			pageUrl = pageUrl +	pageObject.CreatePageUrlWithParameters(furtherUrlParameters);
 			TestLog.AddWithoutTime("<br><b>>>>" + typeof(T).Name + "</b>");
 			TestLog.Add("CreateAndNavigate: " + typeof(T).Name + " -> " + pageUrl);
 			webDriver.Navigate().GoToUrl(pageUrl);

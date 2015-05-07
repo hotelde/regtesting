@@ -30,5 +30,15 @@ namespace RegTesting.Tests.Framework.UnitTests.PageObjects
 		{
 			get { return null; }
 		}
+
+		public override string PageUrl
+		{
+			get { return null; }
+		}
+
+		public override string CreatePageUrlWithParameters(IEnumerable<string> urlParams)
+		{
+			return null;
+		}
 	}
 }

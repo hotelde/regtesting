@@ -12,12 +12,13 @@ namespace RegTesting.Tests.Framework.Logic
 {
 	abstract public class BasePageObject
 	{
-		private readonly object _lock = new object();
 		protected readonly IWebDriver _driver;
 		private readonly AsyncWebDriverCalls _asyncCalls;
 
 		public abstract IDictionary<string, object> DefaultPageSettings { get; }
 		public IDictionary<string, object> CurrentPageSettings { get; set; }
+
+		public virtual string PageUrl { get { return string.Empty; } }
 
 		protected Actions Actions
 		{
@@ -41,13 +42,10 @@ namespace RegTesting.Tests.Framework.Logic
 
 		}
 
-		public virtual string CreatePageUrl(params string[] urlParameters)
+		public virtual string CreatePageUrlWithParameters(IEnumerable<string> urlParams)
 		{
-			//Override this method when the pageObject is not available at the root of your BaseUrl.
-			return String.Empty;
+			return string.Empty;
 		}
-
-
 
 		public void HandleAlert(bool accept)
 		{
@@ -139,8 +137,7 @@ namespace RegTesting.Tests.Framework.Logic
 		/// </summary>
 		public void SwitchToTab()
 		{
-
-			string pageObjectUrl = CreatePageUrl();
+			string pageObjectUrl = PageUrl;
 
 			if(string.IsNullOrWhiteSpace(pageObjectUrl))
 				throw new ArgumentException("You´re trying to switch the WebDriverActions to a tab with a PageObject that doesn´t have a non empty result for CreatePageUrl. " +

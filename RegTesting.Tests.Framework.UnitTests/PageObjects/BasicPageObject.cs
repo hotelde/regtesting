@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.PageObjects;
 using RegTesting.Tests.Framework.Elements;
@@ -24,6 +20,16 @@ namespace RegTesting.Tests.Framework.UnitTests.PageObjects
 		public override IDictionary<string, object> DefaultPageSettings
 		{
 			get { return null; }
+		}
+
+		public override string PageUrl
+		{
+			get { return null; }
+		}
+
+		public override string CreatePageUrlWithParameters(IEnumerable<string> urlParams)
+		{
+			return null;
 		}
 	}
 }
