@@ -11,26 +11,22 @@
             <ColumnDefinition Width="439*"/>
         </Grid.ColumnDefinitions>
         <controls:Grid Name="objRunningTestGrid" Visibility="Collapsed" Grid.ColumnSpan="2">
-            <controls:Grid.RowDefinitions>
-                <controls:RowDefinition Height="Auto" />
-                <controls:RowDefinition Height="*" />
+			<controls:Grid.RowDefinitions>
+				<controls:RowDefinition Height="*" />
                 <controls:RowDefinition Height="28" />
             </controls:Grid.RowDefinitions>
-            <controls:Grid.ColumnDefinitions>
-                <controls:ColumnDefinition Width="*" />
-            </controls:Grid.ColumnDefinitions>
-            <controls:Label controls:Grid.Row="0" controls:Grid.Column="0" Name="txtTestInfo" x:FieldModifier="private"  Margin="3" />
-            <controls:TextBox controls:Grid.Row="1" controls:Grid.Column="0" Name="txtTestStatus" x:FieldModifier="private" IsReadOnly="True" Margin="3" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
-            <controls:Button controls:Grid.Row="2" Content="Back"  controls:Grid.Column="0" Click="BtnBackClick"  Margin="3" />
+			<controls:Grid.ColumnDefinitions>
+				<controls:ColumnDefinition Width="*" />
+			</controls:Grid.ColumnDefinitions>
+			<controls:TextBox controls:Grid.Row="0" controls:Grid.Column="0" Name="txtTestStatus" x:FieldModifier="private" IsReadOnly="True" Margin="3" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
+            <controls:Button controls:Grid.Row="1" Content="Back"  controls:Grid.Column="0" Click="BtnBackClick"  Margin="3" />
         </controls:Grid>
         <controls:Grid Name="objTestGrid" Grid.ColumnSpan="2">
             <controls:Grid.RowDefinitions>
                 <controls:RowDefinition Height="28" />
                 <controls:RowDefinition Height="28" />
-                <controls:RowDefinition Height="*" />
-                <controls:RowDefinition Height="28" />
-                <controls:RowDefinition Height="200" />
-            </controls:Grid.RowDefinitions>
+				<controls:RowDefinition Height="*" />
+			</controls:Grid.RowDefinitions>
             <controls:Grid.ColumnDefinitions>
                 <controls:ColumnDefinition Width="Auto" />
                 <controls:ColumnDefinition Width="*" />
@@ -52,33 +48,65 @@
 
             </controls:Grid>
 
+			<controls:Label controls:Grid.Row="1" controls:Grid.Column="0" Content="Testsystem:"/>
+			<controls:TextBox controls:Grid.Row="1" controls:Grid.Column="1" Text="" Name="txtTestsystem" x:FieldModifier="private"  Margin="3" />
+
+			<TabControl  controls:Grid.Row="2" controls:Grid.Column="0"  Grid.ColumnSpan="2">
+				<TabItem Header="Custom">
+					<Grid>
+						<controls:Grid.RowDefinitions>
+							<controls:RowDefinition Height="28" />
+							<controls:RowDefinition Height="*" />
+							<controls:RowDefinition Height="200" />
+						</controls:Grid.RowDefinitions>
+						<controls:Grid.ColumnDefinitions>
+							<controls:ColumnDefinition Width="Auto" />
+							<controls:ColumnDefinition Width="*" />
+						</controls:Grid.ColumnDefinitions>
+
+						<controls:Label controls:Grid.Row="0" controls:Grid.Column="0" Content="Filter:"/>
+						<controls:TextBox controls:Grid.Row="0" controls:Grid.Column="1" Text="" Name="txtFilter" x:FieldModifier="private"  Margin="3" TextChanged="TxtFilter_OnTextChanged" />
+						<controls:ListBox controls:Grid.Row="1" controls:Grid.Column="0" controls:Grid.ColumnSpan="2" Name="lstViewTestcases" x:FieldModifier="private"  Margin="3" SelectionMode="Extended">
+						</controls:ListBox>
 
 
-            <controls:Label controls:Grid.Row="1" controls:Grid.Column="0" Content="Filter:"/>
-            <controls:TextBox controls:Grid.Row="1" controls:Grid.Column="1" Text="" Name="txtFilter" x:FieldModifier="private"  Margin="3" TextChanged="TxtFilter_OnTextChanged" />
-            <controls:ListBox controls:Grid.Row="2" controls:Grid.Column="0" controls:Grid.ColumnSpan="2" Name="lstViewTestcases" x:FieldModifier="private"  Margin="3" SelectionMode="Extended">
-            </controls:ListBox>
-
-            <controls:Label controls:Grid.Row="3" controls:Grid.Column="0" Content="Testsystem:"/>
-            <controls:TextBox controls:Grid.Row="3" controls:Grid.Column="1" Text="" Name="txtTestsystem" x:FieldModifier="private"  Margin="3" />
-            <controls:Grid controls:Grid.Row="4" controls:Grid.Column="0" controls:Grid.ColumnSpan="2">
-                <controls:Grid.RowDefinitions>
-                    <controls:RowDefinition Height="28" />
-                    <controls:RowDefinition Height="*" />
-                    <controls:RowDefinition Height="28" />
-                </controls:Grid.RowDefinitions>
-                <controls:Grid.ColumnDefinitions>
-                    <controls:ColumnDefinition Width="*" />
-                    <controls:ColumnDefinition Width="*" />
-                </controls:Grid.ColumnDefinitions>
+						<controls:Grid controls:Grid.Row="2" controls:Grid.Column="0" controls:Grid.ColumnSpan="2">
+							<controls:Grid.RowDefinitions>
+								<controls:RowDefinition Height="28" />
+								<controls:RowDefinition Height="*" />
+								<controls:RowDefinition Height="28" />
+							</controls:Grid.RowDefinitions>
+							<controls:Grid.ColumnDefinitions>
+								<controls:ColumnDefinition Width="*" />
+								<controls:ColumnDefinition Width="*" />
+							</controls:Grid.ColumnDefinitions>
 
 
-                <controls:Label controls:Grid.Row="0" controls:Grid.Column="0" Content="Language:"/>
-                <controls:ListBox controls:Grid.Row="1" controls:Grid.Column="0" Name="languages" x:FieldModifier="private"  Margin="3" SelectionMode="Extended"/>
-                <controls:Label controls:Grid.Row="0" controls:Grid.Column="1" Content="Browser:"/>
-                <controls:ListBox controls:Grid.Row="1" controls:Grid.Column="1" Name="lstBrowser" x:FieldModifier="private"  Margin="3" SelectionMode="Extended" />
-                <controls:Button controls:Grid.Row="2" controls:Grid.Column="0" controls:Grid.ColumnSpan="2" Content="Start Test" Click="BtnStartClick"  Margin="3" />
-            </controls:Grid>
+							<controls:Label controls:Grid.Row="0" controls:Grid.Column="0" Content="Language:"/>
+							<controls:ListBox controls:Grid.Row="1" controls:Grid.Column="0" Name="languages" x:FieldModifier="private"  Margin="3" SelectionMode="Extended"/>
+							<controls:Label controls:Grid.Row="0" controls:Grid.Column="1" Content="Browser:"/>
+							<controls:ListBox controls:Grid.Row="1" controls:Grid.Column="1" Name="lstBrowser" x:FieldModifier="private"  Margin="3" SelectionMode="Extended" />
+							<controls:Button controls:Grid.Row="2" controls:Grid.Column="0" controls:Grid.ColumnSpan="2" Content="Start Test" Click="BtnStartClick"  Margin="3" />
+						</controls:Grid>
+
+					</Grid>
+				</TabItem>
+				<TabItem Header="Testsuite">
+					<Grid>
+						<controls:Grid.RowDefinitions>
+							<controls:RowDefinition Height="*" />
+							<controls:RowDefinition Height="28" />
+						</controls:Grid.RowDefinitions>
+						<controls:Grid.ColumnDefinitions>
+							<controls:ColumnDefinition Width="*" />
+						</controls:Grid.ColumnDefinitions>
+
+						<controls:ListBox controls:Grid.Row="0" controls:Grid.Column="0" Name="Testsuites" x:FieldModifier="private"  Margin="3"/>
+						<controls:Button controls:Grid.Row="1" controls:Grid.Column="0" Content="Start Test" Click="BtnStartTestsuiteClick"  Margin="3" />
+
+					</Grid>
+				</TabItem>
+			</TabControl>
 
 
         </controls:Grid>

@@ -85,6 +85,18 @@ namespace RegTesting.LocalTest.Logic
 		}
 
 		/// <summary>
+		/// Get all (non local) testsuites
+		/// </summary>
+		/// <returns>A list of string with all testsuites</returns>
+		public List<string> GetTestsuites()
+		{
+			List<string> testsuites = _channel.GetTestsuites().Where(t=>!t.Name.StartsWith("Local")).Select(t => t.Name).ToList();
+			testsuites.Sort();
+			return testsuites;
+
+		}
+
+		/// <summary>
 		/// Start Tests at the Remote Server
 		/// </summary>
 		/// <param name="fileName">the filename of the testfile</param>
@@ -104,6 +116,25 @@ namespace RegTesting.LocalTest.Logic
 			_channel.AddLocalTestTasks(username, testsystemName, testsystemUrl, browsers, testcases, languages);
 			int testsCount = browsers.Count*testcases.Count*languages.Count;
 			System.Windows.MessageBox.Show(String.Format("Requested {0} tests on {1}. You'll receive a mail when your results are ready!" , testsCount, testsystemUrl));
+		}
+
+		/// <summary>
+		/// Start a testsuite at the Remote Server
+		/// </summary>
+		/// <param name="fileName">the filename of the testfile</param>
+		/// <param name="testsystemUrl">the testsystem url</param>
+		/// <param name="testsuite">the testsuite</param>
+		public void TestRemote(string fileName, string testsystemUrl, string testsuite)
+		{
+			testsystemUrl = testsystemUrl.ToLower().Replace("https://", "").Replace("http://", "");
+
+			string username = GetUser();
+			string testsystemName = "local/" + testsystemUrl + "-" + username;
+
+
+			SendFile(fileName, testsystemName);
+			_channel.AddTestsuiteTask(username, testsystemName, testsystemUrl,testsuite);
+			System.Windows.MessageBox.Show(String.Format("Requested Testsuite {0}. You'll receive a mail when your results are ready!",  testsuite));
 		}
 	}
 }
