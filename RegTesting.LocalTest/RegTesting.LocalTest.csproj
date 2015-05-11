@@ -95,7 +95,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.config">
+    <None Include="app.config.example">
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\Settings.settings">
