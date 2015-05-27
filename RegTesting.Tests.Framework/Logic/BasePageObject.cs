@@ -44,7 +44,7 @@ namespace RegTesting.Tests.Framework.Logic
 
 		public virtual string CreatePageUrlWithParameters(IEnumerable<string> urlParams)
 		{
-			return string.Empty;
+			return PageUrl;
 		}
 
 		public void HandleAlert(bool accept)
