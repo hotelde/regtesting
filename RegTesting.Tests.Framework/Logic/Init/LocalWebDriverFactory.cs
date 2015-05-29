@@ -4,7 +4,6 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
 using OpenQA.Selenium.PhantomJS;
-using OpenQA.Selenium.Remote;
 using RegTesting.Tests.Core;
 
 namespace RegTesting.Tests.Framework.Logic.Init
@@ -18,22 +17,22 @@ namespace RegTesting.Tests.Framework.Logic.Init
 		/// Get a RemoteWebDriver
 		/// </summary>
 		/// <param name="browser">the Browser to test on</param>
+		/// <param name="languageCode">The language that the browser should accept.</param>
 		/// <returns>a IWebDriver</returns>
-		IWebDriver IWebDriverFactory.GetWebDriver(Browser browser)
+		IWebDriver IWebDriverFactory.GetWebDriver(Browser browser, string languageCode)
 		{
-			DesiredCapabilities desiredCapabilities;
 			//What browser to test on?s
 			IWebDriver webDriver;
 			switch (browser.Browserstring.ToLowerInvariant())
 			{
 				case "firefox":
-					desiredCapabilities = DesiredCapabilities.Firefox();
-					desiredCapabilities.SetCapability("singleWindow", true);
-					webDriver = new FirefoxDriver(desiredCapabilities);
+					var firefoxProfile = new FirefoxProfile();
+					firefoxProfile.SetPreference("intl.accept_languages", languageCode);
+					webDriver = new FirefoxDriver(firefoxProfile);
 					break;
 				case "chrome":
 					ChromeOptions chromeOptions = new ChromeOptions();
-					chromeOptions.AddArguments("--test-type", "--disable-hang-monitor", "--new-window", "--no-sandbox");
+					chromeOptions.AddArguments("--test-type", "--disable-hang-monitor", "--new-window", "--no-sandbox", "--lang=" + languageCode);
 					webDriver = new ChromeDriver(chromeOptions);
 					break;
 				case "internet explorer":

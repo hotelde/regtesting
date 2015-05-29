@@ -160,7 +160,7 @@ namespace RegTesting.Tests.Framework.Logic
 					break;
 			}
 
-			_webDriver = webDriverFactory.GetWebDriver(browser);
+			_webDriver = webDriverFactory.GetWebDriver(browser, languageCode);
 			SetupTest(_webDriver, baseURL, languageCode);
 		}
 
