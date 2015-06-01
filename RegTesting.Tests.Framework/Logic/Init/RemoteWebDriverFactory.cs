@@ -14,8 +14,9 @@ namespace RegTesting.Tests.Framework.Logic.Init
 		/// Get a RemoteWebDriver
 		/// </summary>
 		/// <param name="browser">the Browser to test on</param>
+		/// <param name="languageCode">The language that the browser should accept.</param>
 		/// <returns>a IWebDriver</returns>
-		IWebDriver IWebDriverFactory.GetWebDriver(Browser browser)
+		IWebDriver IWebDriverFactory.GetWebDriver(Browser browser, string languageCode)
 		{
 			DesiredCapabilities desiredCapabilities;
 
