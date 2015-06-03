@@ -65,7 +65,7 @@
 	function loadTestjobDetails(testjob) {
 		$("#testjobsListBlock").addClass("testjobDetailsOpened");
 		$("#testjobDetailsBlock").addClass("testjobDetailsOpened");
-		$.get('@Url.Action("Details")' + '?testjob=' + testjob, {},
+		$.get('@Url.Action("TestJobDetails")' + '?testjob=' + testjob, {},
 				function (view) {
 					$("#testjobDetails").html(view);
 				})

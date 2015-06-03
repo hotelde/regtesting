@@ -91,9 +91,9 @@ namespace RegTesting.Mvc.Controllers
 			}
 		}
 
-		public ActionResult Details(int testjob)
+		public ActionResult TestJobDetails(int testjob)
 		{
-			return PartialView(_testViewerService.GetErrorOccurrenceGroupsForTestjob(testjob));
+			return PartialView("_PartialTestJobDetails",_testViewerService.GetErrorOccurrenceGroupsForTestjob(testjob));
 		}
 
 
