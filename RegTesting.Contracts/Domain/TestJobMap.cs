@@ -16,6 +16,7 @@ namespace RegTesting.Contracts.Domain
 		{
 			Id(x => x.ID, map => map.Generator(Generators.Identity));
 			Property(x => x.Name);
+			Property(x => x.Description);
 			Property(x => x.ResultCode);
 			Property(x => x.StartedAt);
 			Property(x => x.FinishedAt);

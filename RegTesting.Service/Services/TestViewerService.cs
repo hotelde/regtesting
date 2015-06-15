@@ -127,6 +127,13 @@ namespace RegTesting.Service.Services
 			return ErrorGrouping.GetHistoryErrorOccurrenceGroups(historyErrorResultsOfTestsuite);
 		}
 
+		IList<ErrorOccurrenceGroup> ITestViewerService.GetErrorOccurrenceGroupsForTestjob(int testjobId)
+		{
+			IList<HistoryResult> historyErrorResultsOfTestsuite = _historyResultRepository.GetListOfErrorHistoryResults(testjobId);
+			return ErrorGrouping.GetHistoryErrorOccurrenceGroups(historyErrorResultsOfTestsuite);
+		}
+
+
 		IList<HistoryResult> ITestViewerService.GetResultsHistory(int testsystemIndex, int testcaseId, int browserId, int languageId, int testsuiteId,
 		                               int maxResults)
 		{

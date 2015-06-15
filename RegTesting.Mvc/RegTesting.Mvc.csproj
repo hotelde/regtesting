@@ -117,6 +117,7 @@
   <ItemGroup>
     <Compile Include="App_Start\AutoMapperInit.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
+    <Compile Include="Controllers\TestjobsController.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyResolver.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
@@ -128,15 +129,12 @@
     <Compile Include="Models\TesterModel.cs" />
     <Compile Include="Models\TestJobModel.cs" />
     <Compile Include="Controllers\BrowserController.cs" />
-    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\LanguageController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\StatusController.cs" />
     <Compile Include="Controllers\TestcaseController.cs" />
     <Compile Include="Controllers\TesterController.cs" />
-    <Compile Include="Controllers\TestingController.cs" />
     <Compile Include="Controllers\TestsuiteController.cs" />
-    <Compile Include="Controllers\TestsystemSummaryController.cs" />
     <Compile Include="Controllers\TestsystemController.cs" />
     <Compile Include="Extensions\DateTimeJavaScript.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
@@ -234,6 +232,12 @@
     <Content Include="Scripts\jquery-ui.min.js" />
     <Content Include="Scripts\modernizr-1.7.js" />
     <Content Include="Scripts\modernizr-1.7.min.js" />
+    <Content Include="Views\Testjobs\Index.cshtml" />
+    <Content Include="web.config" />
+    <Content Include="Views\Testjobs\_PartialErrorOccurence.cshtml" />
+    <Content Include="Views\Testjobs\_PartialTestJobDetails.cshtml" />
+    <Content Include="Views\Testjobs\_PartialTestJob.cshtml" />
+    <None Include="Views\Testjobs\_PartialSuccess.cshtml" />
     <None Include="Web.config.example">
       <SubType>Designer</SubType>
     </None>
@@ -251,7 +255,6 @@
     <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
-    <Content Include="Views\Status\TestJobs.cshtml" />
     <Content Include="Views\Tester\Index.cshtml" />
     <Content Include="Views\Tester\Details.cshtml" />
     <Content Include="Views\Tester\Create.cshtml" />
@@ -267,8 +270,6 @@
     <Content Include="Views\Testsuite\Create.cshtml" />
     <Content Include="Views\Testsuite\Edit.cshtml" />
     <Content Include="Views\Testsuite\Delete.cshtml" />
-    <Content Include="Views\Testing\Index.cshtml" />
-    <Content Include="Views\Testing\Testinfo.cshtml" />
     <Content Include="Views\Settings\Index.cshtml" />
     <Content Include="Views\Language\Index.cshtml" />
     <Content Include="Views\Language\Details.cshtml" />
@@ -286,27 +287,19 @@
     <Content Include="Views\Testcase\Delete.cshtml" />
     <Content Include="Views\Status\Worker.cshtml" />
     <Content Include="Views\Status\PartialWorkerStatus.cshtml" />
-    <Content Include="Views\Testing\Resulthistory.cshtml" />
-    <Content Include="Views\Status\TestJobsPartial.cshtml" />
-    <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Testsuite\EditBrowsers.cshtml" />
     <Content Include="Views\Testsuite\EditLanguages.cshtml" />
     <Content Include="Views\Testsuite\EditTestcases.cshtml" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Views\TestsystemSummary\Index.cshtml" />
-    <Content Include="Views\TestsystemSummary\TestSystemSummaryPartial.cshtml" />
-    <Content Include="Views\Error\Edit.cshtml" />
-    <Content Include="Views\Testing\Errorlog.cshtml" />
-    <Content Include="Views\Testing\PartialTestcaseDetails.cshtml" />
-    <Content Include="Views\Testing\PartialErrorOccurence.cshtml" />
-    <Content Include="Views\Testing\PartialTestingMenu.cshtml" />
-    <Content Include="Views\TestsystemSummary\BranchSummariesTablePartial.cshtml" />
-    <Content Include="Views\TestsystemSummary\MainBranchSummariesPartial.cshtml" />
-    <Content Include="Views\Testing\TestJobsPartial.cshtml" />
-    <Content Include="Views\Testing\PartialMessage.cshtml" />
     <Content Include="Views\Testsuite\Overview.cshtml" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\System.Web.WebPages.xml" />
     <None Include="_bin_deployableAssemblies\System.Web.WebPages.Razor.xml" />

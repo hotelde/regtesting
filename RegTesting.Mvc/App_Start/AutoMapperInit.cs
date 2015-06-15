@@ -16,7 +16,8 @@ namespace RegTesting.Mvc.App_Start
 		/// </summary>
 		public static void CreateMappings()
 		{
-			Mapper.CreateMap<ITestJobManager, TestJobDto>();
+			Mapper.CreateMap<ITestJobManager, TestJobManagerDto>();
+			Mapper.CreateMap<TestJob, TestJobDto>();
 			Mapper.CreateMap<TestJobDto, TestJobModel>();
 			Mapper.CreateMap<WorkItem, Result>();
 			Mapper.CreateMap<TestWorkerDto, TestWorkerModel>();

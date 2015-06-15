@@ -44,7 +44,7 @@ namespace RegTesting.Mvc
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
-                new { controller = "TestsystemSummary", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+                new { controller = "TestJobs", action = "Index", id = UrlParameter.Optional } // Parameter defaults
             );
         }
 		/// <summary>

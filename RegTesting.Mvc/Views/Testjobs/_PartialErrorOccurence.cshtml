@@ -1,0 +1,56 @@
+﻿@using RegTesting.Contracts
+@model ErrorOccurrence
+
+<div class="">
+
+
+	<div class="error-header hideable">
+		<b>@Model.Error.Message </b> [Stacktrace]
+
+		<span class="box" style="display: none">
+			<br />
+
+			@Model.Error.Type  @Html.Raw(@Model.Error.StackTrace.Replace(" at ", "<br>at "))
+			@if (Model.Error.InnerException != null)
+			{
+				<br /><text>InnerException: @Model.Error.InnerException</text>
+			}
+		</span>
+
+	</div>
+
+
+	@for (int index = 0; index < Model.LstOccurence.Count; index++)
+	{
+		String classes = "";
+		OccurrenceElement occurrenceElement = Model.LstOccurence[index];
+		String[] logEntries = occurrenceElement.DetailLog.Split(new string[] { "<br>" }, StringSplitOptions.None);
+
+		<div>
+			<div style="float:left;margin-right: 10px;">
+				@if (!String.IsNullOrEmpty(occurrenceElement.ScreenshotFile))
+				{
+					<a href="@("screenshots/" + occurrenceElement.ScreenshotFile)" target="_blank"><img class="testscreenshot" src="@("screenshots/" + occurrenceElement.ScreenshotFile)" /></a>
+				}
+			</div>
+			<div style="">
+
+
+				@occurrenceElement.Browser.Name,
+				@occurrenceElement.Language.Languagecode,
+				@occurrenceElement.DateTime
+				<div class="detaillog">
+					@foreach (var entry in logEntries)
+					{
+						@Html.Raw(entry+"<br>")
+					}
+					</div>
+			</div>
+			<div style="height:1px;width:100%;background-color: #AAAAAA;clear: both;"></div>
+
+		</div>
+	}
+
+</div>
+
+

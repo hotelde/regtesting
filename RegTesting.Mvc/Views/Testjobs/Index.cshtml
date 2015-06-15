@@ -1,0 +1,76 @@
+﻿@using RegTesting.Mvc.Models
+@model IList<TestJobModel>
+
+
+	@{
+		ViewBag.Title = "Testjobs";
+
+		var todaysJobs = Model.Where(t => t.StartedAt.Value.Date >= DateTime.Now.Date.AddDays(-1));
+		var moreJobs = Model.Where(t => t.StartedAt.Value.Date < DateTime.Now.Date.AddDays(-1));
+
+		int? currentTestjob = (int?) ViewBag.testjob;
+		int testjob = currentTestjob.HasValue ? currentTestjob.Value : -1;
+		
+
+	}
+
+<div id="testjobsListBlock">
+
+	@foreach (TestJobModel testJobModel in todaysJobs)
+	{
+		@Html.Partial("_PartialTestJob", testJobModel)
+	}
+
+
+	<div id="showMoreTestjobs"><b>Show older testjobs</b></div>
+
+	<span id="moreTestjobs" style="display: none">
+		@foreach (TestJobModel testJobModel in moreJobs)
+		{
+			@Html.Partial("_PartialTestJob", testJobModel)
+		}
+	</span>
+
+
+
+
+</div>
+
+<div id="testjobDetailsBlock">
+	<div id="testjobDetails">
+	</div>
+</div>
+
+<script type="text/javascript">
+	
+	var jobid = @testjob;
+
+	if (jobid != -1) {
+		loadTestjobDetails(jobid);
+	}
+
+	$('.testjob').click(function () {
+
+
+		var testjob = $(this).attr("data-tj");
+		loadTestjobDetails(testjob);
+	});
+
+	$('#showMoreTestjobs').click(function () {
+		$("#moreTestjobs").show();
+		$("#showMoreTestjobs").hide();
+	});
+
+
+	function loadTestjobDetails(testjob) {
+		$("#testjobsListBlock").addClass("testjobDetailsOpened");
+		$("#testjobDetailsBlock").addClass("testjobDetailsOpened");
+		$.get('@Url.Action("TestJobDetails")' + '?testjob=' + testjob, {},
+				function (view) {
+					$("#testjobDetails").html(view);
+				})
+			.error(function () {
+				$("#testjobDetails").text("Error while asking for details!");
+			});
+	}
+</script>

@@ -1,0 +1,33 @@
+﻿@using RegTesting.Mvc.Models
+@model TestJobModel
+
+<div class="testjob @("testjob-state-" + Model.ResultCode)" data-tj="@Model.ID">
+	<div>
+		@if (Model.StartedAt.Value.Date.Equals(DateTime.Now.Date))
+		{
+			@Model.StartedAt.Value.ToShortTimeString()
+		}
+		else
+		{
+			@Model.StartedAt.Value.ToString("dd.MM.yyyy HH:mm" )
+
+		}
+		(@Model.TestsuiteName)
+		
+	</div>
+	<div><span class="testjob-name">@Model.Name</span></div>
+	@if (!String.IsNullOrEmpty(Model.CommitAuthor))
+	{
+		<div class="commit-author">@Model.CommitAuthor</div>
+	}
+	@if (!String.IsNullOrEmpty(Model.CommitMergeInfo))
+	{
+		<div class="commit-mergeinfo"><b>Merge: @Model.CommitMergeInfo</b></div>
+	}
+	<div>
+		@if (!String.IsNullOrEmpty(Model.CommitMessage))
+		{
+			<pre><code>@Model.CommitMessage</code></pre>
+		}
+	</div>
+</div>

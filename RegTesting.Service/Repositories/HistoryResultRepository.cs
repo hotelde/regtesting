@@ -73,6 +73,21 @@ namespace RegTesting.Service.Repositories
 				.ToList();
 
 		}
+
+
+		IList<HistoryResult> IHistoryResultRepository.GetListOfErrorHistoryResults(int testjobId)
+		{
+
+			return Session.Query<HistoryResult>()
+				.Where(result => result.TestJob.ID == testjobId)
+				.Where(
+					r =>r.ResultCode == TestState.KnownError ||
+					r.ResultCode == TestState.Error ||
+					r.ResultCode == TestState.ErrorRepeat
+				)
+				.OrderByDescending(result => result.Testtime)
+				.ToList();
+		}
 	}
 
 }

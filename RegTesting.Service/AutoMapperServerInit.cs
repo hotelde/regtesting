@@ -16,7 +16,8 @@ namespace RegTesting.Service
 		public static void CreateMappings()
 		{
 			Mapper.CreateMap<TestJob, ITestJobManager>();
-			Mapper.CreateMap<ITestJobManager, TestJobDto>();
+			Mapper.CreateMap<ITestJobManager, TestJobManagerDto>();
+			Mapper.CreateMap<TestJob, TestJobDto>();
 			Mapper.CreateMap<ITestWorker, TestWorkerDto>();
 			Mapper.CreateMap<WorkItem, Result>();
 			Mapper.CreateMap<WorkItem, HistoryResult>();

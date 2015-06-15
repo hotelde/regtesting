@@ -110,7 +110,7 @@ namespace RegTesting.Service.Services
 			string testjobname;
 			if (!String.IsNullOrEmpty(commitId) && !String.IsNullOrEmpty(branch))
 			{
-				testjobname = "Commit " + commitId + " on " + branch;
+				testjobname = "Commit " + commitId + " on " + ParseBranchName(branch);
 			}
 			else
 			{
@@ -121,7 +121,7 @@ namespace RegTesting.Service.Services
 			TestJob testjob = new TestJob
 			{
 				Name = testjobname,
-				//Description = strCommitMessage,   TODO: Add description to testjob
+				Description = commitMessage,
 				ResultCode = TestState.Pending,
 				Testsuite = testsuite,
 				Testsystem = testsystem,
@@ -145,6 +145,22 @@ namespace RegTesting.Service.Services
 												  }).ToList();
 
 			_testPool.AddTestJob(testJobManager, workItems);
+		}
+
+		private string ParseBranchName(string branchLine)
+		{
+			List<string> branchList = new List<string>();
+			string[] branches = branchLine.Split(';');
+			foreach (string branch in branches)
+			{
+				if (branch.StartsWith("remotes/origin/"))
+				{
+					branchList.Add(branch.Replace("remotes/origin/",""));
+				}
+			}
+
+
+			return string.Join(", ", branchList);
 		}
 	}
 }

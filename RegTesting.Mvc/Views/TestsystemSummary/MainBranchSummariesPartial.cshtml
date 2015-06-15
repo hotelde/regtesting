@@ -1,9 +1,0 @@
-﻿@using RegTesting.Contracts
-@model IList<TestsystemSummary>
-
-<div class="row">
-@foreach (TestsystemSummary testsystemSummary in Model)
-{
-	@Html.Partial("TestSystemSummaryPartial", testsystemSummary);
-}
-</div><!--/row-->

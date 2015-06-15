@@ -40,14 +40,14 @@ namespace RegTesting.Service.Services
 		}
 
 
-		IList<TestJobDto> IStatusService.GetTestJobs()
+		IList<TestJobManagerDto> IStatusService.GetTestJobs()
 		{
 			return _testPool.GetTestJobs();
 
 		}
 
 
-		IList<TestJobDto> IStatusService.GetTestJobsForTestsystem(int testsystemId)
+		IList<TestJobManagerDto> IStatusService.GetTestJobsForTestsystem(int testsystemId)
 		{
 			return _testPool.GetTestJobs(testsystemId);
 

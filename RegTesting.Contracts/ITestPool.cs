@@ -32,7 +32,7 @@ namespace RegTesting.Contracts
 		/// Get the testJobs
 		/// </summary>
 		/// <returns>a list of testJobs</returns>
-		IList<TestJobDto> GetTestJobs();
+		IList<TestJobManagerDto> GetTestJobs();
 
 		/// <summary>
 		/// Register a testworker to list
@@ -76,7 +76,7 @@ namespace RegTesting.Contracts
 		/// </summary>
 		/// <param name="intTestsystem">the testsystem</param>
 		/// <returns>a list of testJobs</returns>
-		IList<TestJobDto> GetTestJobs(int intTestsystem);
+		IList<TestJobManagerDto> GetTestJobs(int intTestsystem);
 
 		/// <summary>
 		/// Readd a workItem

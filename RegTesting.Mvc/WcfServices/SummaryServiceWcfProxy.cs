@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using RegTesting.Contracts;
+using RegTesting.Contracts.Domain;
 using RegTesting.Contracts.DTO;
 using RegTesting.Contracts.Services;
 
@@ -52,5 +53,10 @@ namespace RegTesting.Mvc.WcfServices
 			return  _channel.GetPinnedTestsystemSummaries();
 		}
 
+
+		IList<TestJobDto> ISummaryService.GetTestJobs()
+		{
+			return _channel.GetTestJobs();
+		}
 	}
 }

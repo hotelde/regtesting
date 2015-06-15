@@ -158,7 +158,7 @@ namespace RegTesting.Service.Services
 
 			TestJob testjob = new TestJob
 			{
-				Name = "Testsuite " + testsuite.Name,
+				Name = "A set of tests on " + testsystem.Url,
 				ResultCode = TestState.Pending,
 				Testsuite = testsuite,
 				Testsystem = testsystem,
@@ -192,7 +192,7 @@ namespace RegTesting.Service.Services
 			_testsystemRepository.Store(testsystem);
 
 			Tester tester = _testerRepository.GetByName(userName);
-			string testjobname = "Testsuite " + testsuiteName;
+			string testjobname =  "Testsuite " + testsuite.Name + " on " + testsystem.Url;
 
 			TestJob testjob = new TestJob
 			{
