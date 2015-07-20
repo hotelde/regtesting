@@ -14,7 +14,7 @@ namespace RegTesting.Tests.Framework.Elements
 		public Input(By objBy, IWebDriver webDriver, WaitModel waitModel, BasePageObject parentPageObject, ClickBehaviours clickBehaviour = ClickBehaviours.Default, FillBehaviour fillBehaviour = FillBehaviour.Default)
 			: base(objBy, webDriver, waitModel, parentPageObject, clickBehaviour)
 		{
-			_fillBehaviour = FillbehaviourFactory.Create(fillBehaviour, this);
+			_fillBehaviour = TestContext.FillBehaviourFactory.Create(fillBehaviour, this);
 		}
 
 		public void Type(string text)

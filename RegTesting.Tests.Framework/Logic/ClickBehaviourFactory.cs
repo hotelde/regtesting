@@ -4,9 +4,9 @@ using RegTesting.Tests.Framework.Enums;
 
 namespace RegTesting.Tests.Framework.Logic
 {
-	public class ClickBehaviourFactory
+	public class ClickBehaviourFactory : IClickBehaviourFactory
 	{
-		public static IClickable Create(ClickBehaviours clickBehaviour, BasicPageElement pageElement)
+		IClickable IClickBehaviourFactory.Create(ClickBehaviours clickBehaviour, BasicPageElement pageElement)
 		{
 			switch (clickBehaviour)
 			{

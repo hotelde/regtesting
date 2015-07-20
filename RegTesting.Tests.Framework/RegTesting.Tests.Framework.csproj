@@ -83,13 +83,17 @@
     <Compile Include="Logic\Extensions\WebElementExtensions.cs" />
     <Compile Include="Logic\FillBehaviourAttribute.cs" />
     <Compile Include="Logic\FillbehaviourFactory.cs" />
+    <Compile Include="Logic\IClickBehaviourFactory.cs" />
+    <Compile Include="Logic\IFillBehaviourFactory.cs" />
     <Compile Include="Logic\Init\IWebDriverFactory.cs" />
     <Compile Include="Logic\Init\LocalWebDriverFactory.cs" />
     <Compile Include="Logic\Init\RemoteWebDriverFactory.cs" />
+    <Compile Include="Logic\IRunBeforeTestStart.cs" />
     <Compile Include="Logic\LocateAttribute.cs" />
     <Compile Include="Logic\PageObjectFactory.cs" />
     <Compile Include="Logic\PartialPageObjectAttribute.cs" />
     <Compile Include="Logic\SupportedResolutions.cs" />
+    <Compile Include="Logic\TestContext.cs" />
     <Compile Include="Logic\Testlog.cs" />
     <Compile Include="Logic\TestStatusManager.cs" />
     <Compile Include="Logic\WaitAttribute.cs" />
