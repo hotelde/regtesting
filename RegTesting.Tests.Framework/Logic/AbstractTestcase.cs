@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using OpenQA.Selenium;
 using RegTesting.Tests.Core;
@@ -141,6 +142,8 @@ namespace RegTesting.Tests.Framework.Logic
 		/// <param name="timeOut">A optional timeout</param>
 		void ITestable.SetupTest(WebDriverInitStrategy webDriverInitStrategy,  Browser browser, string baseURL, string languageCode, int timeOut)
 		{
+			RunBeforeTestStartMethods();
+
 			TestStatusManager.IsCanceled = false;
 			/*if (timeOut != 0)
 				Settings.Default.TestTimeout = timeOut;*/
@@ -238,6 +241,7 @@ namespace RegTesting.Tests.Framework.Logic
 		/// </summary>
 		public abstract void Test();
 
+
 		/// <summary>
 		/// The cleaningfunction. Here we dispose things and close our driverconnections etc.
 		/// </summary>
@@ -314,6 +318,24 @@ namespace RegTesting.Tests.Framework.Logic
 				// Note disposing has been done.
 				_disposedCalled = true;
 
+			}
+		}
+
+		/// <summary>
+		/// Search for classes that implement IRunBeforeTestStart and execute the run method
+		/// </summary>
+		private void RunBeforeTestStartMethods()
+		{
+			Type type = typeof(IRunBeforeTestStart);
+			IEnumerable<IRunBeforeTestStart> runBeforeTestStartInstances = AppDomain.CurrentDomain.GetAssemblies()
+																			.SelectMany(s => s.GetTypes())
+																			.Where(p => type.IsAssignableFrom(p) && !p.IsInterface)
+																			.Select(t => Activator.CreateInstance(t) as IRunBeforeTestStart);
+
+
+			foreach (IRunBeforeTestStart runBeforeTestStart in runBeforeTestStartInstances)
+			{
+				runBeforeTestStart.Run();
 			}
 		}
 

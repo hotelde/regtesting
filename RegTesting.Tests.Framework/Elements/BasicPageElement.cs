@@ -51,7 +51,7 @@ namespace RegTesting.Tests.Framework.Elements
 			By = byLocator;
 			WebDriver = webDriver;
 			ParentPageObject = parentPageObject;
-			ClickBehaviour = ClickBehaviourFactory.Create(clickBehaviour, this);
+			ClickBehaviour = TestContext.ClickBehaviourFactory.Create(clickBehaviour, this);
 		}
 
 		/// <summary>

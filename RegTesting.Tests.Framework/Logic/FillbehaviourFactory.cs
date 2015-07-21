@@ -3,9 +3,9 @@ using RegTesting.Tests.Framework.Enums;
 
 namespace RegTesting.Tests.Framework.Logic
 {
-	public class FillbehaviourFactory
+	public class FillBehaviourFactory : IFillBehaviourFactory
 	{
-		public static IFillable Create(FillBehaviour fillBehaviour, BasicPageElement pageElement)
+		IFillable IFillBehaviourFactory.Create(FillBehaviour fillBehaviour, BasicPageElement pageElement)
 		{
 			switch (fillBehaviour)
 			{
