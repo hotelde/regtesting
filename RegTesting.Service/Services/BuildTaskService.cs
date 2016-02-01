@@ -25,6 +25,7 @@ namespace RegTesting.Service.Services
 		private readonly ITestsuiteRepository _testsuiteRepository;
 		private readonly ITestcaseRepository _testcaseRepository;
 		private readonly ITestPool _testPool;
+		private readonly ITestJobRepository _testJobRepository;
 
 		/// <summary>
 		/// Constructor
@@ -35,8 +36,10 @@ namespace RegTesting.Service.Services
 		/// <param name="testsuiteRepository">the testsuiteRepository</param>
 		/// <param name="testcaseRepository">the testcaseRepository</param>
 		/// <param name="testPool">the testPool</param>
+		/// <param name="testJobRepository">the testJobRepository</param>
 		public BuildTaskService(ITestFileLocker testFileLocker, ITestsystemRepository testsystemRepository,
-			ITesterRepository testerRepository, ITestsuiteRepository testsuiteRepository, ITestcaseRepository testcaseRepository, ITestPool testPool)
+			ITesterRepository testerRepository, ITestsuiteRepository testsuiteRepository, ITestcaseRepository testcaseRepository,
+			ITestPool testPool, ITestJobRepository testJobRepository)
 		{
 			if (testFileLocker == null)
 				throw new ArgumentNullException("testFileLocker");
@@ -50,12 +53,15 @@ namespace RegTesting.Service.Services
 				throw new ArgumentNullException("testcaseRepository");
 			if (testPool == null)
 				throw new ArgumentNullException("testPool");
+			if (testJobRepository == null)
+				throw new ArgumentNullException("testJobRepository");
 			_testFileLocker = testFileLocker;
 			_testsystemRepository = testsystemRepository;
 			_testerRepository = testerRepository;
 			_testsuiteRepository = testsuiteRepository;
 			_testcaseRepository = testcaseRepository;
 			_testPool = testPool;
+			_testJobRepository = testJobRepository;
 		}
 
 		void IBuildTaskService.SendTestcaseFile(string testsystemName, byte[] data)
@@ -102,7 +108,7 @@ namespace RegTesting.Service.Services
 
 		}
 		
-		void IBuildTaskService.AddRegTestTasks(string testsystemName, string emailReceiver, string testsuiteName, string branch, string commitId, string commitMessage)
+		int IBuildTaskService.AddRegTestTasks(string testsystemName, string emailReceiver, string testsuiteName, string branch, string commitId, string commitMessage)
 		{
 			Testsuite testsuite = _testsuiteRepository.GetByName(testsuiteName);
 			Testsystem testsystem = _testsystemRepository.GetByName(testsystemName);
@@ -115,7 +121,6 @@ namespace RegTesting.Service.Services
 			else
 			{
 				testjobname = "Testsuite " + testsuiteName;
-
 			}
 
 			TestJob testjob = new TestJob
@@ -145,6 +150,17 @@ namespace RegTesting.Service.Services
 												  }).ToList();
 
 			_testPool.AddTestJob(testJobManager, workItems);
+			return testjob.ID;
+		}
+
+		int IBuildTaskService.GetTestJobResult(int testJobId)
+		{
+			TestJob testjob = _testJobRepository.GetById(testJobId);
+			if (testjob == null)
+			{
+				return (int) TestState.NotAvailable;
+			}
+			return (int) testjob.ResultCode;
 		}
 
 		private string ParseBranchName(string branchLine)

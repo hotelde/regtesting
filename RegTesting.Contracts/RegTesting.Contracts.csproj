@@ -37,13 +37,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Iesi.Collections">
-      <HintPath>..\Packages\Iesi.Collections.3.3.3.4001\lib\Net35\Iesi.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -57,78 +50,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\Browser.cs" />
-    <Compile Include="Domain\BrowserMap.cs" />
-    <Compile Include="Domain\HistoryResult.cs" />
-    <Compile Include="Domain\HistoryResultMap.cs" />
     <Compile Include="Domain\Error.cs" />
-    <Compile Include="Domain\ErrorMap.cs" />
-    <Compile Include="Domain\Language.cs" />
-    <Compile Include="Domain\LanguageMap.cs" />
-    <Compile Include="Domain\Result.cs" />
-    <Compile Include="Domain\ResultMap.cs" />
-    <Compile Include="Domain\Testcase.cs" />
-    <Compile Include="Domain\TestcaseMap.cs" />
-    <Compile Include="Domain\Tester.cs" />
-    <Compile Include="Domain\TesterMap.cs" />
-    <Compile Include="Domain\TestJobMap.cs" />
-    <Compile Include="Domain\Testsuite.cs" />
-    <Compile Include="Domain\TestsuiteMap.cs" />
-    <Compile Include="Domain\Testsystem.cs" />
-    <Compile Include="Domain\TestsystemMap.cs" />
     <Compile Include="DTO\BrowserDto.cs" />
     <Compile Include="DTO\LanguageDto.cs" />
     <Compile Include="DTO\TestcaseDto.cs" />
-    <Compile Include="DTO\TesterDto.cs" />
-    <Compile Include="DTO\TestJobDto.cs" />
-    <Compile Include="DTO\TestJobManagerDto.cs" />
     <Compile Include="DTO\TestsuiteDto.cs" />
     <Compile Include="DTO\TestsystemDto.cs" />
-    <Compile Include="DTO\TestWorkerDto.cs" />
-    <Compile Include="DTO\WorkItemDto.cs" />
-    <Compile Include="Enums\JobType.cs" />
-    <Compile Include="Enums\TestWorkerStatus.cs" />
-    <Compile Include="ErrorOccurrence.cs" />
-    <Compile Include="ErrorOccurrenceGroup.cs" />
-    <Compile Include="GroupedResult.cs" />
-    <Compile Include="GroupedResultPart.cs" />
-    <Compile Include="ITestFileLocker.cs" />
-    <Compile Include="ITestJobManager.cs" />
-    <Compile Include="ITestWorker.cs" />
-    <Compile Include="RefreshResultsModel.cs" />
-    <Compile Include="Repositories\ILanguageRepository.cs" />
-    <Compile Include="Repositories\IErrorRepository.cs" />
-    <Compile Include="Repositories\IBrowserRepository.cs" />
-    <Compile Include="Services\ILocalTestService.cs" />
+    <Compile Include="DTO\WorkItem.cs" />
+    <Compile Include="Services\ISlimServerService.cs" />
     <Compile Include="Services\INodeService.cs" />
-    <Compile Include="Services\ISettingsService.cs" />
-    <Compile Include="Services\IBuildTaskService.cs" />
-    <Compile Include="Services\IStatusService.cs" />
-    <Compile Include="Services\ISummaryService.cs" />
-    <Compile Include="Services\ITestViewerService.cs" />
-    <Compile Include="OccurrenceElement.cs" />
-    <Compile Include="Repositories\ITestcaseRepository.cs" />
-    <Compile Include="Repositories\ITesterRepository.cs" />
-    <Compile Include="Repositories\IHistoryResultRepository.cs" />
-    <Compile Include="Repositories\ITestJobRepository.cs" />
-    <Compile Include="Repositories\IRepository.cs" />
-    <Compile Include="Repositories\IResultRepository.cs" />
-    <Compile Include="Services\ITestService.cs" />
-    <Compile Include="ITestPool.cs" />
-    <Compile Include="Repositories\ITestsuiteRepository.cs" />
-    <Compile Include="Repositories\ITestsystemRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Domain\TestJob.cs" />
-    <Compile Include="TestcaseDetailsModel.cs" />
-    <Compile Include="TestJobManager.cs" />
     <Compile Include="TestResult.cs" />
     <Compile Include="TestState.cs" />
-    <Compile Include="TestsystemSummary.cs" />
-    <Compile Include="TestsystemSummaryModel.cs" />
-    <Compile Include="WorkItem.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

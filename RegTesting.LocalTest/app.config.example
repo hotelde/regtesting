@@ -40,9 +40,7 @@
 			</wsHttpBinding>
 		</bindings>
 		<client>
-			<endpoint address="http://localhost:1234/LocalTestService" binding="wsHttpBinding" bindingConfiguration="WSHttpBinding_Default" contract="ILocalTestService" name="LocalTestServiceEndpoint"/>
-
+			<endpoint address="http://localhost:1234/SlimServerService" binding="wsHttpBinding" bindingConfiguration="WSHttpBinding_Default" contract="ISlimServerService" name="SlimServerServiceEndpoint"/>
 		</client>
-
 	</system.serviceModel>
 </configuration>

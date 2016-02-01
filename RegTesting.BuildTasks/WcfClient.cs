@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
+using System.Threading;
 using System.Xml;
 using RegTesting.Contracts.Services;
 
@@ -13,8 +14,8 @@ namespace RegTesting.BuildTasks
 	/// </summary>
 	public class WcfClient : IDisposable
 	{
-		private readonly IBuildTaskService _channel;
-		private readonly ChannelFactory<IBuildTaskService> _httpFactory;
+		private readonly ISlimServerService _channel;
+		private readonly ChannelFactory<ISlimServerService> _httpFactory;
 
 
 		/// <summary>
@@ -62,7 +63,7 @@ namespace RegTesting.BuildTasks
 			};
 
 
-			_httpFactory = new ChannelFactory<IBuildTaskService>(wsHttpBinding, endpointAddress);
+			_httpFactory = new ChannelFactory<ISlimServerService>(wsHttpBinding, endpointAddress);
 			_channel = _httpFactory.CreateChannel();
 
 		}
@@ -78,26 +79,35 @@ namespace RegTesting.BuildTasks
 			}
 		}
 
-	    /// <summary>
-	    /// Send a file to testserver
-	    /// </summary>
-	    /// <param name="filename">Filename of the testcases dll</param>
-	    /// <param name="testsystem">testsystem of the testcases</param>
-	    /// <param name="emailReceiver">optional emailcontact after test execution</param>
-	    /// <param name="testsuite">the testsuite to test</param>
-	    public void SendFile(string filename, string testsystem, string emailReceiver = null, string testsuite = null, string branch = null, string commitId = null, string commitMessage = null)
+		/// <summary>
+		/// Send a file to testserver
+		/// </summary>
+		/// <param name="filename">Filename of the testcases dll</param>
+		/// <param name="testurl">The testurl</param>
+		public Guid SendFile(string filename, string testurl)
 		{
-
 			using (FileStream fileStream = new FileStream(filename, FileMode.Open))
 			{
 				byte[] buffer = new byte[52428800];
 				int intSize = fileStream.Read(buffer, 0, 52428800);
 				byte[] bufferShort = buffer.Take(intSize).ToArray();
-				_channel.SendTestcaseFile(testsystem, bufferShort);
+				return _channel.AddTestJob(testurl, bufferShort);
 			}
-
-			_channel.AddRegTestTasks(testsystem, emailReceiver, testsuite, branch, commitId, commitMessage);
 		}
 
+		public void WaitForTestJobResult(Guid testJobId)
+		{
+			bool result;
+			do
+			{
+				Thread.Sleep(10000);
+				result = _channel.IsTestJobFinished(testJobId);
+			} while (result == false);
+		}
+
+		public string GetResultFile(Guid testJobId)
+		{
+			return _channel.GetResultFile(testJobId);
+		}
 	}
 }

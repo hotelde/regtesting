@@ -13,8 +13,8 @@ namespace RegTesting.LocalTest.Logic
 	/// </summary>
 	public class WcfClient : IDisposable
 	{
-		private readonly ILocalTestService _channel;
-		private readonly ChannelFactory<ILocalTestService> _httpFactory;
+		private readonly ISlimServerService _channel;
+		private readonly ChannelFactory<ISlimServerService> _httpFactory;
 
 
 		/// <summary>
@@ -22,7 +22,7 @@ namespace RegTesting.LocalTest.Logic
 		/// </summary>
 		public WcfClient()
 		{
-			_httpFactory = new ChannelFactory<ILocalTestService>("LocalTestServiceEndpoint");
+			_httpFactory = new ChannelFactory<ISlimServerService>("SlimServerServiceEndpoint");
 			_channel = _httpFactory.CreateChannel();
 		}
 
@@ -43,57 +43,25 @@ namespace RegTesting.LocalTest.Logic
 	    /// </summary>
 	    /// <param name="filename">Filename of the testcases dll</param>
 	    /// <param name="testsystem">testsystem of the testcases</param>
-		private void SendFile(string filename, string testsystem)
+		private Guid SendFile(string filename, string testsystem)
 	    {
 			using (FileStream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 			{
 				byte[] buffer = new byte[52428800];
 				int size = fileStream.Read(buffer, 0, 52428800);
 				byte[] bufferShort = buffer.Take(size).ToArray();
-				_channel.SendTestcaseFile(testsystem, bufferShort);
+
+				try
+				{
+					return _channel.AddTestJob(testsystem, bufferShort);
+				}
+				catch (Exception e)
+				{
+					System.Windows.MessageBox.Show("An error occurred while requesting tests on the testserver: " + e);
+					return Guid.Empty;
+				}
+
 			}
-		}
-
-		private static string GetUser()
-		{
-			string userName = WindowsIdentity.GetCurrent().Name;
-			int endOfDomainPart = userName.IndexOf("\\");
-			return (endOfDomainPart > -1) ? userName.Substring(endOfDomainPart + 1, userName.Length - endOfDomainPart - 1) : null;
-		}
-
-		/// <summary>
-		/// Get all languages
-		/// </summary>
-		/// <returns>A list of strings with all languages </returns>
-		public List<string> GetLanguages()
-		{
-			List<string> languages = _channel.GetLanguages().Select(t => t.Languagecode).ToList();
-			languages.Sort();
-			return languages;
-		}
-
-		/// <summary>
-		/// Get all browsers
-		/// </summary>
-		/// <returns>A list of string with all browsers</returns>
-		public List<string> GetBrowsers()
-		{
-			List<string> browsers = _channel.GetBrowsers().Select(t=> t.Name).ToList();
-			browsers.Sort();
-			return browsers;
-
-		}
-
-		/// <summary>
-		/// Get all (non local) testsuites
-		/// </summary>
-		/// <returns>A list of string with all testsuites</returns>
-		public List<string> GetTestsuites()
-		{
-			List<string> testsuites = _channel.GetTestsuites().Where(t=>!t.Name.StartsWith("Local")).Select(t => t.Name).ToList();
-			testsuites.Sort();
-			return testsuites;
-
 		}
 
 		/// <summary>
@@ -101,40 +69,11 @@ namespace RegTesting.LocalTest.Logic
 		/// </summary>
 		/// <param name="fileName">the filename of the testfile</param>
 		/// <param name="testsystemUrl">the testsystem url</param>
-		/// <param name="browsers">the browsers</param>
-		/// <param name="testcases">the testcases</param>
-		/// <param name="languages">the languages</param>
-		public void TestRemote(string fileName, string testsystemUrl, List<string> browsers, List<string> testcases, List<string> languages)
+		public Guid TestRemote(string fileName, string testsystemUrl)
 		{
 			testsystemUrl = testsystemUrl.ToLower().Replace("https://", "").Replace("http://", "");
-
-			string username = GetUser();
-			string testsystemName = "local/" + testsystemUrl + "-" + username;
+			return SendFile(fileName, testsystemUrl);
+		}
 		
-
-			SendFile(fileName, testsystemName);
-			_channel.AddLocalTestTasks(username, testsystemName, testsystemUrl, browsers, testcases, languages);
-			int testsCount = browsers.Count*testcases.Count*languages.Count;
-			System.Windows.MessageBox.Show(String.Format("Requested {0} tests on {1}. You'll receive a mail when your results are ready!" , testsCount, testsystemUrl));
-		}
-
-		/// <summary>
-		/// Start a testsuite at the Remote Server
-		/// </summary>
-		/// <param name="fileName">the filename of the testfile</param>
-		/// <param name="testsystemUrl">the testsystem url</param>
-		/// <param name="testsuite">the testsuite</param>
-		public void TestRemote(string fileName, string testsystemUrl, string testsuite)
-		{
-			testsystemUrl = testsystemUrl.ToLower().Replace("https://", "").Replace("http://", "");
-
-			string username = GetUser();
-			string testsystemName = "local/" + testsystemUrl + "-" + username;
-
-
-			SendFile(fileName, testsystemName);
-			_channel.AddTestsuiteTask(username, testsystemName, testsystemUrl,testsuite);
-			System.Windows.MessageBox.Show(String.Format("Requested Testsuite {0}. You'll receive a mail when your results are ready!",  testsuite));
-		}
 	}
 }
