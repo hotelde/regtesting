@@ -74,14 +74,13 @@ namespace RegTesting.Service.TestLogic
 
 			AddTasksDelegate addTasksToWorkItemGroup = AddTestJobImpl;
 			addTasksToWorkItemGroup.BeginInvoke(testJobManager, workItems, null, null);
+			_testJobRepository.Store(testJobManager.TestJob);
 		}
 
 		private void AddTestJobImpl(ITestJobManager testJobManager, ICollection<WorkItem> workItems)
 		{
 
-	
 			TestcaseProvider testcaseProvider;
-
 			object branchSpecificFileLock = _testFileLocker.GetLock(testJobManager.TestJob.Testsystem.Name);
 			lock (branchSpecificFileLock)
 			{
@@ -89,8 +88,6 @@ namespace RegTesting.Service.TestLogic
 					new TestcaseProvider(RegtestingServerConfiguration.Testsfolder + testJobManager.TestJob.Testsystem.Filename);
 				testcaseProvider.CreateAppDomain();
 			}
-
-			_testJobRepository.Store(testJobManager.TestJob);
 
 			lock (_lockWorkItems)
 			{

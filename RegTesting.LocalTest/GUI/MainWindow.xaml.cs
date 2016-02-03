@@ -1,23 +1,18 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using System.Windows.Input;
 using System.Windows.Threading;
 using RegTesting.LocalTest.Logic;
 using CheckBox = System.Windows.Controls.CheckBox;
 using Label = System.Windows.Controls.Label;
 using ListBox = System.Windows.Controls.ListBox;
 using MessageBox = System.Windows.Forms.MessageBox;
-using System.IO;
 
 namespace RegTesting.LocalTest.GUI
 {
@@ -27,23 +22,14 @@ namespace RegTesting.LocalTest.GUI
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow
 	{
-
-		private bool remoteAvailable = false;
 		private DispatcherTimer _timer;
 
 		private readonly LocalTestLogic _localTestLogic;
-		private BackgroundWorker _localTestBackgroundWorker = null;
-		private BackgroundWorker _getRemoteCapabilityBackgroundWorker = null;
+		private BackgroundWorker _localTestBackgroundWorker;
 
 		private readonly List<string> _testcases;
-		List<string> browsers = new List<string>();
-		private List<string> _languages = new List<string>();
-
-		private const string LocalPrefix = "LOCAL: ";
-		private const string RemotePrefix = "REMOTE: ";
-
 		 
 
 
@@ -61,17 +47,22 @@ namespace RegTesting.LocalTest.GUI
 			languages.SelectionChanged += _SelectionChanged;
 
 			string testsystem = _localTestLogic.GetAppSetting("Testsystem");
-			if (String.IsNullOrEmpty(testsystem)) testsystem = "dev";
+			if (string.IsNullOrEmpty(testsystem)) testsystem = "dev";
 			txtTestsystem.Text = testsystem;
 
 			string language = _localTestLogic.GetAppSetting("Language");
-			if (String.IsNullOrEmpty(language)) language = "";
+			if (string.IsNullOrEmpty(language)) language = "";
 			
 
 			string browser = _localTestLogic.GetAppSetting("Browser");
-			if (String.IsNullOrEmpty(browser)) browser = "";
+			if (string.IsNullOrEmpty(browser)) browser = "";
 			
 			languages.Items.Add(GetCheckBoxRow("DE"));
+			languages.Items.Add(GetCheckBoxRow("EN"));
+			languages.Items.Add(GetCheckBoxRow("ES"));
+			languages.Items.Add(GetCheckBoxRow("FR"));
+			languages.Items.Add(GetCheckBoxRow("IT"));
+			languages.Items.Add(GetCheckBoxRow("NL"));
 			SelectItems(languages,language.Split('|'), true);
 
 			_testcases = new List<string>();
@@ -82,15 +73,11 @@ namespace RegTesting.LocalTest.GUI
 			string filterTestcases = _localTestLogic.GetAppSetting("TestcaseFilter");
 			txtFilter.Text = filterTestcases;
 
-
-			AddLocalBrowserCapabilities(LocalPrefix + "firefox");
-			AddLocalBrowserCapabilities(LocalPrefix + "chrome");
-			AddLocalBrowserCapabilities(LocalPrefix + "internet explorer");
-			AddLocalBrowserCapabilities(LocalPrefix + "phantomjs");
-
-
+			AddLocalBrowserCapabilities("firefox");
+			AddLocalBrowserCapabilities("chrome");
+			AddLocalBrowserCapabilities("internet explorer");
+			AddLocalBrowserCapabilities("phantomjs");
 			SelectItems(lstBrowser,browser.Split('|'), true);
-			AddRemoteTestingVariants();
 		}
 
 
@@ -174,34 +161,6 @@ namespace RegTesting.LocalTest.GUI
 			txtTestStatus.ScrollToEnd();
 		}
 
-		// Completed Method
-		void GetRemoteCapabilityBackgroundWorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-		{
-
-			if (e.Cancelled)
-			{
-			}
-			else if(!remoteAvailable)
-			{
-				Title = "RegTesting LocalTest (Local)";
-
-			}
-			else
-			{
-				Title = "RegTesting LocalTest (Local+Remote)";
-
-				string language = _localTestLogic.GetAppSetting("Language");
-				if (String.IsNullOrEmpty(language)) language = "";
-
-
-				string browser = _localTestLogic.GetAppSetting("Browser");
-				if (String.IsNullOrEmpty(browser)) browser = "";
-				SelectItems(lstBrowser, browser.Split('|'), true);
-				SelectItems(languages, language.Split('|'), true);
-			}
-		}
-
-
 		private string GetLog()
 		{
 			StringBuilder stringBuilder = new StringBuilder();
@@ -213,69 +172,6 @@ namespace RegTesting.LocalTest.GUI
 
 			}
 			return stringBuilder.Replace("<br>","\n").ToString();
-		}
-
-		private void AddRemoteTestingVariants()
-		{
-			try
-			{
-				_getRemoteCapabilityBackgroundWorker = new BackgroundWorker();
-				_getRemoteCapabilityBackgroundWorker.DoWork +=
-					(objS, objDoWorkEventArgs) =>
-						GetRemoteCapability();
-				_getRemoteCapabilityBackgroundWorker.RunWorkerCompleted += GetRemoteCapabilityBackgroundWorkerRunWorkerCompleted;
-				_getRemoteCapabilityBackgroundWorker.RunWorkerAsync();
-			}
-			catch (Exception objException)
-			{
-				txtTestStatus.Text = "Uncatched error:  " + objException;
-			}
-		}
-
-		private void GetRemoteCapability()
-		{
-			try
-			{
-				List<string> remoteBrowsers;
-				List<string> remoteLanguages;
-				List<string> remoteTestsuites;
-
-				using (WcfClient wcfClient = new WcfClient())
-				{
-					remoteLanguages = wcfClient.GetLanguages();
-					remoteBrowsers = wcfClient.GetBrowsers();
-					remoteTestsuites = wcfClient.GetTestsuites();
-
-				}
-				Dispatcher.Invoke((() =>
-				{
-					languages.Items.Clear();
-					foreach (string remoteLanguage in remoteLanguages)
-					{
-						CheckBox checkBoxRow = GetCheckBoxRow(remoteLanguage);
-						checkBoxRow.Click += languageCheckBoxRow_Click;
-						languages.Items.Add(checkBoxRow);
-					}
-					foreach (string remoteBrowser in remoteBrowsers)
-					{
-						CheckBox checkBoxRow = GetCheckBoxRow(RemotePrefix + remoteBrowser);
-						checkBoxRow.Click += browserCheckBoxRow_Click;
-
-						lstBrowser.Items.Add(checkBoxRow);
-					}
-
-					lstBrowser.Items.Refresh();
-					languages.Items.Refresh();
-					Testsuites.Items.Clear();
-					remoteTestsuites.ForEach(t => Testsuites.Items.Add(t));
-					remoteAvailable = true;
-
-				}));
-			}
-			catch
-			{
-				remoteAvailable = false;
-			}
 		}
 
 		void browserCheckBoxRow_Click(object sender, RoutedEventArgs e)
@@ -313,22 +209,7 @@ namespace RegTesting.LocalTest.GUI
 			SetSelectedItems(languages);
 			SetSelectedItems(lstBrowser);
 
-			List<string> selectedBrowsersLocal = new List<string>();
-			List<string> selectedBrowsersRemote = new List<string>();
-
-			foreach (object selectedObject in lstBrowser.SelectedItems)
-			{
-				CheckBox checkBox = selectedObject as CheckBox;
-				if (checkBox != null)
-				{
-					string selectedBrowser = checkBox.Tag.ToString();
-					if(selectedBrowser.StartsWith(LocalPrefix))
-						selectedBrowsersLocal.Add(selectedBrowser.Substring(LocalPrefix.Length));
-					if (selectedBrowser.StartsWith(RemotePrefix))
-						selectedBrowsersRemote.Add(selectedBrowser.Substring(RemotePrefix.Length));
-				}
-			}
-
+			List<string> selectedBrowsersLocal = lstBrowser.SelectedItems.OfType<CheckBox>().Select(checkBox => checkBox.Tag.ToString()).ToList();
 			List<string> selectedLanguages = languages.SelectedItems.Cast<CheckBox>().Where(checkBox => checkBox.IsChecked.HasValue && checkBox.IsChecked.Value).Select(checkBox => checkBox.Tag.ToString()).ToList();
 			List<string> selectedTestcases = lstViewTestcases.SelectedItems.Cast<string>().ToList();
 
@@ -340,26 +221,13 @@ namespace RegTesting.LocalTest.GUI
 			_localTestLogic.SetAppSetting("Testcase", string.Join("|", lstViewTestcases.SelectedItems.Cast<string>()));
 
 			string testsystem = txtTestsystem.Text;
-			string fileName = txtFile.Text;
 
 			LoadTestcaseFile(txtFile.Text);
 
 			if(selectedBrowsersLocal.Any())
 				TestLocal(testsystem,selectedBrowsersLocal,selectedTestcases,selectedLanguages);
-
-			if (selectedBrowsersRemote.Any())
-				TestRemote(fileName,testsystem, selectedBrowsersRemote, selectedTestcases, selectedLanguages);
-
-
 		}
-
-		private void TestRemote(string fileName, string testsystem, List<string> lstBrowsers, List<string> testcases, List<string> languages)
-		{
-			using (WcfClient wcfClient = new WcfClient())
-			{
-				wcfClient.TestRemote(fileName, testsystem, lstBrowsers, testcases, languages);
-			}
-		}
+		
 
 		private void TestLocal(string testsystem, List<string> lstBrowsers, List<string> testcases, List<string> languages)
 		{
@@ -472,19 +340,12 @@ namespace RegTesting.LocalTest.GUI
 
 		private void BtnStartTestsuiteClick(object sender, RoutedEventArgs e)
 		{
-			if (Testsuites.SelectedItems.Count != 1)
-			{
-				ShowErrorMessage("You must select one testsuite first.", "Missing arguments!");
-				return;
-			}
-
-			string testsuite = Testsuites.SelectedItem.ToString();
 			string testsystem = txtTestsystem.Text;
 			string fileName = txtFile.Text;
 
 			using (WcfClient wcfClient = new WcfClient())
 			{
-				wcfClient.TestRemote(fileName, testsystem, testsuite);
+				wcfClient.TestRemote(fileName, testsystem);
 			}
 		}
 	}

@@ -30,10 +30,5 @@ namespace RegTesting.Contracts.Domain
 		/// </summary>
 		public virtual string InnerException { get; set; }
 
-		/// <summary>
-		/// The TfsWorkItemID
-		/// </summary>
-		public virtual int? TfsWorkItemID { get; set; }
-
 	}
 }
