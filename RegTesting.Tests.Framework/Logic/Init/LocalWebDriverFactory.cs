@@ -39,7 +39,11 @@ namespace RegTesting.Tests.Framework.Logic.Init
 					webDriver = new InternetExplorerDriver(new InternetExplorerOptions { BrowserCommandLineArguments = "singleWindow=true", IntroduceInstabilityByIgnoringProtectedModeSettings = true, EnsureCleanSession = true, EnablePersistentHover = false });
 					break;
 				case "phantomjs":
-					webDriver = new PhantomJSDriver(new PhantomJSOptions() {});
+					PhantomJSDriverService service = PhantomJSDriverService.CreateDefaultService();
+					service.IgnoreSslErrors = true;
+					service.LoadImages = false;
+					service.ProxyType = "none";
+					webDriver = new PhantomJSDriver(service);
 					break;
 				default:
 					throw new NotSupportedException("Not supported browser");
