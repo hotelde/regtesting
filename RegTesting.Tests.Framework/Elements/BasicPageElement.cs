@@ -186,7 +186,7 @@ namespace RegTesting.Tests.Framework.Elements
 					wait.Timeout = new TimeSpan(0, 0, maximumWaitInSeconds);
 					wait.Until(driver => !IsAnimationOngoing());
 				}
-				catch (WebDriverTimeoutException e)
+				catch (WebDriverTimeoutException)
 				{
 					throw new TimeoutException("Waited " + maximumWaitInSeconds + " seconds for animation of " + By +  "to complete, but animation is still ongoing");
 				}

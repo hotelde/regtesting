@@ -3,7 +3,7 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 							   xmlns:windows="clr-namespace:System.Windows;assembly=PresentationFramework"
 				xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
-				Title="RegTesting LocalTest (Local, Remote connecting...)" Height="500" Width="600">
+				Title="RegTesting LocalTest" Height="500" Width="600">
 
     <controls:Grid>
         <Grid.ColumnDefinitions>
@@ -52,7 +52,7 @@
 			<controls:TextBox controls:Grid.Row="1" controls:Grid.Column="1" Text="" Name="txtTestsystem" x:FieldModifier="private"  Margin="3" />
 
 			<TabControl  controls:Grid.Row="2" controls:Grid.Column="0"  Grid.ColumnSpan="2">
-				<TabItem Header="Custom">
+				<TabItem Header="Local">
 					<Grid>
 						<controls:Grid.RowDefinitions>
 							<controls:RowDefinition Height="28" />
@@ -91,7 +91,7 @@
 
 					</Grid>
 				</TabItem>
-				<TabItem Header="Testsuite">
+				<TabItem Header="Remote">
 					<Grid>
 						<controls:Grid.RowDefinitions>
 							<controls:RowDefinition Height="*" />
@@ -101,8 +101,7 @@
 							<controls:ColumnDefinition Width="*" />
 						</controls:Grid.ColumnDefinitions>
 
-						<controls:ListBox controls:Grid.Row="0" controls:Grid.Column="0" Name="Testsuites" x:FieldModifier="private"  Margin="3"/>
-						<controls:Button controls:Grid.Row="1" controls:Grid.Column="0" Content="Start Test" Click="BtnStartTestsuiteClick"  Margin="3" />
+						<controls:Button controls:Grid.Row="1" controls:Grid.Column="0" Content="Test everything on the Testserver" Click="BtnStartTestsuiteClick"  Margin="3" />
 
 					</Grid>
 				</TabItem>

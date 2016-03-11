@@ -42,8 +42,7 @@ namespace RegTesting.Node
 			do
 			{
 				EnsureBrowserClosed();
-				WorkItemDto workItemDto = WaitForWorkItem();
-				WorkItem workItem = Mapper.Map<WorkItem>(workItemDto);
+				WorkItem workItem = WaitForWorkItem();
 
 				Console.WriteLine(@"Loading " + workItem.Testsystem.Name);
 				UpdateTestcases(workItem.Testsystem);
@@ -100,7 +99,7 @@ namespace RegTesting.Node
 
 		}
 
-		private void UpdateTestcases(Testsystem testsystem)
+		private void UpdateTestcases(TestsystemDto testsystem)
 		{
 			const string testfile = @"LocalTests.dll";
 			byte[] data;
@@ -123,12 +122,12 @@ namespace RegTesting.Node
 			return _testcaseProvider.GetTestableFromTypeName(workItem.Testcase.Type);
 		}
 
-		private WorkItemDto WaitForWorkItem()
+		private WorkItem WaitForWorkItem()
 		{
 			Console.Out.WriteLine("Wait for WorkItem");
 			do
 			{
-				WorkItemDto workItem = FetchWork();
+				WorkItem workItem = FetchWork();
 				if (workItem != null) return workItem;
 				Thread.Sleep(_pollingIntervall);
 
@@ -142,18 +141,15 @@ namespace RegTesting.Node
 			{
 				wcfClient.Register(_nodename, _browsers);
 			}
-
-
 		}
 
-		private WorkItemDto FetchWork()
+		private WorkItem FetchWork()
 		{
 			using (WcfClient wcfClient = new WcfClient(_serverAdr))
 			{
 				return wcfClient.GetWork(_nodename);
 			}
 		}
-
 
 		private TestResult HandleTest(WorkItem workItem)
 		{

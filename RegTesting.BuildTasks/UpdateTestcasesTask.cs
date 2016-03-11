@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
@@ -17,17 +18,17 @@ namespace RegTesting.BuildTasks
 		/// <returns>boolean with true in success case, else returns false</returns>
 		public override bool Execute()
 		{
-			
 			try
 			{
-				Log.LogMessage(MessageImportance.Normal, "Updating Testcases: START.");
-				string stage = Stage.ToLower();
-				Log.LogMessage(MessageImportance.Normal, "Updating Testcases: " + stage + ".dll -> " + EndpointAdress);
+				
+				Log.LogMessage(MessageImportance.Normal, "Starting UITests at " + EndpointAdress);
 				using (WcfClient wcfClient = new WcfClient(EndpointAdress))
 				{
-					wcfClient.SendFile(File, stage, ReleaseManager, Testsuite, Branch, CommitId, CommitMessage);
-					Log.LogMessage(MessageImportance.Normal, "Updating Testcases: SUCCESS.");
-					Log.LogMessage(MessageImportance.Normal, "Testresults will be sent to " + ReleaseManager );
+					Guid testjob = wcfClient.SendFile(TestFile, TestUrl.ToLower() );
+					Log.LogMessage(MessageImportance.Normal, "Waiting for Testresults. " + "Testjobid: " + testjob);
+					wcfClient.WaitForTestJobResult(testjob);
+					string resultFile = wcfClient.GetResultFile(testjob);
+					WriteResultFile(resultFile);
 				}
 			}
 			catch(Exception exception)
@@ -37,6 +38,11 @@ namespace RegTesting.BuildTasks
 			}
 
 			return true;
+		}
+		
+		private void WriteResultFile(string content)
+		{
+			File.WriteAllText(ResultFile, content);
 		}
 
 		/// <summary>
@@ -49,14 +55,21 @@ namespace RegTesting.BuildTasks
 			set;
 		}
 
-		
-
+		/// <summary>
+		/// Path to Resultfile
+		/// </summary>
+		[Required]
+		public String ResultFile
+		{
+			get;
+			set;
+		}
 
 		/// <summary>
 		/// Path to Dllfile with Testcases
 		/// </summary>
 		[Required]
-		public String File
+		public String TestFile
 		{
 			get;
 			set;
@@ -66,56 +79,7 @@ namespace RegTesting.BuildTasks
 		/// Stage to update (gamma, beta, etc.)
 		/// </summary>
 		[Required]
-		public String Stage
-		{
-			get;
-			set;
-		}
-
-		/// <summary>
-		/// ReleaseManager for tests and sending the testresults
-		/// </summary>
-		public String ReleaseManager
-		{
-			get;
-			set;
-		}
-
-
-		/// <summary>
-		/// The Testsuite to test
-		/// </summary>
-		public String Testsuite
-		{
-			get;
-			set;
-		}
-
-
-		/// <summary>
-		/// The branch of the commit
-		/// </summary>
-		public String Branch
-		{
-			get;
-			set;
-		}
-
-
-		/// <summary>
-		/// The commit id
-		/// </summary>
-		public String CommitId
-		{
-			get;
-			set;
-		}
-
-
-		/// <summary>
-		/// The commit message
-		/// </summary>
-		public String CommitMessage
+		public String TestUrl
 		{
 			get;
 			set;

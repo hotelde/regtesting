@@ -25,7 +25,7 @@ namespace RegTesting.Contracts.Services
 		/// <param name="nodeName">the node name</param>
 		/// <returns>a workItem</returns>
 		[OperationContract]
-		WorkItemDto GetWork(string nodeName);
+		WorkItem GetWork(string nodeName);
 
 		/// <summary>
 		/// report the results of a finished test

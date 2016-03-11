@@ -69,7 +69,7 @@ namespace RegTesting.Node
 		/// </summary>
 		/// <param name="nodeName">the node</param>
 		/// <returns>A workItem for tests or null if no work is available</returns>
-		public WorkItemDto GetWork(string nodeName)
+		public WorkItem GetWork(string nodeName)
 		{
 			return _channel.GetWork(nodeName);
 		}
