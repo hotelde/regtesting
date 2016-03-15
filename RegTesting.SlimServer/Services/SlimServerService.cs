@@ -38,8 +38,8 @@ namespace RegTesting.SlimServer.Services
 				{
 					Browser = new BrowserDto
 					{
-						Browserstring = "chrome",
-						Name = "Chrome"
+						Browserstring = "phantomjs",
+						Name = "phantomjs"
 					},
 					Language = new LanguageDto
 					{
