@@ -43,6 +43,7 @@ namespace RegTesting.Tests.Framework.Logic.Init
 					service.IgnoreSslErrors = true;
 					service.LoadImages = false;
 					service.ProxyType = "none";
+					service.HideCommandPromptWindow = true;
 					webDriver = new PhantomJSDriver(service);
 					break;
 				default:
