@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 using RegTesting.LocalTest.Properties;
 using RegTesting.Tests.Core;
 
@@ -21,6 +23,23 @@ namespace RegTesting.LocalTest.Logic
 				return new List<string>();
 			}
 		}
+
+
+		public string FinishedScreenshot;
+
+		public string CurrentScreenshot
+		{
+			get
+			{
+				if (!_finished)
+					return _testable?.SaveScreenshot(string.Empty);
+
+				return FinishedScreenshot;
+			}
+		}
+
+
+		private bool _finished;
 
 		private bool _canceled;
 
@@ -105,6 +124,8 @@ namespace RegTesting.LocalTest.Logic
 				//Test is canceled. Do normal teardown
 			}
 
+			FinishedScreenshot = CurrentScreenshot;
+			_finished = true;
 			_testable.TeardownTest();
 		}
 

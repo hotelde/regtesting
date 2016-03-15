@@ -3,25 +3,29 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 							   xmlns:windows="clr-namespace:System.Windows;assembly=PresentationFramework"
 				xmlns:controls="clr-namespace:System.Windows.Controls;assembly=PresentationFramework"
-				Title="RegTesting LocalTest" Height="500" Width="600">
+				Title="RegTesting LocalTest" Height="900" Width="1000">
 
     <controls:Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="153*"/>
             <ColumnDefinition Width="439*"/>
         </Grid.ColumnDefinitions>
-        <controls:Grid Name="objRunningTestGrid" Visibility="Collapsed" Grid.ColumnSpan="2">
+        <controls:Grid Name="objRunningTestGrid"  Grid.ColumnSpan="2">
 			<controls:Grid.RowDefinitions>
 				<controls:RowDefinition Height="*" />
                 <controls:RowDefinition Height="28" />
             </controls:Grid.RowDefinitions>
 			<controls:Grid.ColumnDefinitions>
 				<controls:ColumnDefinition Width="*" />
+				<controls:ColumnDefinition Width="*" />
 			</controls:Grid.ColumnDefinitions>
 			<controls:TextBox controls:Grid.Row="0" controls:Grid.Column="0" Name="txtTestStatus" x:FieldModifier="private" IsReadOnly="True" Margin="3" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
             <controls:Button controls:Grid.Row="1" Content="Back"  controls:Grid.Column="0" Click="BtnBackClick"  Margin="3" />
-        </controls:Grid>
-        <controls:Grid Name="objTestGrid" Grid.ColumnSpan="2">
+			<Image  Name="currentScreenshot" Stretch="Uniform" controls:Grid.Row="0" controls:Grid.Column="1" />
+			<controls:Button controls:Grid.Row="1" Content="Save Image"  controls:Grid.Column="1" Click="BtnSaveImage"  Margin="3" />
+
+		</controls:Grid>
+		<controls:Grid Name="objTestGrid" Visibility="Collapsed" Grid.ColumnSpan="2">
             <controls:Grid.RowDefinitions>
                 <controls:RowDefinition Height="28" />
                 <controls:RowDefinition Height="28" />

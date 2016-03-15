@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using RegTesting.LocalTest.Logic;
 using CheckBox = System.Windows.Controls.CheckBox;
@@ -30,7 +31,7 @@ namespace RegTesting.LocalTest.GUI
 		private BackgroundWorker _localTestBackgroundWorker;
 
 		private readonly List<string> _testcases;
-		 
+		private string currentScreenshotBase;
 
 
 		/// <summary>
@@ -78,6 +79,9 @@ namespace RegTesting.LocalTest.GUI
 			AddLocalBrowserCapabilities("internet explorer");
 			AddLocalBrowserCapabilities("phantomjs");
 			SelectItems(lstBrowser,browser.Split('|'), true);
+
+			objRunningTestGrid.Visibility = Visibility.Collapsed;
+			objTestGrid.Visibility = Visibility.Visible;		
 		}
 
 
@@ -267,6 +271,20 @@ namespace RegTesting.LocalTest.GUI
 				{
 					txtTestStatus.Text = GetLog();
 					txtTestStatus.ScrollToEnd();
+					var screen = _localTestLogic.CurrentScreenshot;
+
+					if (string.IsNullOrEmpty(screen))
+						return;
+
+					var binaryData = Convert.FromBase64String(screen);
+	
+					BitmapImage bi = new BitmapImage();
+					bi.BeginInit();
+					bi.StreamSource = new MemoryStream(binaryData);
+					bi.EndInit();
+					currentScreenshot.Source = bi;
+					currentScreenshotBase = screen;
+
 				});
 
 			// Start the timer
@@ -346,6 +364,16 @@ namespace RegTesting.LocalTest.GUI
 			using (WcfClient wcfClient = new WcfClient())
 			{
 				wcfClient.TestRemote(fileName, testsystem);
+			}
+		}
+
+		private void BtnSaveImage(object sender, RoutedEventArgs e)
+		{
+			var bytes = Convert.FromBase64String(currentScreenshotBase);
+			using (var imageFile = new FileStream(@"C:\RegTesting-" + DateTime.Now.Ticks + ".png", FileMode.Create))
+			{
+				imageFile.Write(bytes, 0, bytes.Length);
+				imageFile.Flush();
 			}
 		}
 	}

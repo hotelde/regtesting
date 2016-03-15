@@ -66,7 +66,7 @@ namespace RegTesting.Tests.Framework.Logic
 		string ITestable.SaveScreenshot(string folderPath)
 		{
 
-			if (_webDriver == null) return "";
+			if (_webDriver == null) return string.Empty;
 			try
 			{
 				Screenshot screenshot = ((ITakesScreenshot)_webDriver).GetScreenshot();
