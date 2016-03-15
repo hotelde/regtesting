@@ -64,7 +64,6 @@ namespace RegTesting.Tests.Framework.Logic
 				T pageObject = (T)Activator.CreateInstance(typeof(T), webDriver);
 
 				InitElements(webDriver, pageObject);
-			
 				return pageObject;
 			}
 			catch (TargetInvocationException exception)

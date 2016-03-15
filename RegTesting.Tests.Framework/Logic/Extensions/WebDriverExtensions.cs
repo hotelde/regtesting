@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 		public static void ClickElement(this IWebDriver webDriver, BasicPageElement pageElement)
 		{
 			Stopwatch startNew = Stopwatch.StartNew();
-			Click(FindAndScrollToElement(pageElement.By, Visibility.Visible), pageElement);
+			Click(webDriver, FindAndScrollToElement(pageElement.By, Visibility.Visible), pageElement);
 			startNew.Stop();
 			TestLog.Add("Waited " + startNew.ElapsedMilliseconds + " milliseconds to scroll and click element '" + pageElement.By + "'.");
 		}
@@ -39,12 +40,12 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 		public static void ClickElementWithoutScrolling(this IWebDriver webDriver, BasicPageElement pageElement)
 		{
 			Stopwatch startNew = Stopwatch.StartNew();
-			Click(Find(pageElement.By, Visibility.Visible), pageElement);
+			Click(webDriver, Find(pageElement.By, Visibility.Visible), pageElement);
 			startNew.Stop();
 			TestLog.Add("Waited " + startNew.ElapsedMilliseconds + " milliseconds to click element '" + pageElement.By + "'.");
 		}
 
-		private static void Click(Func<IWebDriver, IWebElement> findFunction, BasicPageElement pageElement)
+		private static void Click(IWebDriver webDriver, Func<IWebDriver, IWebElement> findFunction, BasicPageElement pageElement)
 		{
 			IWebElement element = null;
 			TimeSpan timeout = new TimeSpan(0, 0, Settings.Default.TestTimeout);
@@ -59,8 +60,10 @@ namespace RegTesting.Tests.Framework.Logic.Extensions
 				string timeoutMessage = BuildTimeoutMessage(pageElement.By, Visibility.Hidden, e.Message, Settings.Default.TestTimeout, element);
 				throw new TimeoutException(timeoutMessage, e);
 			}
-			
+			new SiteParser(webDriver.Url).ParseCoverageItems(webDriver.PageSource);
+			TestCoverage.SetCovered(webDriver.Url, XPathGenerator.Generate(element), "click");
 			element.Click();
+			TestLog.Add("Tested " + TestCoverage.GetCoverage().Values.Count(t => t) + " from " + TestCoverage.GetCoverage().Count);
 		}
 
 		private static Func<IWebDriver, IWebElement> Find(By locator, Visibility visibilityFilter)
