@@ -10,7 +10,7 @@ namespace RegTesting.BuildTasks
 	/// <summary>
 	/// A Task to update the testcases
 	/// </summary>
-	public class CheckTestrunErrorCountTask : Task
+	public class CheckTestjobErrorCountTask : Task
 	{
 
 		/// <summary>

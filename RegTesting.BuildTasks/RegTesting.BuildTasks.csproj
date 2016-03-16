@@ -72,8 +72,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CheckTestrunErrorCountTask.cs" />
-    <Compile Include="UpdateTestcasesTask.cs" />
+    <Compile Include="WaitForTestjobTask.cs" />
+    <Compile Include="CheckTestjobErrorCountTask.cs" />
+    <Compile Include="StartTestjobTask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WcfClient.cs" />
   </ItemGroup>

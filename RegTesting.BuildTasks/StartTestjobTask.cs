@@ -9,7 +9,7 @@ namespace RegTesting.BuildTasks
 	/// <summary>
 	/// A Task to update the testcases
 	/// </summary>
-	public class UpdateTestcasesTask : Task
+	public class StartTestjobTask : Task
 	{
 
 		/// <summary>
@@ -24,11 +24,10 @@ namespace RegTesting.BuildTasks
 				Log.LogMessage(MessageImportance.Normal, "Starting UITests at " + EndpointAdress);
 				using (WcfClient wcfClient = new WcfClient(EndpointAdress))
 				{
-					Guid testjob = wcfClient.SendFile(TestFile, TestUrl.ToLower() );
-					Log.LogMessage(MessageImportance.Normal, "Waiting for Testresults. " + "Testjobid: " + testjob);
-					wcfClient.WaitForTestJobResult(testjob);
-					string resultFile = wcfClient.GetResultFile(testjob);
-					WriteResultFile(resultFile);
+					Guid testjob = wcfClient.SendFile(TestFile, TestUrl.ToLower());
+                    Log.LogMessage(MessageImportance.Normal, "Started testjob with id " + testjob);
+                    WriteTestjobFile(testjob.ToString());
+
 				}
 			}
 			catch(Exception exception)
@@ -39,16 +38,16 @@ namespace RegTesting.BuildTasks
 
 			return true;
 		}
-		
-		private void WriteResultFile(string content)
-		{
-			File.WriteAllText(ResultFile, content);
-		}
 
-		/// <summary>
-		/// EndpointAdress
-		/// </summary>
-		[Required]
+        private void WriteTestjobFile(string testjob)
+        {
+            File.WriteAllText(TestjobFile, testjob);
+        }
+
+        /// <summary>
+        /// EndpointAdress
+        /// </summary>
+        [Required]
 		public String EndpointAdress
 		{
 			get;
@@ -59,8 +58,8 @@ namespace RegTesting.BuildTasks
 		/// Path to Resultfile
 		/// </summary>
 		[Required]
-		public String ResultFile
-		{
+		public String TestjobFile
+        {
 			get;
 			set;
 		}
