@@ -37,6 +37,7 @@ namespace RegTesting.Tests.Framework.Logic
 			TestLog.AddWithoutTime("<br><b>>>>" + typeof(T).Name + "</b>");
 			TestLog.Add("CreateAndNavigate: " + typeof(T).Name + " -> " + pageUrl);
 			webDriver.Navigate().GoToUrl(pageUrl);
+			TestLog.Add("Url is now: " + webDriver.Url);
 			ApplyPageSettings(pageObject, pageSettings ?? new Dictionary<string, object>());
 			return pageObject;
 		}
@@ -54,6 +55,7 @@ namespace RegTesting.Tests.Framework.Logic
 			T pageObject = CreatePageObject<T>(webDriver);
 			TestLog.Add("Applying Page settings for '" + pageObject.GetType().Name + "'");
 			ApplyPageSettings(pageObject, pageSettings ?? new Dictionary<string, object>());
+			TestLog.Add("Url is now: " + webDriver.Url);
 			return pageObject;
 		}
 
