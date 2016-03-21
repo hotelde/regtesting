@@ -41,7 +41,8 @@ namespace RegTesting.Tests.Framework.Logic.Init
 				case "phantomjs":
 					PhantomJSDriverService service = PhantomJSDriverService.CreateDefaultService();
 					service.IgnoreSslErrors = true;
-					service.LoadImages = false;
+					service.WebSecurity = false;
+					service.LoadImages = true;
 					service.ProxyType = "none";
 					service.HideCommandPromptWindow = true;
 					webDriver = new PhantomJSDriver(service);
