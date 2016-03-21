@@ -88,6 +88,7 @@ namespace RegTesting.LocalTest.Logic
 					Browser browser = GetBrowser(browserName);
 					foreach (string language in languages)
 					{
+						_finished = false;
 						if (_canceled) return;
 						InitializeTest(testcase, testsystem, language, browser);
 					}
